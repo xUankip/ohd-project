@@ -4,7 +4,7 @@ using AspnetCoreMvcStarter.Data;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var xuan = "xuan";
 builder.Services.AddDbContext<AspnetCoreMvcStarterContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("AspnetCoreMvcStarterContext") ?? throw new InvalidOperationException("Connection string 'AspnetCoreMvcStarterContext' not found.")));
 
