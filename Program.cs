@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AspnetCoreMvcStarterContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("AspnetCoreMvcStarterContext") ?? throw new InvalidOperationException("Connection string 'AspnetCoreMvcStarterContext' not found.")));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContext' not found.")));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-  .AddEntityFrameworkStores<AspnetCoreMvcStarterContext>()
+  .AddEntityFrameworkStores<ApplicationDbContext>()
   .AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options =>
