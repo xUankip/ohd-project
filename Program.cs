@@ -32,26 +32,26 @@ var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityR
 // tạo mới user
 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-if (!await roleManager.RoleExistsAsync("Admin"))
-{
-  await roleManager.CreateAsync(new IdentityRole("Admin"));
-}
+// if (!await roleManager.RoleExistsAsync("Admin"))
+// {
+//   await roleManager.CreateAsync(new IdentityRole("Admin"));
+// }
+//
+// var adminUser = new IdentityUser
+// {
+//   UserName = "luyendh@example.com",
+//   Email = "luyendh@example.com",
+//   EmailConfirmed = true
+// };
 
-var adminUser = new IdentityUser
-{
-  UserName = "luyendh@example.com",
-  Email = "luyendh@example.com",
-  EmailConfirmed = true
-};
-
-if (await userManager.FindByEmailAsync(adminUser.Email) == null)
-{
-  var result = await userManager.CreateAsync(adminUser, "Admin@123");
-  if (result.Succeeded)
-  {
-    await userManager.AddToRoleAsync(adminUser, "Admin");
-  }
-}
+// if (await userManager.FindByEmailAsync(adminUser.Email) == null)
+// {
+//   var result = await userManager.CreateAsync(adminUser, "Admin@123");
+//   if (result.Succeeded)
+//   {
+//     await userManager.AddToRoleAsync(adminUser, "Admin");
+//   }
+// }
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
