@@ -9,7 +9,7 @@
   .input-wrapper {
     position: relative;
     width: 100%;
-    max-width: 450px;
+    max-width: calc(100% - 45%);
   }
 
   @include light.media-breakpoint-down(sm) {
@@ -19,10 +19,6 @@
   }
 }
 
-.faq-nav-icon {
-  font-size: 1.125rem;
-}
-
 .faq-banner-img {
   position: absolute;
   top: 0;
@@ -30,14 +26,16 @@
   height: 100%;
   width: 100%;
   object-fit: cover;
-  object-position: left;
-  border-radius: light.$border-radius;
+  z-index: -1;
+  @include light.media-breakpoint-down(sm) {
+    object-position: right;
+  }
 }
 
 @if $enable-light-style {
   .light-style {
     .bg-faq-section {
-      background-color: light.$gray-60;
+      background-color: light.$gray-50;
     }
     .faq-header {
       .input-wrapper {
@@ -53,7 +51,7 @@
 @if $enable-dark-style {
   .dark-style {
     .bg-faq-section {
-      background-color: dark.$gray-60;
+      background-color: dark.$gray-50;
     }
     .faq-header {
       .input-wrapper {

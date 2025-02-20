@@ -5,21 +5,31 @@
 @import 'jstree/dist/themes/default-dark/style';
 @import './themes/theme';
 
+.jstree {
+  .jstree-children {
+    .jstree-anchor,
+    .jstree-wholerow {
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+    }
+  }
+}
 // Light Style
 @if $enable-light-style {
   .light-style {
     // Folder Icons and text colors
     .jstree {
       .jstree-container-ul {
-        .jstree-icon.fa-folder,
+        .jstree-icon.ri-folder-3-line,
         .ion-ios-folder {
           color: light.$warning;
         }
-        .jstree-icon.fa-file {
+        .jstree-icon.ri-file-text-line {
           color: light.$primary;
         }
         .jstree-anchor {
-          color: light.$body-color;
+          color: light.$headings-color;
         }
       }
     }
@@ -61,6 +71,19 @@
         display: none;
       }
     }
+    .jstree-hovered,
+    .jstree-wholerow-hovered,
+    .jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered,
+    .jstree-checkbox-no-clicked > .jstree-wholerow-ul .jstree-wholerow-clicked.jstree-wholerow-hovered,
+    .jstree-default-responsive .jstree-wholerow-hovered {
+      background-color: light.$gray-50;
+    }
+    .jstree-clicked,
+    .jstree-context,
+    .jstree-wholerow-clicked,
+    .jstree-default-responsive .jstree-wholerow-clicked {
+      background-color: rgba(light.$primary, 0.08);
+    }
   }
 }
 
@@ -70,15 +93,15 @@
     // Folder Icons and text colors
     .jstree {
       .jstree-container-ul {
-        .jstree-icon.fa-folder,
+        .jstree-icon.ri-folder-3-line,
         .ion-ios-folder {
           color: dark.$warning;
         }
-        .jstree-icon.fa-file {
+        .jstree-icon.ri-file-text-line {
           color: dark.$primary;
         }
         .jstree-anchor {
-          color: dark.$body-color;
+          color: dark.$headings-color;
         }
       }
     }
@@ -116,6 +139,19 @@
       .vakata-contextmenu-sep {
         display: none;
       }
+    }
+    .jstree-hovered,
+    .jstree-wholerow-hovered,
+    .jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered,
+    .jstree-checkbox-no-clicked > .jstree-wholerow-ul .jstree-wholerow-clicked.jstree-wholerow-hovered,
+    .jstree-default-responsive .jstree-wholerow-hovered {
+      background-color: dark.$gray-50;
+    }
+    .jstree-clicked,
+    .jstree-context,
+    .jstree-wholerow-clicked,
+    .jstree-default-responsive .jstree-wholerow-clicked {
+      background-color: rgba(dark.$primary, 0.08);
     }
   }
 }

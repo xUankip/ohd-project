@@ -88,13 +88,6 @@
       background-color: rgba-to-hex(rgba($color, 0.95), $background: $rth-color) !important;
     }
   }
-
-  //! Fix: Dropdown notification read badge bg color
-  .dropdown-notifications-item:not(.mark-as-read) {
-    .dropdown-notifications-read span {
-      background-color: $color;
-    }
-  }
 }
 
 @mixin bg-variant($parent, $color, $rth-color: #000) {
@@ -111,18 +104,6 @@
   #{$parent} {
     background-color: $label-background !important;
     color: if($color, $color, color-contrast($bg)) !important;
-  }
-}
-
-// Border Label
-@mixin border-label-variant($parent, $background) {
-  $label-background: if(
-    $dark-style,
-    shade-color($background, $border-shade-amount),
-    tint-color($background, $border-tint-amount)
-  );
-  #{$parent} {
-    border: 3px solid $label-background;
   }
 }
 
@@ -146,13 +127,6 @@
 @mixin bg-gradient-variant($parent, $background, $deg: 45deg) {
   #{$parent} {
     background-image: linear-gradient($deg, $background, rgba-to-hex(rgba($background, 0.5))) !important;
-  }
-}
-
-// Border Light
-@mixin border-light-variant($parent, $background) {
-  #{$parent} {
-    border: 3px solid rgba($background, 0.08);
   }
 }
 

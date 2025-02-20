@@ -5,12 +5,31 @@
 @use '../_bootstrap-extended/include-dark' as dark;
 @import '../_custom-variables/pages';
 
-.circle-bullets {
-  list-style-type: none;
+.pricing-plans {
+  ul {
+    list-style-type: circle;
+    li::marker {
+      font-size: 1.4rem;
+    }
+  }
 }
 
+.pricing-free-trial {
+  background-color: rgba(light.$primary, 0.04);
+}
+.badge-pro {
+  margin-left: 1px !important;
+}
 .pricing-plans-comparison {
   .table {
+    thead {
+      tr {
+        th {
+          background-color: transparent !important;
+          vertical-align: middle;
+        }
+      }
+    }
     tr {
       > th:first-child,
       > td:first-child {
@@ -33,6 +52,31 @@
   left: 0;
   right: 0;
 }
+@if $enable-light-style {
+  .light-style {
+    .bg-alt-pricing {
+      background-color: light.$body-bg;
+    }
+    .pricing-plans-comparison {
+      .table thead tr th {
+        border-bottom-color: light.$border-color;
+      }
+    }
+  }
+}
+
+@if $enable-dark-style {
+  .dark-style {
+    .bg-alt-pricing {
+      background-color: dark.$body-bg;
+    }
+    .pricing-plans-comparison {
+      .table thead tr th {
+        border-bottom-color: dark.$border-color;
+      }
+    }
+  }
+}
 
 // To position illustration
 @include light.media-breakpoint-up(lg) {
@@ -40,9 +84,12 @@
     img {
       position: absolute;
       bottom: 0;
-      inset-inline-end: 0;
-      height: 115%;
-      width: auto;
+      @include app-ltr() {
+        right: 0;
+      }
+      @include app-rtl() {
+        left: 0;
+      }
     }
   }
 }

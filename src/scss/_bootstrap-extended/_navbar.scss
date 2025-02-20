@@ -8,9 +8,6 @@
   .dropdown-toggle:focus {
     outline: 0;
   }
-  .navbar-toggler {
-    border: none;
-  }
   .navbar-toggler:focus {
     box-shadow: none;
   }
@@ -34,6 +31,9 @@
 
 .navbar-dark .navbar-nav .nav-link.disabled {
   color: $navbar-dark-disabled-color !important;
+}
+.navbar-nav {
+  --#{$prefix}nav-link-padding-y: calc(#{$spacer} / 2);
 }
 
 // IE fix

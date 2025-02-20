@@ -2,51 +2,30 @@ nav.layout-navbar {
   backdrop-filter: unset !important;
   height: auto !important;
   z-index: 999 !important;
-  background-color: transparent !important;
-  &::after {
-    content: '';
-    position: absolute;
-    display: block;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-  }
-  &.navbar-active {
-    &::after {
-      backdrop-filter: saturate(100%) blur(6px);
-      -webkit-backdrop-filter: saturate(100%) blur(6px);
-    }
-  }
 }
 .navbar {
   &.landing-navbar {
     box-shadow: none;
     transition: light.$btn-transition;
     transform: unset !important;
-    padding-top: 0.614rem;
-    padding-bottom: 0.614rem;
-    margin-top: 1rem;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: light.$border-radius;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    @include light.border-bottom-radius(light.$border-radius-xl);
     .navbar-nav {
       .nav-link {
-        padding: 0.5rem 0.625rem;
-        margin-inline-end: 0.625rem;
+        padding: 0.5rem 0.8375rem;
         @include light.media-breakpoint-down(xl) {
           padding-left: 0.5rem;
           padding-right: 0.5rem;
-          margin-inline-end: 0;
         }
-      }
-
-      .nav-item {
-        &:last-child {
-          .nav-link {
-            margin-inline-end: 0;
+        .menu-icon {
+          &,
+          &::before {
+            font-size: 0.75rem;
           }
         }
+      }
+      .nav-item {
         &.mega-dropdown {
           > .dropdown-menu {
             @include light.media-breakpoint-up(lg) {
@@ -63,13 +42,6 @@ nav.layout-navbar {
             .mega-dropdown-link {
               padding-left: 0;
               padding-right: 0;
-              margin: 0;
-              font-weight: light.$font-weight-normal;
-              i {
-                font-size: 1rem;
-                font-weight: light.$font-weight-bold;
-                margin-top: -0.125rem;
-              }
             }
           }
         }
@@ -77,6 +49,21 @@ nav.layout-navbar {
           &,
           img {
             border-radius: 0.625rem;
+          }
+        }
+      }
+    }
+    .landing-nav-menu {
+      .navbar-nav {
+        @include light.media-breakpoint-down(lg) {
+          .nav-item.dropdown {
+            .dropdown-menu {
+              position: unset !important;
+              box-shadow: none;
+              border: none;
+              margin: 0;
+              margin-left: 1rem;
+            }
           }
         }
       }
@@ -99,7 +86,6 @@ nav.layout-navbar {
         height: 100%;
         max-width: 300px;
         width: 80%;
-        padding: 1rem;
         inset-inline-start: -100%;
         top: 0;
         overflow-y: auto;
@@ -119,51 +105,35 @@ nav.layout-navbar {
 // Light style
 @if $enable-light-style {
   .light-style {
-    .layout-navbar {
-      .navbar {
-        &.landing-navbar {
-          border-color: rgba(light.$card-bg, 0.68);
-          background: rgba(light.$card-bg, 0.38);
-          .navbar-nav {
-            .nav-link {
-              color: light.$headings-color;
-            }
-            .show > .nav-link,
-            .active > .nav-link,
-            .nav-link.show,
-            .nav-link.active {
-              color: light.$primary !important;
-            }
-            .nav-item {
-              &.mega-dropdown {
-                > .dropdown-menu {
-                  .mega-dropdown-link {
-                    i {
-                      color: light.$body-color;
-                    }
-                  }
-                }
-              }
-            }
+    .navbar {
+      &.landing-navbar {
+        background-color: light.$card-bg;
+        border: 1px solid rgba(light.$card-bg, 0.78);
+        &.navbar-active {
+          box-shadow: light.$box-shadow-sm;
+        }
+        .navbar-brand {
+          .navbar-toggler {
+            color: light.$headings-color;
           }
-          @include light.media-breakpoint-down(lg) {
-            .landing-nav-menu {
-              background-color: light.$card-bg;
+        }
+        .navbar-nav {
+          .nav-link {
+            color: light.$headings-color;
+            .menu-icon {
+              color: light.$body-color;
             }
           }
         }
-      }
-      &.navbar-active {
-        .navbar {
-          &.landing-navbar {
-            background: light.$card-bg;
-            box-shadow: light.$box-shadow-sm;
+        @include light.media-breakpoint-down(lg) {
+          .landing-nav-menu {
+            background-color: light.$card-bg;
           }
         }
       }
-      .menu-text {
-        color: light.$headings-color;
-      }
+    }
+    .menu-text {
+      color: light.$headings-color;
     }
   }
 }
@@ -171,51 +141,34 @@ nav.layout-navbar {
 // Dark style
 @if $enable-dark-style {
   .dark-style {
-    .layout-navbar {
-      .navbar {
-        &.landing-navbar {
-          border-color: rgba(#41415f, 0.68);
-          background-color: rgba(#41415f, 0.38);
-          .navbar-nav {
-            .nav-link {
-              color: dark.$headings-color;
-            }
-            .show > .nav-link,
-            .active > .nav-link,
-            .nav-link.show,
-            .nav-link.active {
-              color: dark.$primary !important;
-            }
-            .nav-item {
-              &.mega-dropdown {
-                > .dropdown-menu {
-                  .mega-dropdown-link {
-                    i {
-                      color: dark.$body-color;
-                    }
-                  }
-                }
-              }
-            }
+    .navbar {
+      &.landing-navbar {
+        background-color: dark.$card-bg;
+        border: 1px solid rgba(dark.$card-bg, 0.78);
+        &.navbar-active {
+          box-shadow: dark.$box-shadow-sm;
+        }
+        .navbar-brand {
+          .navbar-toggler {
+            color: dark.$headings-color;
           }
-          @include light.media-breakpoint-down(lg) {
-            .landing-nav-menu {
-              background-color: dark.$card-bg;
+        }
+        .navbar-nav {
+          .nav-link {
+            color: dark.$headings-color;
+            .menu-icon {
+              color: dark.$body-color;
             }
           }
         }
-        .menu-text {
-          color: dark.$headings-color;
+        @include light.media-breakpoint-down(lg) {
+          .landing-nav-menu {
+            background-color: dark.$card-bg;
+          }
         }
       }
-      &.navbar-active {
-        .navbar {
-          &.landing-navbar {
-            background: dark.$card-bg;
-            border-color: dark.$card-bg;
-            box-shadow: dark.$box-shadow-sm;
-          }
-        }
+      .menu-text {
+        color: dark.$headings-color;
       }
     }
   }

@@ -11,16 +11,12 @@
     margin-left: auto;
   }
 
-  .app-brand-logo ~ .app-brand-text {
+  .app-brand-logo ~ .app-brand-text,
+  .app-brand .layout-menu-toggle {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     opacity: 0;
-  }
-  .app-brand .layout-menu-toggle {
-    // display: none !important;
-    opacity: 0;
-    left: calc(#{$menu-collapsed-width} - 1.5rem);
   }
 
   .app-brand-img {

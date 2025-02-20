@@ -7,7 +7,7 @@
     border-color: $form-check-input-disabled-bg;
   }
   &:checked {
-    box-shadow: $box-shadow-sm;
+    box-shadow: $box-shadow-xs;
   }
 }
 
@@ -19,10 +19,49 @@
 //? .dt-checkboxes-cell class is used for DataTables checkboxes
 .form-check:not(.form-switch),
 .dt-checkboxes-cell {
+  // Material shadow
+  .form-check-input {
+    position: relative;
+    transition: all 0.2s;
+    @include rtl-style {
+      &::after {
+        right: -2px;
+        left: auto;
+      }
+    }
+  }
+
+  // Checkbox and Radio bg size for animation transition
+  .form-check-input[type='checkbox'] {
+    background-size: 1.1rem;
+    &:not(:checked):not(:indeterminate) {
+      background-size: 0rem;
+    }
+    &:indeterminate {
+      box-shadow: $box-shadow-xs;
+    }
+  }
   .form-check-input[type='radio'] {
     background-size: 1.3125rem;
     &:not(:checked) {
       background-size: 0.75rem;
+    }
+  }
+  // Material shadow display on hover & active
+  .form-check-input {
+    &:active,
+    &:hover {
+      &::after {
+        opacity: 1;
+        transform: scale(2) translateZ(0);
+      }
+    }
+
+    &:disabled,
+    &[disabled] {
+      &::after {
+        display: none;
+      }
     }
   }
 }
@@ -74,6 +113,6 @@
 // Contextual colors for form check
 @each $color, $value in $theme-colors {
   @if $color != primary {
-    @include template-form-check-variant('.form-check-#{$color}', $value);
+    @include template-material-form-check-variant('.form-check-#{$color}', $value);
   }
 }

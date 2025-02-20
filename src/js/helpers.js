@@ -720,7 +720,7 @@ const Helpers = {
     setTimeout(() => {
       const contentArea = document.querySelector('.content-wrapper > div') // For content area
       const navbarArea = document.querySelector('.layout-navbar') // For navbar area for vertical menu
-      const navbarAreaHorizontal = document.querySelector('.layout-navbar > div') // For navbar area for horizontal menu
+      const navbarAreaHorizontal = document.querySelector('.layout-navbar > div') // For navbar area for horizontal
       const navbarSearchInputWrapper = document.querySelector('.layout-navbar .search-input-wrapper') // For navbar search input wrapper
       const navbarSearchInput = document.querySelector('.layout-navbar .search-input-wrapper .search-input') // For navbar search input
       const footerArea = document.querySelector('.content-footer > div') // For footer area
@@ -736,7 +736,7 @@ const Helpers = {
       }
       //  If compact mode layout
       if (contentLayout === 'compact') {
-        // Remove container fluid class from content area and footer area
+        // Remove container fluid class from content area, navbar area and footer area
         if (containerFluid.some(el => [contentArea, footerArea].includes(el))) {
           this._removeClass('container-fluid', [contentArea, footerArea])
           this._addClass('container-xxl', [contentArea, footerArea])
@@ -771,7 +771,7 @@ const Helpers = {
       } else {
         //  If wide mode layout
 
-        // Remove container xxl class from content area and footer area
+        // Remove container xxl class from content area, navbar area and footer area
         if (containerXxl.some(el => [contentArea, footerArea].includes(el))) {
           this._removeClass('container-xxl', [contentArea, footerArea])
           this._addClass('container-fluid', [contentArea, footerArea])
@@ -999,10 +999,10 @@ const Helpers = {
 
           if (formPasswordToggleInput.getAttribute('type') === 'text') {
             formPasswordToggleInput.setAttribute('type', 'password')
-            formPasswordToggleIcon.classList.replace('bx-show', 'bx-hide')
+            formPasswordToggleIcon.classList.replace('ri-eye-line', 'ri-eye-off-line')
           } else if (formPasswordToggleInput.getAttribute('type') === 'password') {
             formPasswordToggleInput.setAttribute('type', 'text')
-            formPasswordToggleIcon.classList.replace('bx-hide', 'bx-show')
+            formPasswordToggleIcon.classList.replace('ri-eye-off-line', 'ri-eye-line')
           }
         })
       })
@@ -1059,6 +1059,50 @@ const Helpers = {
         })
       }
     }
+  },
+
+  // Tabs animation
+  navTabsAnimation() {
+    // Adding timeout to make it work on firefox
+    setTimeout(() => {
+      document.querySelectorAll('.nav-tabs').forEach(tab => {
+        let slider = tab.querySelector('.tab-slider')
+        if (!slider) {
+          const sliderEle = document.createElement('span')
+          sliderEle.setAttribute('class', 'tab-slider')
+
+          slider = tab.appendChild(sliderEle)
+        }
+        const isVertical = tab.closest('.nav-align-left') || tab.closest('.nav-align-right')
+        const setSlider = activeTab => {
+          const tabsEl = activeTab.parentElement
+          const tabsRect = tabsEl.getBoundingClientRect()
+          const activeTabRect = activeTab.getBoundingClientRect()
+          const sliderStart = activeTabRect.x - tabsRect.x
+          const isBottom = tab.closest('.nav-align-bottom')
+          if (isVertical) {
+            slider.style.top = activeTabRect.y - tabsRect.y + 'px'
+            slider.style[tab.closest('.nav-align-right') ? 'inset-inline-start' : 'inset-inline-end'] = 0
+            slider.style.height = activeTabRect.height + 'px'
+          } else {
+            slider.style.left = sliderStart + 'px'
+            slider.style.width = activeTabRect.width + 'px'
+            if (!isBottom) {
+              slider.style.bottom = 0
+            }
+          }
+        }
+        // On click
+        tab.addEventListener('click', event => {
+          // To avoid active state for disabled element
+          if (event.target.closest('.nav-item .active')) {
+            setSlider(event.target.closest('.nav-item'))
+          }
+        })
+        // On Load
+        setSlider(tab.querySelector('.nav-link.active').closest('.nav-item'))
+      })
+    }, 50)
   },
 
   // ---

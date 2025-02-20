@@ -8,7 +8,7 @@
 
 $kanban-wrapper-height: calc(100vh - 12rem);
 $kanban-app-horizontal-height-diff: 3.5rem;
-$kanban-title-font-size: light.$h5-font-size;
+$kanban-title-font-size: 1.125rem;
 $kanban-title-font-weight: light.$font-weight-medium;
 $kanban-title-max-width: 13rem;
 
@@ -17,7 +17,7 @@ $kanban-drag-min-width: 16.25rem;
 $kanban-drag-padding: 0;
 
 $kanban-item-width: 16.25rem;
-$kanban-item-padding-y: 1.5rem;
+$kanban-item-padding-y: 1.25rem;
 $kanban-item-padding-x: $kanban-item-padding-y;
 
 $kanban-add-new-board-padding: 1rem;
@@ -55,8 +55,8 @@ $kanban-add-new-board-padding: 1rem;
           padding: 0 0 $kanban-add-new-board-padding 0;
           .kanban-title-board {
             font-size: $kanban-title-font-size;
-            max-width: $kanban-title-max-width;
             font-weight: $kanban-title-font-weight;
+            max-width: $kanban-title-max-width;
             white-space: nowrap;
             overflow: hidden;
             &:focus {
@@ -81,10 +81,9 @@ $kanban-add-new-board-padding: 1rem;
         }
         .kanban-title-button {
           position: absolute;
-          left: -4px;
+          left: -6px;
           bottom: 0;
-          margin: -1.5rem 0;
-          font-weight: light.$font-weight-normal;
+          margin: -2rem 0;
           &:focus {
             box-shadow: none;
           }
@@ -96,7 +95,7 @@ $kanban-add-new-board-padding: 1rem;
           width: $kanban-item-width;
           padding: $kanban-item-padding-y $kanban-item-padding-x;
           margin-bottom: 1rem;
-          border-radius: light.$border-radius;
+          border-radius: light.$border-radius-lg;
           .kanban-tasks-item-dropdown {
             display: none;
             position: absolute;
@@ -111,6 +110,9 @@ $kanban-add-new-board-padding: 1rem;
             .kanban-tasks-item-dropdown {
               display: block;
             }
+          }
+          .kanban-text {
+            font-size: 0.9375rem;
           }
         }
       }
@@ -188,13 +190,11 @@ $kanban-add-new-board-padding: 1rem;
       .kanban-board {
         .kanban-board-header {
           color: light.$headings-color;
-          .kanban-title-button {
-            color: light.$headings-color;
-          }
         }
         .kanban-item {
           background-color: light.$card-bg;
           box-shadow: light.$card-box-shadow;
+
           .kanban-text {
             color: light.$headings-color;
           }
@@ -216,13 +216,11 @@ $kanban-add-new-board-padding: 1rem;
       .kanban-board {
         .kanban-board-header {
           color: dark.$headings-color;
-          .kanban-title-button {
-            color: dark.$headings-color;
-          }
         }
         .kanban-item {
           background-color: dark.$card-bg;
           box-shadow: dark.$card-box-shadow;
+
           .kanban-text {
             color: dark.$headings-color;
           }

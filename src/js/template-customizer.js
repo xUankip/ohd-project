@@ -490,7 +490,7 @@ class TemplateCustomizer {
       image = image || nameVal
 
       return this._getElementFromString(`<div class="col-4 px-2">
-      <div class="form-check custom-option custom-option-icon">
+        <div class="form-check custom-option custom-option-icon">
         <label class="form-check-label custom-option-content p-0" for="${inputName}${nameVal}">
           <span class="custom-option-body mb-0">
             <img src="${assetsPath}img/customizer/${image}${
@@ -505,7 +505,7 @@ class TemplateCustomizer {
             id="${inputName}${nameVal}" />
         </label>
       </div>
-      <label class="form-check-label small text-nowrap text-body mt-1" for="${inputName}${nameVal}">${title}</label>
+      <label class="form-check-label small text-nowrap" for="${inputName}${nameVal}">${title}</label>
     </div>`)
     }
 

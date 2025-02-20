@@ -1,108 +1,157 @@
-using System.Linq.Dynamic.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using AspnetCoreMvcStarter.Data;
+using AspnetCoreMvcStarter.Models;
 
-namespace AspnetCoreMvcStarter.Controllers;
-
-[Route("api/users")]
-[ApiController]
-public class UserController : ControllerBase
+namespace AspnetCoreMvcStarter.Controllers
 {
-  private static Dictionary<String, Object> cached = new Dictionary<string, object>();
-  private static string cacheKey = "listUser";
-  private readonly ILogger<UserController> _logger;
-
-  public UserController(ILogger<UserController> logger)
-  {
-    _logger = logger;
-  }
-
-  private static List<User> _users = new List<User>()
-  {
-    new User { Id = 1, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" },
-    new User { Id = 2, FirstName = "Jane", LastName = "Smith", Email = "jane.smith@example.com" },
-    new User { Id = 3, FirstName = "Peter", LastName = "Jones", Email = "peter.jones@example.com" },
-    new User { Id = 4, FirstName = "Alice", LastName = "Brown", Email = "alice.brown@example.com" },
-    new User { Id = 5, FirstName = "Bob", LastName = "Lee", Email = "bob.lee@example.com" },
-    new User { Id = 6, FirstName = "Charlie", LastName = "Davis", Email = "charlie.davis@example.com" },
-    new User { Id = 7, FirstName = "Diana", LastName = "Wilson", Email = "diana.wilson@example.com" },
-    new User { Id = 8, FirstName = "Eric", LastName = "Moore", Email = "eric.moore@example.com" },
-    new User { Id = 9, FirstName = "Fiona", LastName = "Taylor", Email = "fiona.taylor@example.com" },
-    new User { Id = 10, FirstName = "George", LastName = "Anderson", Email = "george.anderson@example.com" },
-    new User { Id = 11, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com" },
-    new User { Id = 12, FirstName = "Jane", LastName = "Smith", Email = "jane.smith@example.com" },
-    new User { Id = 13, FirstName = "Peter", LastName = "Jones", Email = "peter.jones@example.com" },
-    new User { Id = 14, FirstName = "Alice", LastName = "Brown", Email = "alice.brown@example.com" },
-    new User { Id = 15, FirstName = "Bob", LastName = "Lee", Email = "bob.lee@example.com" },
-    new User { Id = 16, FirstName = "Charlie", LastName = "Davis", Email = "charlie.davis@example.com" },
-    new User { Id = 17, FirstName = "Diana", LastName = "Wilson", Email = "diana.wilson@example.com" },
-    new User { Id = 18, FirstName = "Eric", LastName = "Moore", Email = "eric.moore@example.com" },
-    new User { Id = 19, FirstName = "Fiona", LastName = "Taylor", Email = "fiona.taylor@example.com" },
-    new User { Id = 20, FirstName = "George", LastName = "Anderson", Email = "george.anderson@example.com" }
-  };
-
-  [HttpGet]
-  public IActionResult GetUsers(
-    [FromQuery] int page = 1,
-    [FromQuery] int pageSize = 10,
-    [FromQuery] string? search = null,
-    [FromQuery] string? orderColumn = null,
-    [FromQuery] string? orderDir = null)
-  {
-    if (!cached.ContainsKey("listUser"))
+    public class UserController : Controller
     {
-      _logger.LogInformation("Get Fresh data");
-      cached[cacheKey] = _users; // móc trong db.
+        private readonly ApplicationDbContext _context;
+
+        public UserController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        // GET: User
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Users.ToListAsync());
+        }
+
+        // GET: User/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(m => m.UserID == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        // GET: User/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: User/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("UserID,Username,PasswordHash,Email,RoleID,FullName,Phone,IsActive,CreatedAt,UpdatedAt,DeletedAt")] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(user);
+        }
+
+        // GET: User/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        // POST: User/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("UserID,Username,PasswordHash,Email,RoleID,FullName,Phone,IsActive,CreatedAt,UpdatedAt,DeletedAt")] User user)
+        {
+            if (id != user.UserID)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.UserID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(user);
+        }
+
+        // GET: User/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(m => m.UserID == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        // POST: User/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool UserExists(int id)
+        {
+            return _context.Users.Any(e => e.UserID == id);
+        }
     }
-    else
-    {
-      _logger.LogInformation("Get Cache data");
-    }
-    _users = (List<User>) cached["listUser"];
-
-    var query = _users.AsQueryable(); // móc từ db.
-    if (!string.IsNullOrEmpty(search))
-    {
-      // search theo keyword
-      query = query.Where(x => x.LastName.Contains(search, StringComparison.OrdinalIgnoreCase));
-    }
-    if (!string.IsNullOrEmpty(orderColumn) && !string.IsNullOrEmpty(orderDir))
-    {
-      // sort by field
-      query = query.OrderBy($"{orderColumn} {orderDir}");
-    }
-    var totalCount = query.Count();
-    var pagedProducts = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-    var result = new
-    {
-      data = pagedProducts,
-      recordsTotal = _users.Count,
-      recordsFiltered = totalCount,
-      page = page,
-      pageSize = pageSize
-    };
-    return Ok(result);
-  }
-
-  [HttpPost]
-  public IActionResult Save(User user)
-  {
-    // Save and add to cached
-    // if (cached.ContainsKey("listUser"))
-    // {
-    //   var cachedUser = (List<User>) cached[cacheKey];
-    //   cachedUser.Add(user);
-    //   cached[cacheKey] = cachedUser;
-    // }
-    cached.Remove(cacheKey);
-    return Ok(null);
-  }
-
-  // Model User
-  public class User
-  {
-    public int Id { get; set; }
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-  }
 }

@@ -6,22 +6,13 @@
 
   #{$parent} {
     color: map-get($colors, color);
-    .layout-footer-fixed .layout-horizontal & {
-      background-color: map-get($colors, bg) !important;
-    }
-
-    .layout-footer-fixed .layout-wrapper:not(.layout-horizontal) & {
-      .footer-container {
-        background-color: map-get($colors, bg) !important;
-      }
-    }
 
     .footer-link {
-      color: map-get($colors, active-color);
+      color: map-get($colors, color);
 
       &:hover,
       &:focus {
-        color: map-get($colors, active-color);
+        color: map-get($colors, color);
       }
 
       &.disabled {
@@ -30,7 +21,7 @@
     }
 
     .footer-text {
-      color: map-get($colors, color);
+      color: map-get($colors, active-color);
     }
 
     .show > .footer-link,

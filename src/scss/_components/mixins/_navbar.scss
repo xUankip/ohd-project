@@ -5,8 +5,29 @@
   $colors: get-navbar-prop($bg, $active-color, $color, $border);
 
   #{$parent} {
-    background-color: rgba(map-get($colors, bg), 0.88) !important;
     color: map-get($colors, color);
+    &.layout-navbar {
+      .layout-navbar-fixed .window-scrolled &,
+      .layout-horizontal & {
+        background-color: rgba(map-get($colors, bg), 0.85) !important;
+        .search-input-wrapper {
+          .search-input,
+          .search-toggler {
+            background-color: $bg !important;
+            border-radius: $border-radius-xl;
+          }
+        }
+      }
+      .navbar-search-wrapper {
+        .search-toggler {
+          > i:before {
+            @include app-rtl {
+              transform: scaleX(-1) !important;
+            }
+          }
+        }
+      }
+    }
 
     .navbar-brand,
     .navbar-brand a {
@@ -28,8 +49,8 @@
     .search-input-wrapper {
       .search-input,
       .search-toggler {
-        background-color: $bg !important;
         color: map-get($colors, color);
+        @include border-top-radius(0);
       }
     }
 

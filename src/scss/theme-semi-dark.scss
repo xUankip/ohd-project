@@ -2,10 +2,9 @@
 @import './_theme/common';
 @import './_theme/libs';
 @import './_theme/pages';
-@import './_theme/_theme';
 
-$primary-color: #696cff;
-$body-bg: #f4f5fb;
+$primary-color: #8c57ff;
+$body-bg: #f4f5fa;
 
 body {
   background: $body-bg;
@@ -21,89 +20,63 @@ body {
 
 // Navbar
 // ---------------------------------------------------------------------------
-@include template-navbar-style('.bg-navbar-theme', $card-bg, $color: $body-color, $active-color: $headings-color);
-.layout-navbar {
-  background-color: rgba($card-bg, 0.88) !important;
-  backdrop-filter: saturate(200%) blur(6px);
+@include template-navbar-style('.bg-navbar-theme', $card-bg, $color: $headings-color, $active-color: $headings-color);
+
+.layout-horizontal .layout-navbar {
+  box-shadow: 0 1px 0 $border-color;
 }
-.layout-navbar-fixed .layout-page:before {
-  backdrop-filter: saturate(200%) blur(10px);
-  background: linear-gradient(180deg, rgba($body-bg, 70%) 44%, rgba($body-bg, 43%) 73%, rgba($body-bg, 0%));
-  -webkit-mask: linear-gradient($body-bg, $body-bg 18%, transparent 100%);
-  mask: linear-gradient($body-bg, $body-bg 18%, transparent 100%);
+
+.layout-navbar-fixed .layout-page:not(.window-scrolled) .layout-navbar.navbar-detached {
+  background: $body-bg;
 }
 
 // Menu
 // ---------------------------------------------------------------------------
-@include template-menu-style('.bg-menu-theme', $dark, $color: #d5d5e2, $active-color: $white, $border: transparent);
+@include template-menu-style(
+  '.bg-menu-theme',
+  #282a42,
+  $color: #eaeaffde,
+  $active-color: #eaeaffde,
+  $active-bg: $primary-color
+);
 
+.app-brand .layout-menu-toggle {
+  svg {
+    color: #eaeaffde;
+  }
+}
+.menu-inner > .menu-header::before {
+  background-color: #464963 !important;
+}
 .bg-menu-theme {
-  // Menu header
-  .menu-header {
-    color: $text-muted;
-    &:before {
-      background-color: $text-muted !important;
+  &.menu-vertical {
+    .menu-item:not(.active) .menu-link:hover {
+      background-color: rgba($body-bg, 0.05);
+      color: #eaeaffde;
     }
-  }
-
-  // menu item open(vertical) & hover (vertical & horizontal)
-  .menu-inner .menu-item.open > .menu-link,
-  .menu-inner .menu-item .menu-link:not(.active):hover {
-    html:not(.layout-menu-collapsed) &,
-    .layout-menu-hover.layout-menu-collapsed & {
-      background-color: rgba(#e6e6f1, 0.06);
-    }
-  }
-  // menu item open(horizontal)
-  .menu-inner .menu-sub > .menu-item.active {
-    > .menu-link.menu-toggle {
-      background-color: rgba(#e6e6f1, 0.08) !important;
-    }
-    &:not(:has(.menu-sub)) {
-      .menu-icon {
-        color: $primary-color;
+    .menu-item.open {
+      > .menu-link {
+        background-color: rgba($body-bg, 0.08);
+        color: #eaeaffde;
       }
     }
   }
-
-  // menu item active
-  .menu-inner > .menu-item.active > .menu-link,
-  &.menu-horizontal .menu-inner > .menu-item.active > .menu-sub > .menu-item.active:not(:has(.menu-sub)) > .menu-link {
-    color: $white !important;
-    background-color: $primary-color !important;
-    .menu-icon {
-      color: $white !important;
+  &.menu-horizontal {
+    .menu-inner .menu-item:not(.menu-item-closing) > .menu-sub {
+      background: #282a42;
+    }
+    .menu-inner > .menu-item .menu-sub .menu-item.active > .menu-link.menu-toggle {
+      background-color: rgba($body-bg, 0.08);
+    }
+    .menu-item .menu-link:hover {
+      background-color: rgba($body-bg, 0.05);
+      color: #eaeaffde;
     }
   }
-  .menu-inner > .menu-item.active:before {
-    background: $primary-color;
-  }
-
-  // Sub menu item link bullet
-  .menu-sub > .menu-item > .menu-link:before {
-    background-color: rgba-to-hex($gray-400, $rgba-to-hex-bg) !important;
-  }
-  // Sub menu item link active bullet
-  .menu-sub > .menu-item.active > .menu-link:not(.menu-toggle):before {
-    background-color: $primary-color !important;
-    border: 3px solid rgba-to-hex(rgba($primary-color, 0.4), $dark) !important;
-  }
-  // Sub menu box-shadow (horizontal)
-  .menu-inner > .menu-item .menu-sub {
-    .layout-horizontal & {
-      box-shadow: 0 0.25rem 1rem rgba($dark, 0.4);
-    }
+  .menu-inner > .menu-item .menu-link.menu-toggle:after {
+    color: #d5d1ea;
   }
 }
-
-.app-brand .layout-menu-toggle {
-  background-color: $primary-color;
-  border: 7px solid $body-bg;
-  i {
-    color: color-contrast($primary-color);
-  }
-}
-
 // Footer
 // ---------------------------------------------------------------------------
-@include template-footer-style('.bg-footer-theme', $card-bg, $color: $body-color, $active-color: $primary-color);
+@include template-footer-style('.bg-footer-theme', $body-bg, $color: $primary-color, $active-color: $headings-color);

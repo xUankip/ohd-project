@@ -6,10 +6,9 @@
   max-height: 10rem;
   overflow-y: auto;
   margin: 0.125rem 0;
-  background: light.$white;
+  background: #fff;
   background-clip: padding-box;
   outline: none;
-  padding: light.$dropdown-padding-y;
 }
 
 .ui-timepicker-list {
@@ -28,16 +27,16 @@
 }
 
 .ui-timepicker-list li {
-  padding: 0.25rem 0.75rem;
-  margin: 0.125rem 0.5625rem;
+  padding: 0.4rem 0.75rem;
+  margin: 0.2rem 0.75rem;
   white-space: nowrap;
   cursor: pointer;
   list-style: none;
-  border-radius: light.$dropdown-border-radius;
+  border-radius: light.$border-radius-lg;
 
   &.ui-timepicker-disabled,
   &.ui-timepicker-selected.ui-timepicker-disabled {
-    background: light.$white !important;
+    background: #fff !important;
     cursor: default !important;
   }
 }
@@ -45,9 +44,10 @@
 @if $enable-light-style {
   .light-style {
     .ui-timepicker-wrapper {
+      padding: light.$dropdown-padding-y + 0;
       z-index: light.$zindex-popover;
       background: light.$dropdown-bg;
-      box-shadow: light.$dropdown-box-shadow;
+      box-shadow: light.$card-box-shadow;
       border: light.$dropdown-border-width solid light.$dropdown-border-color;
 
       @include light.border-radius(light.$border-radius);
@@ -82,9 +82,10 @@
   .dark-style {
     .ui-timepicker-wrapper {
       border: dark.$dropdown-border-width solid dark.$dropdown-border-color;
+      padding: dark.$dropdown-padding-y 0;
       z-index: dark.$zindex-popover;
       background: dark.$dropdown-bg;
-      box-shadow: dark.$dropdown-box-shadow;
+      box-shadow: dark.$card-box-shadow;
 
       @include dark.border-radius(dark.$border-radius);
     }

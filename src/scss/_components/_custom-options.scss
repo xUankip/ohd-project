@@ -14,19 +14,22 @@
   &.custom-option-image {
     border-width: $custom-option-image-border-width !important;
     overflow: hidden;
-    margin: 0;
     &:hover {
       border-width: $custom-option-image-border-width !important;
-      border-color: $custom-option-border-hover-color;
     }
   }
   .custom-option-content {
     cursor: $custom-option-cursor;
     width: 100%;
   }
+
+  &.custom-option-label {
+    border-color: $secondary;
+    background-color: $custom-option-label-bg;
+  }
   .form-check-input {
     background-color: transparent;
-    margin-inline-start: $form-check-padding-start * -1.12;
+    margin-inline-start: $form-check-padding-start * -1.1;
   }
 }
 
@@ -34,7 +37,7 @@
 .custom-option-basic {
   .custom-option-content {
     padding: $custom-option-padding;
-    padding-left: $custom-option-padding + $form-check-padding-start + 0.65em;
+    padding-left: $custom-option-padding + $form-check-padding-start + 0.367em;
   }
   .custom-option-header {
     display: flex;
@@ -51,15 +54,6 @@
 // Custom option with icon
 .custom-option-icon {
   overflow: hidden;
-  &.checked {
-    i,
-    svg {
-      color: $component-active-bg;
-    }
-  }
-  &:not(.checked) svg {
-    color: $headings-color;
-  }
   .custom-option-content {
     text-align: center;
     padding: $custom-option-padding;
@@ -76,16 +70,15 @@
       display: block;
     }
     svg {
-      height: 40px;
-      width: 40px;
-      margin-bottom: 0.5rem;
+      height: 38px;
+      width: 38px;
+      margin-bottom: 0.25rem;
     }
     .custom-option-title {
       display: block;
       font-size: $font-size-base;
       font-weight: $font-weight-medium;
       color: $headings-color;
-      margin-bottom: 0.5rem;
     }
   }
   .form-check-input {

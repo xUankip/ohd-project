@@ -43,6 +43,7 @@ $calender-sidebar-width: 18.75rem !default;
   .app-calendar-content {
     position: relative;
   }
+
   .fc-toolbar {
     h2 {
       font-size: light.$h4-font-size;
@@ -65,17 +66,15 @@ $calender-sidebar-width: 18.75rem !default;
       border-right: 0;
     }
   }
-  .fc-timeGridDay-view,
-  .fc-timeGridWeek-view {
-    table.fc-scrollgrid {
-      tbody {
-        tr:not(.fc-scrollgrid-section:first-of-type) {
-          td {
-            border-bottom: 0;
-          }
-        }
-      }
+  .fc-timeGridWeek-view,
+  .fc-timeGridDay-view {
+    table > tbody > tr:last-child > td {
+      border-bottom: 0;
     }
+  }
+
+  .fc-list {
+    border: 0 !important;
   }
   .fc-dayGridMonth-view {
     table.fc-scrollgrid {
@@ -84,8 +83,9 @@ $calender-sidebar-width: 18.75rem !default;
       }
     }
   }
+
   .fc-header-toolbar {
-    margin-bottom: 1.5rem !important;
+    margin-bottom: 1.2rem !important;
   }
   .fc-view-container {
     margin: 0 -1.6rem;
@@ -147,6 +147,27 @@ $calender-sidebar-width: 18.75rem !default;
     .app-calendar-wrapper {
       .app-calendar-sidebar {
         background-color: light.$white;
+
+        .flatpickr-calendar {
+          .flatpickr-month,
+          .flatpickr-weekday,
+          .flatpickr-weekdays {
+            color: light.$body-color;
+          }
+          .flatpickr-months {
+            svg {
+              fill: light.$body-color;
+            }
+          }
+        }
+      }
+      .event-sidebar {
+        .select2-results {
+          .select2-results__option.select2-results__option--highlighted {
+            background-color: light.$gray-100 !important;
+            color: light.$body-color !important;
+          }
+        }
       }
     }
   }
@@ -158,6 +179,20 @@ $calender-sidebar-width: 18.75rem !default;
     .app-calendar-wrapper {
       .app-calendar-sidebar {
         background-color: dark.$card-bg;
+        .flatpickr-calendar {
+          background-color: dark.$card-bg;
+          .flatpickr-days {
+            background-color: dark.$card-bg;
+          }
+        }
+      }
+      .event-sidebar {
+        .select2-results {
+          .select2-results__option.select2-results__option--highlighted {
+            background-color: dark.$gray-100 !important;
+            color: dark.$body-color !important;
+          }
+        }
       }
     }
   }

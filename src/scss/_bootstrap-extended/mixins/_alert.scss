@@ -33,11 +33,10 @@
 
   #{$parent} {
     hr {
-      color: $color !important;
+      background-color: $color !important;
     }
     .alert-icon {
       background-color: $color;
-      box-shadow: 0 0 0 0.125rem rgba($color, 0.16);
     }
   }
 }
@@ -61,11 +60,10 @@
 
   #{$parent} {
     hr {
-      color: $color !important;
+      background-color: $color !important;
     }
     .alert-icon {
       color: $background !important;
-      box-shadow: 0 0 0 0.125rem tint-color($background, $alert-icon-shadow-scale);
     }
   }
 }
@@ -73,6 +71,11 @@
 // Outline Alerts
 @mixin template-alert-outline-variant($parent, $background, $color: null) {
   $color: $background;
+  $icon-background: if(
+    $dark-style,
+    shade-color($background, $alert-bg-scale, $card-bg),
+    tint-color($background, $alert-bg-tint-scale, $card-bg)
+  );
 
   #{$parent} {
     border-color: $background;
@@ -88,11 +91,11 @@
 
   #{$parent} {
     hr {
-      color: $color !important;
+      background-color: $color !important;
     }
     .alert-icon {
-      background-color: $color !important;
-      box-shadow: 0 0 0 0.125rem rgba($color, 0.16);
+      color: $color !important;
+      background-color: $icon-background !important;
     }
   }
 }

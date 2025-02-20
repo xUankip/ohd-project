@@ -6,9 +6,8 @@
 
 .btn-group,
 .btn-group-vertical {
-  &:disabled,
-  &.disabled {
-    opacity: 0.45;
+  .btn {
+    box-shadow: none !important;
   }
 }
 
@@ -24,14 +23,12 @@
 .btn-sm + .dropdown-toggle-split,
 .btn-group-sm > .btn + .dropdown-toggle-split,
 .input-group-sm .btn + .dropdown-toggle-split {
-  padding-right: 0.6em;
-  padding-left: 0.6em;
+  padding: 0.8em;
 }
 
 .btn-xs + .dropdown-toggle-split,
 .btn-group-xs > .btn + .dropdown-toggle-split {
-  padding-right: 0.5em;
-  padding-left: 0.5em;
+  padding: 0.7em;
 }
 
 // * Sizing
@@ -68,6 +65,26 @@
   }
   @include rtl-style {
     border-left-color: transparent !important;
+  }
+}
+
+.btn-group-vertical > .btn-group-vertical:first-child > .btn:not([class*='btn-outline-']):first-child,
+:not(.btn-group-vertical):not(.input-group) > .btn-group-vertical > .btn:not([class*='btn-outline-']):first-child {
+  @include ltr-style {
+    border-top-color: transparent !important;
+  }
+  @include rtl-style {
+    border-bottom-color: transparent !important;
+  }
+}
+
+.btn-group-vertical > .btn-group-vertical:last-child > .btn:not([class*='btn-outline-']):last-of-type,
+:not(.btn-group-vertical):not(.input-group) > .btn-group-vertical > .btn:not([class*='btn-outline-']):last-of-type {
+  @include ltr-style {
+    border-bottom-color: transparent !important;
+  }
+  @include rtl-style {
+    border-top-color: transparent !important;
   }
 }
 

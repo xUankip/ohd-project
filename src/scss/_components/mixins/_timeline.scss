@@ -20,11 +20,11 @@
 
 @mixin template-timeline-indicator-variant($indicator-color, $background) {
   $color: $background;
-  $background: rgba($background, 0.16);
+  $background: shift-color($background, $timeline-point-indicator-bg-scale, $body-bg);
 
   .timeline {
     #{$indicator-color} {
-      background-color: $background;
+      background-color: $background !important;
       i {
         color: $color !important;
       }

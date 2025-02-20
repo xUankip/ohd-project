@@ -1,62 +1,28 @@
 @use '../../scss/_bootstrap-extended/include' as light;
 @use '../../scss/_bootstrap-extended/include-dark' as dark;
 @import '../../scss/_custom-variables/libs';
-$datepicker-content-margin: 0.5rem !default;
-$datepicker-arrow-size: 0.45rem !default;
+
+$datepicker-arrow-size: 0.5rem !default;
 $datepicker-item-width: 2.25rem !default;
 $datepicker-item-height: 2.25rem !default;
 $white: #fff;
 
 .datepicker {
   direction: ltr;
-
+  //! FIX: We can't use dropdown animation here
+  animation: none !important;
   &.dropdown-menu {
     padding: 0;
     margin: 0;
   }
-
   .datepicker-days {
-    margin: $datepicker-content-margin;
+    margin: 0.875rem 0.875rem 0.875rem;
   }
 
   .next,
   .prev {
     color: transparent !important;
     position: relative;
-    border-radius: light.$border-radius;
-  }
-
-  table thead tr th {
-    &.next,
-    &.prev {
-      width: 1.875rem;
-      height: 1.875rem;
-      display: table-caption;
-      top: 0.25rem;
-    }
-
-    &.datepicker-switch {
-      padding-top: 0.4rem;
-    }
-
-    &.next {
-      @include app-ltr {
-        float: right;
-        right: 0.5rem;
-      }
-      @include app-rtl {
-        float: left;
-        left: 0.5rem;
-      }
-    }
-    &.prev {
-      @include app-ltr {
-        left: 0.5rem;
-      }
-      @include app-rtl {
-        right: 0.5rem;
-      }
-    }
   }
 
   .next::after,
@@ -64,7 +30,8 @@ $white: #fff;
     content: '';
     display: block;
     position: absolute;
-    top: 48%;
+    left: 50%;
+    top: 50%;
     height: $datepicker-arrow-size;
     width: $datepicker-arrow-size;
     border-radius: 0;
@@ -76,28 +43,20 @@ $white: #fff;
   .next::after {
     margin-left: -$datepicker-arrow-size * 0.5;
     border-width: 0 2px 2px 0;
-    @include app-ltr {
-      left: 50%;
-    }
 
     @include app-rtl {
-      right: 23%;
       transform: rotate(-45deg);
-      border-width: 2px 0 0 2px;
+      border-width: 1px 0 0 1px;
       margin-left: 0;
     }
   }
 
   .prev::after {
     border-width: 2px 0 0 2px;
-    @include app-ltr {
-      right: 23%;
-    }
 
     @include app-rtl {
-      left: 50%;
       transform: rotate(-45deg);
-      border-width: 0 2px 2px 0;
+      border-width: 0 1px 1px 0;
       margin-left: -$datepicker-arrow-size * 0.5;
     }
   }
@@ -125,7 +84,7 @@ $white: #fff;
     &:before {
       content: '@';
       display: block;
-      line-height: 15px;
+      line-height: 6px;
       text-indent: -99999px;
     }
   }
@@ -133,20 +92,29 @@ $white: #fff;
 
 .datepicker table tr td,
 .datepicker table tr th {
-  width: $datepicker-item-width;
-  height: $datepicker-item-height;
+  font-weight: 400;
   text-align: center;
   border: none;
 
   &.dow {
-    font-size: 0.8125rem;
-    font-weight: normal;
-    vertical-align: bottom;
+    font-size: light.$font-size-sm;
+    font-weight: light.$font-weight-medium;
   }
 }
-
+.datepicker table tr {
+  &:not(:last-child) th {
+    width: $datepicker-item-width;
+    height: $datepicker-item-height;
+  }
+  &:last-child th {
+    width: $datepicker-item-width;
+    height: $datepicker-item-height + 0.5rem;
+  }
+}
 .datepicker table tr td {
-  border-radius: light.$border-radius;
+  border-radius: light.$border-radius-pill;
+  width: $datepicker-item-width;
+  height: $datepicker-item-height;
   &.day:hover,
   &.focused {
     cursor: pointer;
@@ -164,6 +132,11 @@ $white: #fff;
       box-shadow: none !important;
     }
   }
+
+  // span.month,
+  // span.year {
+  //   margin: 0 0.5rem;
+  // }
 
   &.range-start:not(.range-end) {
     @include app-ltr {
@@ -195,12 +168,13 @@ $white: #fff;
     color: $white;
   }
 }
+
 .datepicker table tr td span {
   display: block;
   float: left;
-  width: 3.375rem;
-  height: 2.375rem;
-  line-height: 2.375rem;
+  width: 3.625rem;
+  height: 2rem;
+  line-height: 2rem;
   cursor: pointer;
 
   &.disabled,
@@ -222,7 +196,7 @@ $white: #fff;
 
 // styling for calendar-week cells
 .datepicker .cw {
-  border-radius: 0;
+  font-weight: light.$font-weight-normal;
 }
 
 .datepicker-months table,
@@ -232,13 +206,10 @@ $white: #fff;
   width: (3.375rem * 3) + 2.625rem;
 
   td {
-    padding: 0 0 0.25rem 0.8rem;
-    span {
-      margin: 0.2rem;
-    }
+    padding: 0 0 1.25rem 1rem;
 
     @include app-rtl {
-      padding: 0 0.8rem 0.25rem 0;
+      padding: 0 1rem 1.25rem 0;
     }
   }
 }
@@ -258,57 +229,55 @@ $white: #fff;
   .light-style {
     .datepicker-dropdown {
       z-index: light.$zindex-popover !important;
+      box-shadow: light.$card-box-shadow;
     }
 
     .datepicker {
+      .cw {
+        color: light.$headings-color;
+      }
       &.datepicker-inline {
         table {
-          box-shadow: light.$floating-component-shadow;
+          box-shadow: light.$card-box-shadow;
         }
       }
 
-      th {
-        &.prev,
-        &.next {
-          background-color: light.$gray-80;
-          &::after {
-            color: light.$body-color;
-            border-color: light.$body-color;
-          }
-        }
+      .next::after,
+      .prev::after {
+        color: light.$body-color;
       }
 
       table {
+        thead {
+          background: light.$dropdown-bg;
+          tr,
+          td {
+            color: light.$headings-color;
+          }
+        }
         tr td,
         tr th {
-          &.new,
-          &.new:hover,
-          &.new:focus {
+          &.new {
             color: light.$text-muted;
-          }
-          &.dow,
-          &.datepicker-switch {
-            color: light.$headings-color;
           }
         }
 
         tr td {
-          color: light.$headings-color;
           &.old,
-          &.old:hover,
-          &.old:focus,
           &.disabled {
             color: light.$text-muted;
           }
 
-          &.cw {
-            background: light.rgba-to-hex(light.$gray-60, light.$dropdown-bg);
-          }
-
           &.day:hover,
           &.focused {
-            background: light.rgba-to-hex(light.$gray-60, light.$rgba-to-hex-bg);
-            color: light.$headings-color;
+            background: light.$gray-50;
+          }
+          &.active,
+          &.active.highlighted,
+          .focused,
+          span.active,
+          span.active.disabled {
+            box-shadow: light.$box-shadow-xs;
           }
         }
       }
@@ -319,7 +288,7 @@ $white: #fff;
 
       &:hover,
       &.focused {
-        background: light.rgba-to-hex(light.$gray-60, light.$rgba-to-hex-bg);
+        background: light.$gray-50;
       }
 
       &.disabled,
@@ -328,11 +297,7 @@ $white: #fff;
       }
 
       &.old,
-      &.new,
-      &.old:hover,
-      &.new:hover,
-      &.old:focus,
-      &.new:focus {
+      &.new {
         color: light.$text-muted;
       }
     }
@@ -344,57 +309,57 @@ $white: #fff;
   .dark-style {
     .datepicker-dropdown {
       z-index: dark.$zindex-popover !important;
-    }
-
-    th {
-      &.prev,
-      &.next {
-        background-color: dark.$gray-80;
-        &::after {
-          color: dark.$body-color;
-          border-color: dark.$body-color;
-        }
-      }
+      box-shadow: dark.$card-box-shadow;
     }
 
     .datepicker {
+      .cw {
+        color: dark.$headings-color;
+      }
       &.datepicker-inline {
         table {
-          box-shadow: dark.$floating-component-shadow;
+          box-shadow: dark.$card-box-shadow;
         }
       }
 
+      .next::after,
+      .prev::after {
+        color: dark.$body-color;
+      }
+
       table {
+        thead {
+          background: dark.$dropdown-bg;
+          tr,
+          td {
+            color: dark.$headings-color;
+          }
+        }
         tr td,
         tr th {
-          &.new,
-          &.new:hover,
-          &.new:focus {
+          &.new {
             color: dark.$text-muted;
-          }
-          &.dow,
-          &.datepicker-switch {
-            color: dark.$headings-color;
           }
         }
 
         tr td {
-          color: dark.$headings-color;
+          color: dark.$body-color;
+
           &.old,
-          &.old:hover,
-          &.old:focus,
           &.disabled {
             color: dark.$text-muted;
           }
 
-          &.cw {
-            background: dark.rgba-to-hex(dark.$gray-60, dark.$dropdown-bg);
-          }
-
           &.day:hover,
           &.focused {
-            background: dark.$gray-60;
-            color: dark.$headings-color;
+            background: dark.$gray-50;
+          }
+          &.active,
+          &.active.highlighted,
+          .focused,
+          span.active,
+          span.active.disabled {
+            box-shadow: dark.$box-shadow-xs;
           }
         }
       }
@@ -405,21 +370,17 @@ $white: #fff;
 
       &:hover,
       &.focused {
-        background: dark.$gray-60;
+        background: dark.$input-bg;
       }
 
       &.disabled,
       &.disabled:hover {
-        color: dark.$text-muted;
+        color: dark.$text-light;
       }
 
       &.old,
-      &.new,
-      &.old:hover,
-      &.new:hover,
-      &.old:focus,
-      &.new:focus {
-        color: dark.$text-muted;
+      &.new {
+        color: dark.$text-light;
       }
     }
   }

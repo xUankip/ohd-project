@@ -20,7 +20,6 @@
 @import '../../libs/fullcalendar/mixins';
 @import '../../libs/sweetalert2/mixins';
 @import '../../libs/pickr/mixins';
-@import '../../libs/shepherd/mixins';
 @import '../../libs/bs-stepper/mixins';
 
 // Theme mixin
@@ -46,7 +45,6 @@
   @include sweetalert2-theme($background, $color);
   @include colorPicker-theme($background);
   @include icon-theme($background);
-  @include tour-theme($background);
   @include bs-stepper-theme($background);
 }
 
@@ -70,6 +68,5 @@
   @include sweetalert2-dark-theme($background, $color);
   @include colorPicker-theme($background);
   @include icon-theme($background); // ToDo: placement of mixin
-  @include tour-theme($background);
   @include bs-stepper-theme($background);
 }

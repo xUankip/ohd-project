@@ -18,17 +18,7 @@
     > *:first-child {
       margin-right: 0.5rem;
     }
-  }
-  // End Indicator
-  .timeline-end-indicator {
-    position: absolute;
-    bottom: -1.35rem;
-    left: -0.65rem;
-
-    i {
-      font-size: $timeline-end-indicator-font-size;
-      color: $timeline-border-color;
-    }
+    // d-flex justify-content-between flex-sm-row flex-column
   }
 
   // Timeline Item
@@ -51,10 +41,32 @@
         color: $timeline-event-time-color;
       }
     }
-    // Timeline Point Indicator
-
-    .timeline-indicator,
+    // advance indicator
     .timeline-indicator-advanced {
+      position: absolute;
+      left: -1.08rem;
+      top: 0;
+      z-index: 2;
+      height: 2rem;
+      width: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: $card-bg;
+      box-shadow: 0 0 0 10px $card-bg;
+    }
+
+    .timeline-indicator-advanced + .timeline-event {
+      position: relative;
+      width: 100%;
+      min-height: 4rem;
+      border-radius: 0.5rem;
+      padding: 0.4rem 1.5rem 1rem;
+    }
+
+    // Timeline indicator with icon when use fullscreen timeline
+    .timeline-indicator {
       position: absolute;
       left: -1rem;
       top: 0.64rem;
@@ -64,20 +76,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      text-align: center;
       border-radius: 50%;
-    }
-
-    .timeline-indicator {
+      background-color: shift-color($timeline-point-color, $timeline-point-indicator-bg-scale, $body-bg);
       box-shadow: 0 0 0 10px $body-bg;
+      // Icons
+      i {
+        color: $timeline-point-color;
+      }
     }
 
-    //For advanced Timeline Indicator Background
-    .timeline-indicator-advanced {
-      background-color: $card-bg;
-      top: 0;
-    }
-
+    // Timeline Point Indicator
     .timeline-point {
       position: absolute;
       left: -0.38rem;
@@ -120,15 +128,10 @@
   }
   // Timeline Center
   &.timeline-center {
-    .timeline-end-indicator {
-      bottom: -1.4rem;
-      left: 50%;
-      margin-left: 0.55rem;
-    }
-
     .timeline-item {
       width: 50%;
       clear: both;
+
       &.timeline-item-left,
       &:nth-of-type(odd):not(.timeline-item-left):not(.timeline-item-right) {
         float: left;
@@ -156,13 +159,12 @@
         padding-bottom: 2.5rem;
         border-left: 1px solid $timeline-border-color;
 
-        .timeline-event {
-          .timeline-event-time {
-            left: -10.2rem;
-          }
-          .timeline-point {
-            left: 0;
-          }
+        .timeline-event-time {
+          left: -10.2rem;
+        }
+
+        .timeline-point {
+          left: 0;
         }
       }
 
@@ -174,34 +176,11 @@
         left: 50%;
         margin-left: -0.3125rem;
       }
-      &::after {
-        content: '';
-        position: absolute;
-        display: block;
-        width: $timeline-indicator-size;
-        height: $timeline-indicator-size;
-        background-color: $card-bg;
-        border-radius: 50%;
-        inset-inline-start: -1rem;
-        top: 0.64rem;
-      }
-    }
-  }
-
-  // To remove arrows (visible while switching tabs) in widgets
-  &.timeline-advance {
-    .timeline-item {
-      .timeline-event {
-        &:before,
-        &:after {
-          border: transparent;
-        }
-      }
     }
   }
 }
 
-//LTR only
+// LTR only
 @include ltr-only {
   .timeline:not(.timeline-center) {
     padding-left: 0.5rem;
@@ -210,6 +189,7 @@
     border-left: 1px solid $timeline-border-color;
   }
 }
+
 // RTL
 @include rtl-only {
   .timeline:not(.timeline-center) {
@@ -217,16 +197,9 @@
     .timeline-item {
       border-right: 1px solid $timeline-border-color;
     }
-
-    .timeline-end-indicator {
-      left: auto;
-      right: -0.75rem;
-    }
-
     .timeline-item {
       padding-left: 0;
       padding-right: 2rem;
-      border-right: 1px solid $timeline-border-color;
 
       &.timeline-item-transparent {
         .timeline-event {
@@ -246,6 +219,13 @@
         right: -1rem;
         left: auto;
       }
+      .timeline-indicator-advanced + .timeline-event {
+        .timeline-header {
+          > *:first-child {
+            margin-right: 0;
+          }
+        }
+      }
     }
   }
 }
@@ -257,21 +237,13 @@
       .timeline-indicator {
         left: calc(100% - calc(#{$timeline-indicator-size}/ 2));
       }
-      &::after {
-        inset-inline-start: calc(100% - calc(#{$timeline-indicator-size}/ 2));
-      }
     }
   }
 }
 // To Change Timeline Center's Alignment om small Screen
-
 @include media-breakpoint-down(md) {
   .timeline {
     &.timeline-center {
-      .timeline-end-indicator {
-        left: -2px;
-      }
-
       .timeline-item {
         border-right: 0 !important;
         left: 1rem;
@@ -290,6 +262,7 @@
             right: auto !important;
           }
         }
+
         .timeline-point {
           left: -0.7rem !important;
           margin-left: 0 !important;
@@ -301,6 +274,7 @@
       }
     }
   }
+
   // RTL: Timeline Center's Alignment om small Screen
   @include rtl-only {
     .timeline {
@@ -318,13 +292,15 @@
           width: 100%;
           padding-right: 3.5rem !important;
           padding-left: 1.5rem !important;
+
           .timeline-event {
             .timeline-event-time {
-              top: -1.7rem;
+              top: -1.2rem;
               right: 0 !important;
               left: auto !important;
             }
           }
+
           .timeline-point {
             right: -0.7rem !important;
             margin-right: 0 !important;
@@ -336,8 +312,7 @@
 }
 
 @include media-breakpoint-down(md) {
-  .timeline .timeline-item .timeline-indicator,
-  .timeline .timeline-item .timeline-indicator-advanced {
+  .timeline .timeline-item .timeline-indicator {
     @include rtl-style {
       left: auto;
       right: -0.6875rem;

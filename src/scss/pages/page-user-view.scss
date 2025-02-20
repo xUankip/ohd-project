@@ -11,9 +11,17 @@
   }
 }
 
-.card.primary-shadow {
-  box-shadow: 0 0.125rem 0.375rem 0 rgba(light.$primary, 0.3) !important;
+// App user view datatable
+@media (min-width: 768px) and (max-width: 825px) {
+  .dataTables_filter {
+    label {
+      input {
+        width: 75% !important;
+      }
+    }
+  }
 }
+
 // Light style
 @if $enable-light-style {
   .light-style {

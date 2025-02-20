@@ -7,7 +7,6 @@
     $hover-bg: mix($color, $background, percentage($table-hover-bg-factor));
     $striped-bg: mix($color, $background, percentage($table-striped-bg-factor));
     $active-bg: mix($color, $background, percentage($table-active-bg-factor));
-    $dark-border-color: if($parent == 'dark', mix($color, $background, percentage($table-border-factor)), inherit);
 
     --#{$variable-prefix}table-bg: #{$background};
     --#{$variable-prefix}table-striped-bg: #{$striped-bg};

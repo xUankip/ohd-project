@@ -24,6 +24,9 @@ body > :not(.invoice-print) {
 
 .invoice-print * {
   color: $body-color !important;
+  .border-top {
+    border-top: 1px solid rgba($color: $black, $alpha: 0.5) !important;
+  }
 }
 
 @if $enable-dark-style {

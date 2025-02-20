@@ -5,13 +5,18 @@
 
 #toast-container {
   > div {
-    padding: 15px 25px 15px 50px !important;
+    padding: 12px 20px 12px 40px !important;
     opacity: 1;
-    margin-bottom: light.$toast-spacing;
+
     @include app-rtl {
       direction: rtl;
       background-position: center right 0.9375rem;
-      padding: 15px 50px 15px 25px !important;
+      padding: 12px 40px 12px 20px !important;
+    }
+  }
+  .toast-header {
+    .btn-close {
+      background-size: 0.6rem;
     }
   }
   &.toast-top-left {
@@ -49,60 +54,31 @@
   }
   > .toast {
     max-width: 100%;
-    background-size: 28px;
+    background-size: 20px;
     background-repeat: no-repeat;
-    overflow: visible;
   }
   &.toast-bottom-full-width > div,
   &.toast-top-full-width > div {
-    padding: 15px 50px 15px 50px !important;
     width: 100%;
     margin-bottom: 0;
     border-radius: 0 !important;
-    .toast-close-button {
-      top: 12px !important;
-      @include app-ltr {
-        right: 12px !important;
-      }
-      @include app-rtl {
-        left: 12px !important;
-      }
-    }
   }
 
   > .toast-info {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'%3E%3Cpath fill='#{light.str-replace(#{light.$info},'#','%23')}' d='M256 90c44.3 0 86 17.3 117.4 48.6C404.7 170 422 211.7 422 256s-17.3 86-48.6 117.4C342 404.7 300.3 422 256 422s-86-17.3-117.4-48.6C107.3 342 90 300.3 90 256s17.3-86 48.6-117.4C170 107.3 211.7 90 256 90m0-42C141.1 48 48 141.1 48 256s93.1 208 208 208 208-93.1 208-208S370.9 48 256 48z'/%3E%3Cpath fill='#{light.str-replace(#{light.$info},'#','%23')}' d='M277 360h-42V235h42v125zm0-166h-42v-42h42v42z'/%3E%3C/svg%3E") !important;
-    .toast-close-button {
-      background-color: light.$info !important;
-      box-shadow: 0 0.125rem 0.25rem rgba(light.$info, 0.4) !important;
-    }
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2326c6f9'%3E%3Ctitle%3Einformation%3C/title%3E%3Cpath d='M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z' /%3E%3C/svg%3E") !important;
+    background-position: 0.75rem 0.85rem;
   }
   > .toast-error {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'%3E%3Cpath fill='#{light.str-replace(#{light.$danger},'#','%23')}' d='M405 136.798L375.202 107 256 226.202 136.798 107 107 136.798 226.202 256 107 375.202 136.798 405 256 285.798 375.202 405 405 375.202 285.798 256z'/%3E%3C/svg%3E") !important;
-    .toast-close-button {
-      background-color: light.$danger !important;
-      box-shadow: 0 0.125rem 0.25rem rgba(light.$danger, 0.4) !important;
-    }
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff4d49'%3E%3Ctitle%3Ealert-circle%3C/title%3E%3Cpath d='M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z' /%3E%3C/svg%3E") !important;
+    background-position: 0.75rem 0.85rem;
   }
   > .toast-success {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'%3E%3Cpath fill='#{light.str-replace(#{light.$success},'#','%23')}' d='M186.301 339.893L96 249.461l-32 30.507L186.301 402 448 140.506 416 110z'/%3E%3C/svg%3E") !important;
-    .toast-close-button {
-      background-color: light.$success !important;
-      box-shadow: 0 0.125rem 0.25rem rgba(light.$success, 0.4) !important;
-    }
-  }
-  @include app-rtl(false) {
-    > .toast-success {
-      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'%3E%3Cpath fill='#{light.str-replace(#{light.$success},'#','%23')}' d='M96 110l-32 30.5L325.7 402L448 280l-32-30.5l-90.3 90.4L96 110z'/%3E%3C/svg%3E") !important;
-    }
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2372e128'%3E%3Ctitle%3Echeck-circle%3C/title%3E%3Cpath d='M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z' /%3E%3C/svg%3E") !important;
+    background-position: 0.75rem 0.85rem;
   }
   > .toast-warning {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'%3E%3Cpath fill='#{light.str-replace(#{light.$warning},'#','%23')}' d='M32 464h448L256 48 32 464zm248-64h-48v-48h48v48zm0-80h-48v-96h48v96z'/%3E%3C/svg%3E") !important;
-    background-size: 25px;
-    .toast-close-button {
-      background-color: light.$warning !important;
-      box-shadow: 0 0.125rem 0.25rem rgba(light.$warning, 0.4) !important;
-    }
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fdb528'%3E%3Ctitle%3Ealert%3C/title%3E%3Cpath d='M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z' /%3E%3C/svg%3E") !important;
+    background-position: 0.75rem 0.85rem;
   }
 }
 // for full width toasts
@@ -127,26 +103,15 @@
 
 .toast-close-button {
   position: absolute;
-  top: -8px;
+  right: 0.25rem !important;
+  top: 0;
   text-shadow: none;
-  border-radius: light.$border-radius;
-  padding: 0.3rem 0.45rem !important;
-  transition: all 0.23s ease 0.1s;
-  opacity: 1 !important;
-  line-height: 0.8;
+  color: inherit !important;
+  line-height: 1;
 
-  @include app-ltr {
-    right: -7px !important;
-  }
   @include app-rtl {
-    left: -7px !important;
+    left: 0.25rem !important;
     right: auto !important;
-  }
-}
-
-@media (max-width: 419.98px) {
-  .toast {
-    width: 300px !important;
   }
 }
 
@@ -158,9 +123,6 @@
 
       .toast-close-button {
         font-weight: light.$close-font-weight;
-        color: light.$btn-close-color !important;
-        background-color: light.$card-bg;
-        box-shadow: light.$box-shadow-sm;
       }
 
       > div {
@@ -169,39 +131,11 @@
       }
 
       > .toast-success,
-      > .toast-success .toast-message a,
-      > .toast-success .toast-message label {
-        background-color: light.color-contrast(map-get(light.$theme-colors, success));
-        color: map-get(light.$theme-colors, success);
-      }
-
-      > .toast-error,
-      > .toast-error .toast-message a,
-      > .toast-error .toast-message label {
-        background-color: light.color-contrast(map-get(light.$theme-colors, danger));
-        color: map-get(light.$theme-colors, danger);
-      }
-
-      > .toast-info,
-      > .toast-info .toast-message a,
-      > .toast-info .toast-message label {
-        background-color: light.color-contrast(map-get(light.$theme-colors, info));
-        color: map-get(light.$theme-colors, info);
-      }
-
-      > .toast-warning,
-      > .toast-warning .toast-message a,
-      > .toast-warning .toast-message label {
-        background-color: light.color-contrast(map-get(light.$theme-colors, warning));
-        color: map-get(light.$theme-colors, warning);
-      }
-      > .toast-success,
-      > .toast-error,
-      > .toast-info,
-      > .toast-warning {
-        .toast-close-button {
-          color: light.$white !important;
-        }
+      .toast-error,
+      .toast-info,
+      .toast-warning {
+        color: light.$headings-color;
+        background-color: light.$card-bg;
       }
     }
   }
@@ -215,42 +149,26 @@
 
       .toast-close-button {
         font-weight: dark.$close-font-weight;
-        color: dark.$btn-close-color !important;
-        background-color: dark.$card-bg;
-        box-shadow: dark.$box-shadow-sm;
+        color: dark.$text-muted !important;
+      }
+      .toast-title {
+        color: dark.$headings-color;
       }
 
       > div {
         box-shadow: dark.$toast-box-shadow !important;
         border-radius: dark.$border-radius;
       }
+      .toast-progress {
+        background-color: dark.$white;
+      }
 
       > .toast-success,
-      > .toast-success .toast-message a,
-      > .toast-success .toast-message label {
+      .toast-error,
+      .toast-info,
+      .toast-warning {
+        color: dark.$headings-color;
         background-color: dark.$card-bg;
-        color: map-get(dark.$theme-colors, success);
-      }
-
-      > .toast-error,
-      > .toast-error .toast-message a,
-      > .toast-error .toast-message label {
-        background-color: dark.$card-bg;
-        color: map-get(dark.$theme-colors, danger);
-      }
-
-      > .toast-info,
-      > .toast-info .toast-message a,
-      > .toast-info .toast-message label {
-        background-color: dark.$card-bg;
-        color: map-get(dark.$theme-colors, info);
-      }
-
-      > .toast-warning,
-      > .toast-warning .toast-message a,
-      > .toast-warning .toast-message label {
-        background-color: dark.$card-bg;
-        color: map-get(dark.$theme-colors, warning);
       }
     }
   }

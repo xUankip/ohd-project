@@ -35,6 +35,9 @@
   padding: 0;
   margin: 0;
   z-index: -1;
+  &:hover ~ .switch-toggle-slider::before {
+    background: $gray-50;
+  }
 }
 
 // Toggle slider
@@ -223,7 +226,7 @@
 
 @each $color, $value in $theme-colors {
   @if $color != primary and $color != light {
-    @include template-switch-variant('.switch-#{$color}', $value);
+    @include template-material-switch-variant('.switch-#{$color}', $value);
   }
 }
 
@@ -235,5 +238,5 @@
   padding-left: $switch-gutter;
 }
 
-@include template-switch-validation-state('valid', $form-feedback-valid-color);
-@include template-switch-validation-state('invalid', $form-feedback-invalid-color);
+@include template-material-switch-validation-state('valid', $form-feedback-valid-color);
+@include template-material-switch-validation-state('invalid', $form-feedback-invalid-color);

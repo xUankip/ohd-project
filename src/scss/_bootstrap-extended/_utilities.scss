@@ -69,9 +69,9 @@ $utilities: map-merge(
         class: shadow,
         values: (
           null: $box-shadow,
+          xs: $box-shadow-xs,
           sm: $box-shadow-sm,
           lg: $box-shadow-lg,
-          xl: $box-shadow-xl,
           none: none
         )
       ),
@@ -137,14 +137,6 @@ $utilities: map-merge(
             'transparent': transparent // (C)
           )
         )
-    ),
-    'border-label-color': (
-      property: border-color,
-      class: border-label,
-      local-vars: (
-        'border-opacity': 0.4
-      ),
-      values: $utilities-border-colors
     ),
     'border-width': (
       property: border-width,
@@ -534,7 +526,6 @@ $utilities: map-merge(
         medium: $font-weight-medium,
         semibold: $font-weight-semibold,
         bold: $font-weight-bold,
-        extrabold: $font-weight-extrabold,
         bolder: $font-weight-bolder
       )
     ),
@@ -545,9 +536,11 @@ $utilities: map-merge(
         1: 1,
         inherit: inherit,
         //(C)
+        xs: $line-height-xs,
         sm: $line-height-sm,
         base: $line-height-base,
-        lg: $line-height-lg
+        lg: $line-height-lg,
+        xl: $line-height-xl
       )
     ),
     'text-decoration': (
@@ -681,9 +674,9 @@ $utilities: map-merge(
               'body': $body-bg,
               'white': $white,
               'transparent': transparent,
-              'lighter': rgba-to-hex($gray-60, $rgba-to-hex-bg),
+              'lighter': rgba-to-hex($gray-100, $rgba-to-hex-bg),
               //(C)
-              'lightest': rgba-to-hex($gray-25, $rgba-to-hex-bg),
+              'lightest': rgba-to-hex($gray-50, $rgba-to-hex-bg),
               //(C)
             )
           )
@@ -733,8 +726,8 @@ $utilities: map-merge(
         values: (
           null: $border-radius,
           0: 0,
-          1: $border-radius-sm,
-          2: $border-radius,
+          1: $border-radius-xs,
+          2: $border-radius-sm,
           3: $border-radius-lg,
           circle: 50%,
           pill: $border-radius-pill
@@ -864,8 +857,6 @@ $utilities: map-merge(
 @each $color, $value in $theme-colors {
   @if $color != primary {
     @include bg-label-variant('.bg-label-#{$color}', $value);
-    @include border-label-variant('.border-label-#{$color}', $value);
-    @include border-light-variant('.border-light-#{$color}', $value);
   }
 }
 // BG hover: label to solid variant
@@ -881,9 +872,25 @@ $utilities: map-merge(
   }
 }
 
-// ! FIX: .bg-dark & .bg-label-dark color in dark mode
-@if $dark-style {
-  @include border-label-variant('.border-label-dark', $light);
+// For ri icons, add size to before psuedo
+@each $size,
+  $value
+    in map-merge(
+      $font-sizes,
+      (
+        tiny: $tiny-font-size,
+        big: $big-font-size,
+        large: $large-font-size,
+        xlarge: $xlarge-font-size
+      )
+    )
+{
+  .fs-#{$size} {
+    &:before {
+      font-size: #{$value};
+    }
+  }
+
   @include bg-label-hover-variant('.bg-label-hover-dark', $light);
 }
 
@@ -912,7 +919,7 @@ a.bg-lighter {
 a.bg-lightest {
   &:hover,
   &:focus {
-    background-color: $gray-60 !important;
+    background-color: $gray-50 !important;
   }
 }
 
@@ -952,17 +959,6 @@ a.bg-lightest {
     &:hover,
     &:focus {
       color: $text-muted-hover !important;
-    }
-  }
-}
-
-.text-paper {
-  color: $card-bg !important;
-
-  &[href] {
-    &:hover,
-    &:focus {
-      color: $primary !important;
     }
   }
 }

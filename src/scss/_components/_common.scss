@@ -2,7 +2,6 @@
 // *******************************************************************************
 
 @use '../_bootstrap-extended/include' as light;
-@use '../_bootstrap-extended/include-dark' as dark;
 
 .ui-square,
 .ui-rect,
@@ -251,16 +250,6 @@ $clamp-numbers: (
 
     .ui-star > *:last-child {
       color: $ui-star-empty-color;
-    }
-    .ui-bg-overlay {
-      background-color: light.$gray-900;
-    }
-  }
-}
-@if $dark-style {
-  .dark-style {
-    .ui-bg-overlay {
-      background-color: rgba-to-hex(rgba($dark, 0.6), dark.$rgba-to-hex-bg);
     }
   }
 }

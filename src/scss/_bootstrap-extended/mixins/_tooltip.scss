@@ -6,7 +6,6 @@
     .tooltip-inner {
       background: $background;
       color: if($color, $color, color-contrast($background));
-      box-shadow: 0 0.125rem 0.25rem 0 rgba($background, 0.4);
     }
 
     &.bs-tooltip-auto {

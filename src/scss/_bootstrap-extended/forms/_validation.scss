@@ -54,11 +54,16 @@ form {
     &.selectpicker {
       &.is-invalid {
         ~ .btn {
-          padding: calc($input-padding-y - $input-focus-border-width) calc($input-padding-x - $input-border-width);
           border-width: $input-focus-border-width;
           border-color: $form-feedback-invalid-color !important;
         }
       }
+    }
+  }
+  .form-floating:has(.selectpicker.is-invalid),
+  .form-floating:has(.select2.is-invalid) {
+    label {
+      color: $form-feedback-invalid-color !important;
     }
   }
 }
@@ -73,34 +78,13 @@ form {
 }
 //! FIX: Basic input (without floating) has shake effect due to padding
 .was-validated .form-control:invalid,
-.was-validated .form-control:valid,
-.form-control.is-invalid,
-.form-control.is-valid {
+.form-control.is-invalid {
   padding: calc($input-padding-y - $input-focus-border-width) calc($input-padding-x - $input-border-width);
   ~ .input-group-text {
     padding: calc($input-padding-y - $input-focus-border-width) calc($input-padding-x - $input-border-width);
   }
 }
-.input-group {
-  > :not(:first-child):not(.dropdown-menu):not(.btn):not(.dropdown-menu + .form-control):not(
-      .btn + .form-control
-    )#{$validation-messages}.form-control.is-invalid,
-  > :not(:first-child):not(.dropdown-menu):not(.btn):not(.dropdown-menu + .form-control):not(
-      .btn + .form-control
-    )#{$validation-messages}.form-control.is-valid {
-    margin-inline-start: calc($input-focus-border-width - 4px);
-  }
-  .was-validated & .form-control:invalid,
-  .was-validated & .form-control:valid,
-  .form-control.is-invalid,
-  .form-control.is-valid,
-  .form-select.is-invalid,
-  .form-select.is-valid {
-    &:first-child {
-      padding-inline-start: calc($input-padding-x - $input-focus-border-width);
-    }
-  }
-}
+
 // ! Fix: FormValidation: Set border color to .form-control in touch devices for HTML5 inputs i.e date picker
 @media (hover: none) {
   .fv-plugins-bootstrap5-row-invalid {

@@ -35,11 +35,20 @@
   }
 }
 
+.invoice-preview-card .app-brand-text {
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+}
+.invoice-preview .table thead tr th {
+  background-color: transparent !important;
+  border-color: light.$border-color;
+}
+
 .invoice-preview,
 .invoice-edit,
 .invoice-add {
   & .invoice-preview-header {
-    background-color: light.$gray-60;
+    background-color: light.$gray-50;
   }
 }
 
@@ -49,8 +58,11 @@
     .invoice-edit,
     .invoice-add {
       & .invoice-preview-header {
-        background-color: dark.$gray-60;
+        background-color: dark.$gray-50;
       }
+    }
+    .invoice-preview .table thead tr th {
+      border-color: dark.$border-color;
     }
   }
 }

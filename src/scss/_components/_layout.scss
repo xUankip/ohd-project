@@ -32,12 +32,6 @@
   .layout-menu-fixed-offcanvas .layout-menu .layout-menu-toggle {
     display: none;
   }
-  .layout-horizontal .layout-page .menu-horizontal {
-    box-shadow: $box-shadow;
-  }
-  .bg-menu-theme.menu-vertical {
-    box-shadow: $box-shadow-sm;
-  }
 }
 
 .layout-page,
@@ -93,14 +87,33 @@
 
 // * Layout Navbar
 // *******************************************************************************
+// Layout navbar search input
+@mixin searchInputContainer {
+  left: calc(calc(100% - map-get($container-max-widths, 'xxl')) * 0.5);
+  @include rtl-style() {
+    right: calc(calc(100% - map-get($container-max-widths, 'xxl')) * 0.5);
+    left: inherit;
+  }
+}
+
+// Layout navbar search close icon
+@mixin searchInputIconToggler {
+  right: calc(calc(100% - map-get($container-max-widths, 'xxl') + 5rem) * 0.5);
+  @include rtl-style() {
+    left: calc(calc(100% - map-get($container-max-widths, 'xxl') + 5rem) * 0.5);
+    right: inherit;
+  }
+}
+
 .layout-navbar {
   position: relative;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.2rem;
   height: $navbar-height;
   flex-wrap: nowrap;
   color: $body-color;
   z-index: 2;
+  backdrop-filter: blur(7.5px);
 
   .navbar {
     transform: translate3d(0, 0, 0);
@@ -109,58 +122,34 @@
     flex-basis: 100%;
   }
 
-  .navbar-search-wrapper {
-    .search-input,
-    .input-group-text {
-      background-color: transparent;
-    }
-    .navbar-search-suggestion {
-      max-height: $navbar-suggestion-height;
-      border-radius: $navbar-suggestion-border-radius;
-      margin-top: 0.5rem;
-      .suggestion {
-        color: $headings-color;
-
-        &:hover,
-        &.active {
-          background: $gray-60;
-          color: $headings-color;
-        }
-      }
-
-      .suggestions-header {
-        padding: 0.5rem 0.7rem;
-        &::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          width: 0.7rem;
-          height: 1px;
-          margin-top: 0.7rem;
-          background: $text-muted;
-          @include rtl-style() {
-            right: 0;
-            left: inherit;
-          }
-        }
-      }
-      .tt-selectable {
-        padding: 0.5rem 2rem !important;
-      }
-    }
-  }
   // Style for detached navbar
   &.navbar-detached {
-    box-shadow: $box-shadow-sm;
     // Container layout max-width
     $container-xxl: map-get($container-max-widths, xxl);
+    transition:
+      padding 0.2s ease,
+      background-color 0.18s ease;
+    padding: 0;
+    .layout-navbar-fixed .window-scrolled & {
+      box-shadow: $navbar-search-shadow;
+      padding: 0 $card-spacer-x;
+      .search-input:focus {
+        padding-left: $card-spacer-x;
+        padding-right: $card-spacer-x;
+      }
+    }
+    .layout-navbar-fixed .layout-page:not(.window-scrolled) & {
+      .search-input {
+        background-color: $body-bg;
+      }
+    }
+    .search-input {
+      transition:
+        padding 0.2s ease,
+        background-color 0.18s ease;
+    }
     &.container-xxl {
       max-width: calc(#{$container-xxl} - calc(#{$container-padding-x} * 2));
-    }
-    .layout-navbar-fixed & {
-      .search-input:focus {
-        padding-inline: $card-spacer-x;
-      }
     }
     // Navbar fixed
     .layout-navbar-fixed & {
@@ -188,17 +177,34 @@
     .layout-without-menu & {
       width: calc(100% - calc(#{$container-padding-x} * 2));
     }
+    @include border-bottom-radius($navbar-suggestion-border-radius);
+  }
 
-    margin: $spacer auto 0;
-    border-radius: $border-radius;
-    padding: 0 $card-spacer-x;
+  .navbar-search-wrapper {
+    .navbar-search-suggestion {
+      max-height: $navbar-suggestion-height;
+      border-radius: $navbar-suggestion-border-radius;
+
+      .suggestion {
+        color: $body-color;
+
+        &:hover,
+        &.active {
+          background: $dropdown-link-hover-bg;
+          color: $headings-color;
+        }
+      }
+
+      .suggestions-header {
+        font-weight: $font-weight-medium;
+      }
+    }
   }
 
   .search-input-wrapper {
     .search-toggler {
       position: absolute;
-      top: 52%;
-      transform: translateY(-50%);
+      top: 1.25rem;
       right: 1rem;
       z-index: 1;
       @include rtl-style() {
@@ -215,17 +221,47 @@
       // ! FIX: Horizontal layout search container layout left spacing
       @include media-breakpoint-up('xxl') {
         &.container-xxl {
-          left: calc(calc(100% - map-get($container-max-widths, 'xxl')) * 0.5);
-          @include rtl-style() {
-            right: calc(calc(100% - map-get($container-max-widths, 'xxl')) * 0.5);
-            left: inherit;
+          .layout-horizontal & {
+            @include searchInputContainer();
           }
-
           + .search-toggler {
-            right: calc(calc(100% - map-get($container-max-widths, 'xxl') + 5rem) * 0.5);
-            @include rtl-style() {
-              left: calc(calc(100% - map-get($container-max-widths, 'xxl') + 5rem) * 0.5);
-              right: inherit;
+            .layout-horizontal & {
+              @include searchInputIconToggler();
+            }
+          }
+        }
+      }
+
+      // ! FIX: Vertical layout search container layout for expanded menu
+      $expanded-min-width: calc(
+        map-get($container-max-widths, 'xxl') + rem-to-px($menu-width) + (rem-to-px($container-padding-x))
+      );
+
+      @media (min-width: $expanded-min-width) {
+        &.container-xxl {
+          .layout-wrapper:not(.layout-horizontal) & {
+            @include searchInputContainer();
+          }
+          + .search-toggler {
+            .layout-wrapper:not(.layout-horizontal) & {
+              @include searchInputIconToggler();
+            }
+          }
+        }
+      }
+
+      // ! FIX: Vertical layout search container layout for collapsed menu
+      $collapsed-min-width: calc(
+        map-get($container-max-widths, 'xxl') + rem-to-px($menu-collapsed-width) + (rem-to-px($container-padding-x))
+      );
+      @media (min-width: $collapsed-min-width) {
+        &.container-xxl {
+          .layout-menu-collapsed .layout-wrapper:not(.layout-horizontal) & {
+            @include searchInputContainer();
+          }
+          + .search-toggler {
+            .layout-menu-collapsed .layout-wrapper:not(.layout-horizontal) & {
+              @include searchInputIconToggler();
             }
           }
         }
@@ -235,34 +271,32 @@
     .search-input {
       height: 100%;
       box-shadow: none;
+      border-radius: $border-radius-xl;
     }
 
     .navbar-search-suggestion {
-      width: $navbar-suggestion-width;
+      width: 100%;
       .layout-horizontal & {
-        width: calc($navbar-suggestion-width - 4%);
+        width: $navbar-suggestion-width;
+        @include ltr-style {
+          left: calc(calc(100% - $navbar-suggestion-width) * 0.5) !important;
+        }
+        @include rtl-style {
+          right: calc(calc(100% - $navbar-suggestion-width) * 0.5) !important;
+        }
       }
-    }
-  }
-
-  .dropdown-menu[data-bs-popper] {
-    .layout-wrapper:not(.layout-horizontal) & {
-      top: 144%;
     }
   }
 
   // Navbar custom dropdown
   .navbar-dropdown {
     .badge-notifications {
-      top: 3px;
-      inset-inline-end: -2px;
+      top: 0.5rem;
+      padding: 0.2rem 0.4rem;
     }
     .dropdown-menu {
       min-width: $navbar-dropdown-width;
       overflow: hidden;
-      .dropdown-item {
-        min-height: 2.375rem;
-      }
       .last-login {
         white-space: normal;
       }
@@ -290,7 +324,7 @@
 
           .dropdown-notifications-archive i,
           .dropdown-notifications-archive span {
-            color: $headings-color;
+            color: $body-color;
           }
 
           // Notification default marked as read/unread
@@ -334,11 +368,13 @@
       }
       .dropdown-shortcuts-item {
         text-align: center;
-        padding: 1.5rem;
+        padding: 1.5rem 0.5rem;
         &:hover {
-          background-color: $navbar-dropdown-hover-bg;
+          background-color: $gray-50;
         }
+
         .dropdown-shortcuts-icon {
+          background-color: $gray-75;
           height: 3.125rem;
           width: 3.125rem;
           margin-left: auto;
@@ -346,8 +382,6 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          background-color: $navbar-dropdown-icon-bg;
-          color: $headings-color;
         }
         a,
         a:hover {
@@ -376,13 +410,11 @@
 
   @include media-breakpoint-down($menu-collapsed-layout-breakpoint) {
     .navbar-nav {
-      .nav-item {
-        &.dropdown {
-          .dropdown-menu {
-            position: absolute;
-            .last-login {
-              white-space: nowrap;
-            }
+      .nav-item.dropdown {
+        .dropdown-menu {
+          position: absolute;
+          .last-login {
+            white-space: nowrap;
           }
         }
       }
@@ -393,6 +425,9 @@
       .nav-item.dropdown {
         position: static;
         float: left;
+        .badge-notifications {
+          top: auto;
+        }
         .dropdown-menu {
           position: absolute;
           left: 0.9rem;
@@ -411,11 +446,15 @@
   }
 }
 
-// To align search suggestion with navbar search input
-.layout-horizontal {
-  .layout-navbar {
-    .navbar-search-suggestion {
-      inset-inline-start: 2% !important;
+@include rtl-only {
+  .navbar.layout-navbar {
+    .search-input-wrapper {
+      .navbar-search-suggestion {
+        left: calc(calc(100% - $navbar-suggestion-width) * 0.5) !important;
+        &.ps--active-y > .ps__rail-y {
+          right: auto !important;
+        }
+      }
     }
   }
 }
@@ -504,25 +543,27 @@
 // * Toggle
 // *******************************************************************************
 
-.layout-menu-toggle i {
-  @include ltr-style {
-    transform: rotate(0deg) !important;
-  }
-  @include rtl-style {
-    transform: rotate(180deg) !important;
-  }
-  transition-duration: 0.3s !important;
-  transition-property: transform !important;
-}
-@include media-breakpoint-up(lg) {
-  .layout-menu-toggle {
-    .layout-menu-hover & {
-      display: none;
+.layout-menu-toggle {
+  display: block;
+
+  // Updated menu toggle icon for menu expanded and collapsed
+  .menu-toggle-icon {
+    font-family: 'remixicon' !important;
+    font-style: normal;
+    font-size: $font-size-xl;
+    &::before {
+      content: '\f050';
+      @include media-breakpoint-down($menu-collapsed-layout-breakpoint) {
+        content: '\eb99';
+      }
+      .layout-menu-collapsed & {
+        content: '\f3c2';
+        @include media-breakpoint-down($menu-collapsed-layout-breakpoint) {
+          content: '\eb99';
+        }
+      }
     }
   }
-}
-.layout-menu-collapsed:not(.layout-menu-hover) .layout-menu-toggle {
-  display: none;
 }
 
 // * Collapsed layout (Default static and static off-canvasmenu)
@@ -552,10 +593,10 @@
   .layout-menu-hover.layout-menu-collapsed {
     .layout-menu {
       margin-right: -$menu-width + $menu-collapsed-width;
-      .layout-menu-toggle i {
-        transform: rotate(180deg) !important;
-        transition-duration: 0.3s !important;
-        transition-property: transform !important;
+      .layout-menu-toggle {
+        transform: rotate(180deg);
+        transition-duration: 0.3s;
+        transition-property: transform;
       }
     }
 
@@ -570,9 +611,6 @@
       .layout-menu {
         margin-left: -$menu-width + $menu-collapsed-width;
         margin-right: 0;
-        .layout-menu-toggle i {
-          transform: rotate(0deg) !important;
-        }
       }
 
       &.layout-menu-flipped .layout-menu {
@@ -775,11 +813,6 @@ html:not(.layout-footer-fixed) .content-wrapper {
     right: 0;
     left: 0;
   }
-  .container-p-y {
-    &:not([class^='pt-']):not([class*=' pt-']) {
-      padding-top: calc($container-padding-y + 0.25rem) !important;
-    }
-  }
 }
 
 @include media-breakpoint-up($menu-collapsed-layout-breakpoint) {
@@ -805,6 +838,9 @@ html:not(.layout-footer-fixed) .content-wrapper {
       left: 0;
     }
   }
+  .layout-horizontal .layout-page .menu-horizontal {
+    box-shadow: $menu-horizontal-box-shadow;
+  }
 
   // Horizontal Layout when menu fixed
   .layout-menu-fixed .layout-horizontal .layout-page .menu-horizontal,
@@ -815,7 +851,7 @@ html:not(.layout-footer-fixed) .content-wrapper {
 
   .layout-menu-fixed .layout-horizontal .layout-page .menu-horizontal + [class*='container-'],
   .layout-menu-fixed-offcanvas .layout-horizontal .layout-page .menu-horizontal + [class*='container-'] {
-    padding-top: calc($container-padding-y + 3.88rem) !important;
+    padding-top: calc($container-padding-y + 3.75rem) !important;
   }
 
   @include rtl-only {
@@ -864,19 +900,43 @@ html:not(.layout-footer-fixed) .content-wrapper {
   }
 }
 
+// Default footer transition
+// *******************************************************************************
+.content-footer {
+  transition:
+    margin 0.2s ease,
+    background-color 0.1s ease;
+}
+
 // * Fixed footer
 // *******************************************************************************
 
-.layout-footer-fixed .content-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-
-.layout-footer-fixed .layout-wrapper:not(.layout-horizontal) .content-footer .footer-container,
-.layout-footer-fixed .layout-wrapper.layout-horizontal .content-footer {
-  box-shadow: $box-shadow-lg;
+.layout-footer-fixed {
+  .content-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  .layout-wrapper.layout-horizontal {
+    .content-footer {
+      background-color: $card-bg;
+      box-shadow: $footer-fixed-box-shadow;
+    }
+  }
+  .layout-wrapper:not(.layout-horizontal) {
+    .content-footer {
+      .footer-container {
+        background-color: $card-bg;
+        @include border-top-radius($navbar-suggestion-border-radius);
+        padding: 0 $card-spacer-x;
+        transition:
+          padding 0.2s ease,
+          background-color 0.18s ease;
+        box-shadow: $footer-fixed-box-shadow;
+      }
+    }
+  }
 }
 
 @include media-breakpoint-up($menu-collapsed-layout-breakpoint) {
@@ -1001,7 +1061,7 @@ html:not(.layout-footer-fixed) .content-wrapper {
 
   .drag-target {
     height: 100%;
-    width: 40px;
+    width: 32px;
     position: fixed;
     top: 0;
     left: 0px;
@@ -1065,7 +1125,7 @@ html:not(.layout-footer-fixed) .content-wrapper {
     }
 
     .layout-menu {
-      z-index: 11;
+      z-index: 10;
     }
   }
 
@@ -1093,6 +1153,16 @@ html:not(.layout-footer-fixed) .content-wrapper {
   .layout-menu-fixed body:not(.modal-open) .layout-content-navbar .layout-menu,
   .layout-menu-fixed-offcanvas body:not(.modal-open) .layout-content-navbar .layout-menu {
     z-index: $zindex-menu-fixed;
+  }
+}
+
+// * Sticky Action Bar
+// *******************************************************************************
+.sticky-wrapper {
+  &.is-sticky {
+    .sticky-element {
+      border-radius: 0;
+    }
   }
 }
 

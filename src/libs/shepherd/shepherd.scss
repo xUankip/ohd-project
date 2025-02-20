@@ -6,8 +6,7 @@
 @import './mixins';
 
 $shepherd-header-content-padding-x: 1.25rem !default;
-$shepherd-header-content-padding-y: 1.25rem !default;
-$shepherd-btn-padding-x: 1.25rem !default;
+$shepherd-header-content-padding-y: $shepherd-header-content-padding-x !default;
 $shepherd-container-width: 15rem !default;
 
 .shepherd-element {
@@ -26,7 +25,7 @@ $shepherd-container-width: 15rem !default;
       }
 
       .shepherd-cancel-icon {
-        font-size: 1.85rem !important;
+        font-size: 1.5rem !important;
         &:focus {
           outline: 0;
         }
@@ -36,14 +35,8 @@ $shepherd-container-width: 15rem !default;
       font-size: light.$font-size-base !important;
       padding: 1rem $shepherd-header-content-padding-x !important;
     }
-
     .shepherd-footer {
-      .shepherd-button {
-        &:not(:last-child) {
-          margin-right: 0.75rem !important;
-        }
-      }
-      padding: 0 $shepherd-header-content-padding-x $shepherd-header-content-padding-y !important;
+      padding: 0 $shepherd-header-content-padding-y $shepherd-header-content-padding-x;
     }
   }
   // Ask before submit
@@ -71,26 +64,25 @@ $shepherd-container-width: 15rem !default;
 
 // Light style
 @if $enable-light-style {
-  .shepherd-element {
-    box-shadow: light.$box-shadow;
-    background-color: light.$card-bg !important;
-    .shepherd-content {
-      .shepherd-header {
-        background: light.$card-bg !important;
-        .shepherd-title {
-          color: light.$headings-color !important;
-        }
-        .shepherd-cancel-icon {
-          color: light.$text-muted !important;
+  .light-style {
+    .shepherd-element {
+      box-shadow: light.$box-shadow;
+      background-color: light.$card-bg !important;
+      .shepherd-content {
+        .shepherd-header {
+          background-color: light.$card-bg !important;
+          .shepherd-title {
+            color: light.$headings-color !important;
+          }
         }
       }
       .shepherd-text {
         color: light.$body-color !important;
       }
-    }
-    .shepherd-arrow:before {
-      background-color: light.$card-bg !important;
-      border-color: light.$card-bg !important;
+      .shepherd-arrow:before {
+        background-color: light.$card-bg !important ;
+        border-color: light.$card-bg !important;
+      }
     }
   }
 }
@@ -103,7 +95,7 @@ $shepherd-container-width: 15rem !default;
       background: dark.$card-bg !important;
       .shepherd-content {
         .shepherd-header {
-          background: dark.$card-bg !important;
+          background-color: dark.$card-bg !important;
           .shepherd-title {
             color: dark.$headings-color !important;
           }
@@ -111,14 +103,14 @@ $shepherd-container-width: 15rem !default;
             color: dark.$text-muted !important;
           }
         }
-        .shepherd-text {
-          color: dark.$body-color !important;
-        }
       }
-    }
-    .shepherd-arrow:before {
-      background-color: dark.$card-bg !important;
-      border-color: dark.$card-bg !important;
+      .shepherd-text {
+        color: dark.$body-color !important;
+      }
+      .shepherd-arrow:before {
+        background-color: dark.$card-bg !important;
+        border-color: dark.$card-bg !important;
+      }
     }
   }
 }
@@ -128,7 +120,7 @@ $shepherd-container-width: 15rem !default;
   [dir='rtl'] {
     .shepherd-element {
       .btn-next {
-        margin-right: 0.75rem;
+        margin-right: 0.5rem;
       }
       &[data-popper-placement='left'] {
         margin-left: -0.8rem !important;

@@ -8,8 +8,8 @@
 
 //Custom variables for Logistics-fleet page
 $logistics-fleet-sidebar-width: 21.5rem !default;
-$logistics-fleet-height: calc(100vh - 14.1rem);
-$logistics-fleet-sidebar-height: calc(100vh - 15.8rem);
+$logistics-fleet-height: calc(100vh - 10.3rem);
+$logistics-fleet-sidebar-height: calc(100vh - 12.5rem);
 $logistics-fleet-horizontal-height-diff: 2rem;
 
 // App logistics-fleet wrapper for sidebar
@@ -30,14 +30,13 @@ $logistics-fleet-horizontal-height-diff: 2rem;
 
     //For Sidebar Map menu Scroll
     .logistics-fleet-sidebar-body {
-      height: calc($logistics-fleet-sidebar-height + 4rem) !important;
+      height: calc($logistics-fleet-sidebar-height + 4rem);
     }
   }
   //Sidebar functionality
   .app-logistics-fleet-sidebar {
     position: absolute;
     overflow: hidden;
-    // border-radius: light.$border-radius;
     background-color: light.$card-bg;
     flex-grow: 0;
     flex-basis: $logistics-fleet-sidebar-width;
@@ -57,10 +56,15 @@ $logistics-fleet-horizontal-height-diff: 2rem;
     top: 0.5rem;
     right: 0.5rem;
   }
-
+  #map {
+    @include light.media-breakpoint-down(md) {
+      border-radius: 0.375rem;
+    }
+  }
   //Setting sidebar height
   .logistics-fleet-sidebar-body {
-    height: calc(100vh - 13rem);
+    height: calc(100vh - 15rem);
+    overflow-y: scroll;
     @include light.media-breakpoint-up($menu-collapsed-layout-breakpoint) {
       height: $logistics-fleet-sidebar-height !important;
     }
@@ -72,7 +76,7 @@ $logistics-fleet-horizontal-height-diff: 2rem;
       height: calc(100vh - 11.5rem);
       //For Sidebar Map menu Scroll
       .logistics-fleet-sidebar-body {
-        height: calc($logistics-fleet-sidebar-height + 0.8rem);
+        height: $logistics-fleet-sidebar-height;
       }
     }
     //setting wrapper height when navbar is hidden
@@ -81,7 +85,7 @@ $logistics-fleet-horizontal-height-diff: 2rem;
 
       //For Sidebar Map menu Scroll
       .logistics-fleet-sidebar-body {
-        height: calc($logistics-fleet-sidebar-height + 2.5rem) !important;
+        height: calc($logistics-fleet-sidebar-height + 2.5rem);
       }
     }
   }
@@ -117,15 +121,6 @@ $logistics-fleet-horizontal-height-diff: 2rem;
   }
 }
 
-//Light mode
-@if $enable-light-style {
-  .light-style {
-    .btn-white.btn-white-dark-variant {
-      color: light.$headings-color;
-      box-shadow: light.$box-shadow-xs !important;
-    }
-  }
-}
 //Dark mode
 @if $enable-dark-style {
   .dark-style {
@@ -137,7 +132,7 @@ $logistics-fleet-horizontal-height-diff: 2rem;
         border-color: dark.$card-bg;
         background-color: dark.$card-bg;
         color: dark.$headings-color;
-        box-shadow: dark.$box-shadow-xs !important;
+        box-shadow: dark.$box-shadow-xs;
       }
     }
   }

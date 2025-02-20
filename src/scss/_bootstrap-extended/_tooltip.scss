@@ -4,7 +4,7 @@
 @each $color, $value in $theme-colors {
   @if $color != primary and $color != light {
     @include template-tooltip-variant(
-      '.tooltip-#{$color}, .tooltip-#{$color} > .tooltip, .ngb-tooltip-#{$color} + ngb-tooltip-window',
+      '.tooltip-#{$color}, .tooltip-#{$color} > .tooltip',
       rgba-to-hex(if($color== 'dark' and $dark-style, $light, $value), $rgba-to-hex-bg)
     );
   }
@@ -14,14 +14,9 @@
 .modal-open .tooltip {
   z-index: $zindex-modal + 2;
 }
-
-.tooltip-inner {
+.tooltip.bs-tooltip-auto {
   font-weight: $font-weight-medium;
-  display: flex;
-  align-items: center;
-  gap: 3px;
 }
-
 // RTL
 // *******************************************************************************
 

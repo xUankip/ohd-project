@@ -5,6 +5,7 @@
   $divider-selector: if($divider-color== '', '', '#{$divider-color}');
   .divider {
     &#{$divider-selector} {
+      &.divider-vertical,
       .divider-text {
         &:before,
         &:after {

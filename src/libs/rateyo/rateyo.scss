@@ -15,8 +15,8 @@
 // Light Style
 @if $enable-light-style {
   .light-style {
-    $unratedStarColor: light.rgba-to-hex(rgba(light.$black, 0.16), light.$rgba-to-hex-bg);
-    $ratedStarColor: light.$yellow;
+    $unratedStarColor: light.$gray-300;
+    $ratedStarColor: light.$warning;
     @include app-ltr-style {
       .jq-ry-container {
         .jq-ry-normal-group {
@@ -55,8 +55,8 @@
 // Dark Style
 @if $enable-dark-style {
   .dark-style {
-    $unratedStarColor: dark.rgba-to-hex(rgba(dark.$base, 0.16), dark.$rgba-to-hex-bg);
-    $ratedStarColor: dark.$yellow;
+    $unratedStarColor: dark.$gray-300;
+    $ratedStarColor: dark.$warning;
     @include app-ltr-style {
       .jq-ry-container {
         .jq-ry-normal-group {

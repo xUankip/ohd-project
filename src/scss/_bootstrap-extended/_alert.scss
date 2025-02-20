@@ -13,19 +13,18 @@
 // Adjust close link position
 .alert-dismissible {
   .btn-close {
-    padding: $alert-padding-y * 1.45 $alert-padding-x;
-    background-size: 0.625rem 0.625rem;
+    padding: $alert-padding-y * 1.375 $alert-padding-x;
   }
 }
 
-// Alert icon and line-height styles
+// Alert and alert-icon styles
 .alert {
   line-height: 1.375rem;
   .alert-icon {
     color: $white;
     height: $alert-icon-size;
     width: $alert-icon-size;
-    padding: $spacer * 0.68;
+    padding: $spacer * 0.75;
     margin-right: $spacer;
     display: flex;
     align-items: center;
@@ -34,9 +33,7 @@
   &[class*='alert-solid-'] {
     .alert-icon {
       background-color: $white;
-      :before {
-        font-size: 1.125rem;
-      }
+      box-shadow: $box-shadow-xs;
     }
   }
 }

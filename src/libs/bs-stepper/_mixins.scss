@@ -1,51 +1,77 @@
 // Stepper Mixin
 // *******************************************************************************
-@mixin bs-stepper-theme($background) {
-  $color: color-contrast($background);
+@mixin bs-stepper-theme($color) {
   .bs-stepper {
+    &:not(.wizard-icons) {
+      .bs-stepper-header {
+        .line {
+          border-color: rgba-to-hex(rgba($color, 0.16), $rgba-to-hex-bg);
+          &:before {
+            background-color: rgba-to-hex(rgba($color, 0.16), $rgba-to-hex-bg);
+          }
+        }
+        .step {
+          &:not(.active) {
+            .bs-stepper-circle {
+              border: 3px solid rgba-to-hex(rgba($color, 0.16), $rgba-to-hex-bg);
+            }
+          }
+        }
+      }
+    }
+    &.wizard-icons {
+      .step {
+        &.crossed,
+        &.active {
+          .bs-stepper-label {
+            color: $color;
+          }
+        }
+      }
+    }
     .step {
       &.active {
         .bs-stepper-circle {
-          background-color: $background;
+          background-color: transparent;
+          border: 5px solid $color;
           color: $color;
-          box-shadow: 0 0.125rem 0.25rem 0 rgba($background, 0.4);
         }
-        .bs-stepper-icon svg {
-          fill: $background !important;
-        }
-        .bs-stepper-icon i,
-        .bs-stepper-label {
-          color: $background !important;
-          .bs-stepper-title {
-            color: $background;
+        .bs-stepper-icon {
+          i {
+            color: $color !important;
+          }
+          svg {
+            fill: $color !important;
           }
         }
       }
       &.crossed {
         .step-trigger {
           .bs-stepper-circle {
-            background-color: rgba($background, 0.16) !important;
-            color: $background !important;
+            background-color: $color !important;
+            color: $white !important;
+            border-color: $color !important;
+            i {
+              visibility: visible;
+            }
           }
           .bs-stepper-icon svg {
-            fill: $background !important;
+            fill: $color !important;
           }
           .bs-stepper-icon i {
-            color: $background !important;
+            color: $color !important;
           }
         }
-      }
-    }
-    &.wizard-icons {
-      .step.crossed {
-        .bs-stepper-label {
-          color: $background !important;
-        }
-        & + {
-          .line {
-            i {
-              color: $background;
-            }
+        + .line {
+          border-color: $color;
+          svg {
+            fill: $color;
+          }
+          i {
+            color: $color;
+          }
+          &:before {
+            background-color: $color;
           }
         }
       }

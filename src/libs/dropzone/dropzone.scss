@@ -4,7 +4,7 @@
 @use '../../scss/_bootstrap-extended/include-dark' as dark;
 @import '../../scss/_custom-variables/libs';
 
-$dz-box-padding: 1.25rem !default;
+$dz-box-padding: 1.5rem !default;
 $dz-icon-size: 1.875rem !default;
 $dz-thumbnail-width: 10rem !default;
 $dz-thumbnail-height: 7.5rem !default;
@@ -16,6 +16,7 @@ $dz-icon-block-size: 3.75rem !default;
 .dropzone {
   width: 100%;
   position: relative;
+  padding: $dz-box-padding;
   cursor: pointer;
   border-radius: light.$border-radius-lg;
 
@@ -37,19 +38,6 @@ $dz-icon-block-size: 3.75rem !default;
 
 .dz-message {
   font-size: light.$h4-font-size;
-  &:before {
-    content: '';
-    border-radius: 6px;
-    position: absolute;
-    top: 5rem;
-    left: calc(50% - 23px);
-    display: inline-block;
-    height: 40px;
-    width: 40px;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-  }
-
   .note {
     font-size: light.$font-size-base;
   }
@@ -79,7 +67,7 @@ $dz-icon-block-size: 3.75rem !default;
 }
 
 .dz-message {
-  margin: 8rem 0 3rem;
+  margin: 3rem 0;
   font-weight: 500;
   text-align: center;
 
@@ -89,38 +77,17 @@ $dz-icon-block-size: 3.75rem !default;
   }
 }
 
-// styles for dropzone in ecommerce
-.app-ecommerce {
-  .dz-message {
-    margin-top: 5rem;
-    &::before {
-      top: 3rem;
-    }
-  }
-}
-
 // Preview
 .dz-preview {
   position: relative;
   vertical-align: top;
-  margin: 1rem;
+  margin: $dz-box-padding - 1;
   background: #fff;
   font-size: 0.8125rem;
   box-sizing: content-box;
   cursor: default;
   @include light.media-breakpoint-down(sm) {
     margin: $dz-box-padding - 0.5;
-  }
-}
-
-@include app-ltr(false) {
-  .dz-preview {
-    margin-right: $dz-box-padding - 1;
-  }
-}
-@include app-rtl(false) {
-  .dz-preview {
-    margin-left: $dz-box-padding - 1;
   }
 }
 
@@ -143,6 +110,7 @@ $dz-icon-block-size: 3.75rem !default;
 .dz-size {
   padding: 1.875rem $dz-preview-padding $dz-preview-padding $dz-preview-padding;
   font-size: 0.6875rem;
+  font-style: italic;
 }
 
 // Progressbar
@@ -309,14 +277,6 @@ $dz-icon-block-size: 3.75rem !default;
 
     .dz-message {
       color: light.$headings-color;
-      &:before {
-        background-image: light.str-replace(
-          light.str-replace(light.$upload-icon, 'currentColor', light.$headings-color),
-          '#',
-          '%23'
-        ) !important;
-        background: #eeedf0;
-      }
       .note {
         color: light.$body-color;
         font-weight: light.$font-weight-normal;
@@ -395,17 +355,8 @@ $dz-icon-block-size: 3.75rem !default;
 
     .dz-message {
       color: dark.$headings-color;
-      &:before {
-        background-image: light.str-replace(
-          light.str-replace(light.$upload-icon, 'currentColor', dark.$headings-color),
-          '#',
-          '%23'
-        ) !important;
-        background: #373b50;
-      }
       .note {
         color: dark.$body-color;
-        font-weight: dark.$font-weight-normal;
       }
     }
 

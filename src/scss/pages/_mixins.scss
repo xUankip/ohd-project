@@ -61,11 +61,11 @@
     .features-icon-wrapper {
       .features-icon-box {
         .features-icon {
-          border: 2px solid rgba($color, 0.2);
+          border: 2px solid rgba-to-hex(rgba($color, 0.32), $card-bg);
         }
         &:hover {
           .features-icon {
-            background-color: rgba($color, 0.05);
+            background-color: rgba-to-hex(rgba($color, 0.16), $card-bg);
           }
         }
       }

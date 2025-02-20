@@ -32,9 +32,10 @@ $flatpickr-width: ($flatpickr-cell-size * 7)+ ($flatpickr-content-padding-x * 2)
   overflow: hidden;
   box-sizing: border-box;
   padding: 0;
-  padding-bottom: 2px;
+  padding-bottom: 4px;
   max-height: 0;
   border: 0;
+  background: transparent;
   text-align: center;
   opacity: 0;
   animation: none;
@@ -42,7 +43,7 @@ $flatpickr-width: ($flatpickr-cell-size * 7)+ ($flatpickr-content-padding-x * 2)
   touch-action: manipulation;
   line-height: light.$line-height-base;
   font-size: light.$font-size-base;
-  @include light.border-radius(light.$border-radius-lg);
+  @include light.border-radius(light.$border-radius !important);
 
   &.open,
   &.inline {
@@ -131,25 +132,21 @@ $flatpickr-width: ($flatpickr-cell-size * 7)+ ($flatpickr-content-padding-x * 2)
   text-align: center;
   line-height: 1;
   user-select: none;
+  margin-bottom: 0.25rem;
 }
 
 .flatpickr-prev-month,
 .flatpickr-next-month {
   position: absolute;
-  top: 0.75rem;
+  top: 0;
   z-index: 3;
-  padding: 0 0.41rem;
-  height: 1.875rem;
-  width: 1.875rem;
+  padding: 0.55rem 0.65rem 0;
+  height: $flatpickr-month-height;
   text-decoration: none;
+  line-height: $flatpickr-month-height;
   cursor: pointer;
-  border-radius: light.$border-radius;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   svg {
-    stroke-width: 2;
     vertical-align: middle;
   }
 }
@@ -161,11 +158,11 @@ $flatpickr-width: ($flatpickr-cell-size * 7)+ ($flatpickr-content-padding-x * 2)
 
 .flatpickr-prev-month {
   &.flatpickr-prev-month {
-    left: 1rem;
+    left: 0;
   }
 
   @include app-rtl {
-    right: 1rem;
+    right: 0;
     left: auto;
     transform: scaleX(-1);
   }
@@ -178,24 +175,19 @@ $flatpickr-width: ($flatpickr-cell-size * 7)+ ($flatpickr-content-padding-x * 2)
   }
 
   &.flatpickr-next-month {
-    right: 1rem;
+    right: 0;
   }
 
   @include app-rtl {
     right: auto;
-    left: 1rem;
+    left: 0;
     transform: scaleX(-1);
   }
 }
 
-.flatpickr-prev-month:hover,
-.flatpickr-next-month:hover {
-  opacity: 1;
-}
-
 .flatpickr-prev-month svg,
 .flatpickr-next-month svg {
-  width: 0.6rem;
+  width: 12px;
 }
 
 .flatpickr-prev-month svg path,
@@ -207,9 +199,6 @@ $flatpickr-width: ($flatpickr-cell-size * 7)+ ($flatpickr-content-padding-x * 2)
 .numInputWrapper {
   position: relative;
   height: auto;
-  :hover {
-    background: transparent;
-  }
 
   input,
   span {
@@ -264,7 +253,7 @@ $flatpickr-width: ($flatpickr-cell-size * 7)+ ($flatpickr-content-padding-x * 2)
     }
 
     &.arrowDown {
-      top: 50%;
+      top: 40%;
     }
 
     &.arrowDown:after {
@@ -300,15 +289,18 @@ $flatpickr-width: ($flatpickr-cell-size * 7)+ ($flatpickr-content-padding-x * 2)
   justify-content: center;
   gap: 0.25rem;
   width: 75%;
-  height: $flatpickr-month-height;
+  height: $flatpickr-month-height + 0.5;
   text-align: center;
-  font-weight: 300;
   line-height: 1;
-  padding: 0.9rem 0 0 0;
+  padding: 0.75rem 0 0 0;
   transform: translate3d(0px, 0px, 0px);
+  @include app-rtl {
+    left: 8.5%;
+  }
 
   .flatpickr-monthDropdown-months,
   input.cur-year {
+    padding: 0 0 0 0.5ch;
     outline: none;
     vertical-align: middle !important;
     font-weight: 400;
@@ -321,9 +313,6 @@ $flatpickr-width: ($flatpickr-cell-size * 7)+ ($flatpickr-content-padding-x * 2)
     background: transparent;
     border: 0;
     border-radius: 0;
-    &:not(:first-child) {
-      padding: 0 0 0 0.5ch;
-    }
   }
 
   .numInputWrapper {
@@ -370,7 +359,7 @@ $flatpickr-width: ($flatpickr-cell-size * 7)+ ($flatpickr-content-padding-x * 2)
 .flatpickr-weekdaycontainer {
   display: flex;
   width: 100%;
-  padding: $flatpickr-content-padding-y calc($flatpickr-content-padding-x + 0.1rem);
+  padding: $flatpickr-content-padding-y $flatpickr-content-padding-x;
 }
 
 .flatpickr-weekdays {
@@ -381,7 +370,7 @@ $flatpickr-width: ($flatpickr-cell-size * 7)+ ($flatpickr-content-padding-x * 2)
   width: 100%;
   height: $flatpickr-week-height;
   text-align: center;
-  margin-bottom: 0.125rem;
+  margin-block: 0.375rem;
 }
 
 span.flatpickr-weekday {
@@ -477,7 +466,6 @@ span.flatpickr-weekday {
     background: transparent !important;
     cursor: default;
     pointer-events: none;
-    box-shadow: none;
   }
 
   &.prevMonthDay,
@@ -537,6 +525,7 @@ span.flatpickr-weekday {
   float: left;
 
   .flatpickr-weeks {
+    padding: $flatpickr-content-padding-y + 0.375rem 0;
     background-clip: padding-box !important;
 
     @include app-ltr {
@@ -566,8 +555,8 @@ span.flatpickr-weekday {
     width: 100%;
     line-height: $flatpickr-week-height;
     position: relative;
-    top: 1px;
-    margin-bottom: 0.4rem;
+    top: 0.45rem;
+    margin-bottom: 0.375rem;
   }
 
   span.flatpickr-day {
@@ -735,17 +724,6 @@ span.flatpickr-weekday {
 // Light layout
 @if $enable-light-style {
   .light-style {
-    .flatpickr-calendar {
-      background: light.$dropdown-bg;
-    }
-    .flatpickr-prev-month,
-    .flatpickr-next-month {
-      background-color: light.rgba-to-hex(light.$gray-80, light.$card-bg);
-      svg {
-        fill: light.$body-color;
-        stroke: light.$body-color;
-      }
-    }
     // Dimensions
     .flatpickr-calendar,
     .flatpickr-days {
@@ -773,6 +751,14 @@ span.flatpickr-weekday {
 
     .flatpickr-calendar.open {
       z-index: light.$zindex-popover;
+    }
+
+    .flatpickr-prev-month,
+    .flatpickr-next-month {
+      svg {
+        fill: light.rgba-to-hex(light.$body-color);
+        stroke: light.rgba-to-hex(light.$body-color);
+      }
     }
     //!  Flatpickr provide default input as readonly, applying default input style to readonly
     .flatpickr-input[readonly],
@@ -809,9 +795,9 @@ span.flatpickr-weekday {
     .flatpickr-calendar {
       line-height: light.$line-height-base;
       font-size: light.$font-size-base;
-      box-shadow: light.$box-shadow-lg;
+      box-shadow: light.$card-box-shadow;
 
-      @include light.border-radius(light.$border-radius);
+      @include light.border-radius(light.$border-radius-lg);
 
       &.hasTime:not(.noCalendar):not(.hasTime) .flatpickr-time {
         display: none !important;
@@ -825,6 +811,13 @@ span.flatpickr-weekday {
       color: light.$headings-color;
     }
     .flatpickr-current-month {
+      // ! Fix: To remove : All the datepickrs with a select for months > when we click on the select, month's select and year's input goes up a little bit
+
+      // padding: (
+      //     $flatpickr-month-height - (light.$font-size-base * light.strip-unit(light.$big-font-size) / 100) - 0.45rem
+      //   )
+      //   0
+      //   0;
       font-size: light.$big-font-size;
       color: light.$headings-color;
       .cur-month,
@@ -844,7 +837,7 @@ span.flatpickr-weekday {
       @include light.border-top-radius(light.$border-radius);
       // ! FIX: OS Windows and Linux Browsers DD Option color
       option.flatpickr-monthDropdown-month {
-        color: light.$headings-color;
+        color: light.$body-color;
         background: #{light.$input-bg};
       }
     }
@@ -856,7 +849,8 @@ span.flatpickr-weekday {
 
     .flatpickr-day {
       color: light.$headings-color;
-      @include light.border-radius(light.$border-radius);
+
+      @include light.border-radius(light.$border-radius-pill);
 
       &:hover,
       &:focus,
@@ -866,11 +860,21 @@ span.flatpickr-weekday {
       &.prevMonthDay:focus,
       &.nextMonthDay:focus,
       &.today:focus {
-        color: light.$headings-color;
-        background: light.rgba-to-hex(light.$gray-60, light.$rgba-to-hex-bg);
+        color: light.$body-color;
+        background: light.rgba-to-hex(rgba(light.$black, 0.06), light.$rgba-to-hex-bg);
         &:not(.today) {
           border-color: transparent;
         }
+      }
+
+      &.selected,
+      &.selected.inRange,
+      &.selected:focus,
+      &.selected:hover,
+      &.selected.nextMonthDay,
+      &.selected.prevMonthDay,
+      &.week.selected {
+        box-shadow: light.$box-shadow-xs;
       }
 
       &.prevMonthDay,
@@ -888,7 +892,7 @@ span.flatpickr-weekday {
       }
 
       &.selected.startRange.endRange {
-        border-radius: light.$border-radius !important;
+        border-radius: light.$border-radius-pill !important;
       }
     }
 
@@ -908,7 +912,6 @@ span.flatpickr-weekday {
       .flatpickr-weeks {
         border-right: light.$dropdown-border-width solid opacify(light.$dropdown-border-color, 0.05);
         border-left: 0;
-
         @include light.border-bottom-radius(light.$border-radius);
         border-bottom-left-radius: 0;
       }
@@ -917,12 +920,10 @@ span.flatpickr-weekday {
     .flatpickr-time {
       border: light.$dropdown-border-width solid opacify(light.$dropdown-border-color, 0.05);
       background: #{light.$dropdown-bg};
-
       @include light.border-radius(light.$border-radius);
 
       input {
         color: light.$body-color;
-        font-size: light.$font-size-base;
       }
 
       .numInputWrapper span {
@@ -941,7 +942,6 @@ span.flatpickr-weekday {
 
       .flatpickr-time-separator {
         color: light.$body-color;
-        font-weight: light.$font-weight-medium;
       }
     }
   }
@@ -950,17 +950,6 @@ span.flatpickr-weekday {
 // Dark layout
 @if $enable-dark-style {
   .dark-style {
-    .flatpickr-calendar {
-      background: dark.$dropdown-bg;
-    }
-    .flatpickr-prev-month,
-    .flatpickr-next-month {
-      background-color: dark.$gray-80;
-      svg {
-        fill: dark.$body-color;
-        stroke: dark.$body-color;
-      }
-    }
     .flatpickr-calendar,
     .flatpickr-days {
       width: calc(#{$flatpickr-width} + calc(#{dark.$dropdown-border-width} * 2px)) !important;
@@ -980,9 +969,15 @@ span.flatpickr-weekday {
       }
     }
     .flatpickr-calendar.open {
-      z-index: light.$zindex-popover;
+      z-index: dark.$zindex-popover;
     }
-
+    .flatpickr-prev-month,
+    .flatpickr-next-month {
+      svg {
+        fill: dark.$headings-color;
+        stroke: dark.$headings-color;
+      }
+    }
     //!  Flatpickr provide default input as readonly, applying default input style to readonly
     .flatpickr-input:not(.is-invalid):not(.is-valid) ~ .form-control:disabled,
     .flatpickr-input:not(.is-invalid):not(.is-valid)[readonly],
@@ -1019,10 +1014,10 @@ span.flatpickr-weekday {
     .flatpickr-calendar {
       line-height: dark.$line-height-base;
       font-size: dark.$font-size-base;
-      box-shadow: dark.$box-shadow-lg;
+      box-shadow: dark.$card-box-shadow;
       background-color: dark.$card-bg;
 
-      @include dark.border-radius(dark.$border-radius);
+      @include dark.border-radius(dark.$border-radius-lg);
 
       &.hasTime:not(.noCalendar):not(.hasTime) .flatpickr-time {
         display: none !important;
@@ -1052,6 +1047,10 @@ span.flatpickr-weekday {
       color: dark.$headings-color;
     }
     .flatpickr-current-month {
+      // ! Fix: To remove : All the datepickrs with a select for months > when we click on the select, month's select and year's input goes up a little bit
+      // padding: ($flatpickr-month-height - (dark.$font-size-base * dark.strip-unit(dark.$big-font-size) / 100) - 0.45rem)
+      //   0
+      //   0;
       font-size: dark.$big-font-size;
       color: dark.$headings-color;
       .cur-month,
@@ -1063,14 +1062,15 @@ span.flatpickr-weekday {
     }
 
     span.flatpickr-weekday {
-      font-size: dark.$font-size-sm;
       color: dark.$headings-color;
+      font-size: dark.$font-size-sm;
     }
 
     .flatpickr-day {
       color: dark.$headings-color;
       font-weight: dark.$font-weight-medium;
-      @include dark.border-radius(dark.$border-radius);
+      font-size: dark.$font-size-sm;
+      @include dark.border-radius(dark.$border-radius-pill);
 
       &:hover,
       &:focus,
@@ -1081,8 +1081,18 @@ span.flatpickr-weekday {
       &.prevMonthDay:focus,
       &.today:focus {
         border-color: transparent;
-        color: dark.$headings-color;
-        background: dark.rgba-to-hex(dark.$gray-60, dark.$rgba-to-hex-bg);
+        background: dark.rgba-to-hex(rgba(dark.$base, 0.06), dark.$rgba-to-hex-bg);
+        color: dark.$body-color;
+      }
+
+      &.selected,
+      &.selected.inRange,
+      &.selected:focus,
+      &.selected:hover,
+      &.selected.nextMonthDay,
+      &.selected.prevMonthDay,
+      &.week.selected {
+        box-shadow: dark.$box-shadow-xs;
       }
 
       &.nextMonthDay,
@@ -1096,18 +1106,18 @@ span.flatpickr-weekday {
       }
 
       &.selected.startRange.endRange {
-        border-radius: dark.$border-radius !important;
+        border-radius: dark.$border-radius-pill !important;
       }
 
       &.disabled {
-        color: dark.$text-muted !important;
+        color: darken(dark.$text-muted, 30) !important;
       }
     }
 
     .flatpickr-weeks {
       border-bottom: dark.$dropdown-border-width solid opacify(dark.$dropdown-border-color, 0.05);
       border-left: dark.$dropdown-border-width solid opacify(dark.$dropdown-border-color, 0.05);
-      background: dark.$dropdown-bg;
+      background: dark.$card-bg;
 
       @include dark.border-bottom-radius(dark.$border-radius);
       border-bottom-right-radius: 0;
@@ -1149,7 +1159,6 @@ span.flatpickr-weekday {
 
       .flatpickr-time-separator {
         color: dark.$body-color;
-        font-weight: dark.$font-weight-medium;
       }
     }
   }

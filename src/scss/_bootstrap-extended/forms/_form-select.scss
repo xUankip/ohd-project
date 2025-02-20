@@ -3,8 +3,6 @@
 
 .form-select {
   background-clip: padding-box;
-  padding: calc($form-select-padding-y - $input-border-width) calc($form-select-padding-x - $input-border-width);
-  padding-inline-end: calc($form-select-padding-x * 3 - $input-border-width);
   optgroup {
     background-color: $card-bg;
   }
@@ -21,8 +19,17 @@
       background-image: escape-svg($form-select-disabled-indicator);
     }
   }
-  &:focus,
-  .was-validated & {
+  @include ltr-style {
+    padding: calc($form-select-padding-y - $form-select-border-width)
+      calc($form-select-padding-x * 3 - $form-select-border-width)
+      calc($form-select-padding-y - $form-select-border-width) calc($form-select-padding-x - $form-select-border-width);
+  }
+  @include rtl-style {
+    padding: calc($form-select-padding-y - $form-select-border-width)
+      calc($form-select-padding-x - $form-select-border-width) calc($form-select-padding-y - $form-select-border-width)
+      calc($form-select-padding-x * 3 - $form-select-border-width);
+  }
+  &:focus {
     border-width: $input-focus-border-width;
     @include ltr-style {
       padding: calc($form-select-padding-y - $input-focus-border-width)
@@ -38,13 +45,25 @@
     }
     background-position: right calc($form-select-padding-x - 1px) center;
   }
+  .was-validated & {
+    background-position: right calc($form-select-padding-x - 1px) center;
+  }
   &.form-select-lg {
     min-height: $input-height-lg;
     background-size: 24px 24px;
-    padding: calc($form-select-padding-y-lg - $input-border-width) calc($form-select-padding-x-lg - $input-border-width);
-    padding-inline-end: calc($form-select-padding-x-lg * 3 - $input-border-width);
-    &:focus,
-    .was-validated & {
+    @include ltr-style {
+      padding: calc($form-select-padding-y-lg - $form-select-border-width)
+        calc($form-select-padding-x-lg * 3 - $form-select-border-width)
+        calc($form-select-padding-y-lg - $form-select-border-width)
+        calc($form-select-padding-x-lg - $form-select-border-width);
+    }
+    @include rtl-style {
+      padding: calc($form-select-padding-y-lg - $form-select-border-width)
+        calc($form-select-padding-x-lg - $form-select-border-width)
+        calc($form-select-padding-y-lg - $form-select-border-width)
+        calc($form-select-padding-x-lg * 3 - $form-select-border-width);
+    }
+    &:focus {
       @include ltr-style {
         padding: calc($form-select-padding-y-lg - $input-focus-border-width)
           calc($form-select-padding-x-lg * 3 - $input-focus-border-width)
@@ -62,10 +81,19 @@
   &.form-select-sm {
     min-height: $input-height-sm;
     background-size: 20px 20px;
-    padding: calc($form-select-padding-y-sm - $input-border-width) calc($form-select-padding-x-sm - $input-border-width);
-    padding-inline-end: calc($form-select-padding-x-sm * 3 - $input-border-width);
-    &:focus,
-    .was-validated & {
+    @include ltr-style {
+      padding: calc($form-select-padding-y-sm - $form-select-border-width)
+        calc($form-select-padding-x-sm * 3 - $form-select-border-width)
+        calc($form-select-padding-y-sm - $form-select-border-width)
+        calc($form-select-padding-x-sm - $form-select-border-width);
+    }
+    @include rtl-style {
+      padding: calc($form-select-padding-y-sm - $form-select-border-width)
+        calc($form-select-padding-x-sm - $form-select-border-width)
+        calc($form-select-padding-y-sm - $form-select-border-width)
+        calc($form-select-padding-x-sm * 3 - $form-select-border-width);
+    }
+    &:focus {
       @include ltr-style {
         padding: calc($form-select-padding-y-sm - $input-focus-border-width)
           calc($form-select-padding-x-sm * 3 - $input-focus-border-width)
@@ -81,9 +109,6 @@
     }
     // background-size: 14px 11px;
   }
-  &[multiple]:focus {
-    padding-inline-end: 0.875rem !important;
-  }
 }
 
 // Multiple select RTL Only
@@ -96,7 +121,6 @@
     }
     &[multiple],
     &[size]:not([size='1']) {
-      padding-left: 0.9375rem;
       background-image: none;
     }
   }
@@ -108,6 +132,11 @@
   select.form-select {
     option {
       background-color: $card-bg;
+    }
+    &:hover {
+      &:not([disabled]):not([focus]) {
+        border-color: rgba-to-hex($gray-600, $rgba-to-hex-bg);
+      }
     }
   }
 }

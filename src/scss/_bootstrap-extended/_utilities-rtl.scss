@@ -297,3 +297,18 @@ $utilities: map-merge(
       // scss-docs-end utils-scaleY
   )
 );
+
+// @each $scale, $value in (n1: scaleX(1), n1-rtl: scaleX(-1)) {
+//   .scaleX-#{$scale} {
+//     &:before {
+//       transform: #{$value};
+//     }
+//   }
+// }
+// @each $scale, $value in (n1: scaleY(1), n1-rtl: scaleY(-1)) {
+//   .scaleY-#{$scale} {
+//     &:before {
+//       transform: #{$value};
+//     }
+//   }
+// }

@@ -47,11 +47,5 @@ table.dataTable.dtr-column > tbody > tr.parent th.control:before {
     tr:last-child > td {
       border-bottom: 0;
     }
-    .btn {
-      box-shadow: none !important;
-    }
-    .emp_name {
-      font-weight: light.$font-weight-medium;
-    }
   }
 }

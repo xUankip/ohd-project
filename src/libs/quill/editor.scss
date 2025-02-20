@@ -907,10 +907,6 @@
 
       &.ql-toolbar + .ql-container.ql-snow {
         border-top: 0;
-        .ql-editor,
-        & {
-          @include light.border-bottom-radius(light.$border-radius);
-        }
       }
 
       .ql-stroke {
@@ -1065,10 +1061,6 @@
 
       &.ql-toolbar + .ql-container.ql-snow {
         border-top: 0;
-        .ql-editor,
-        & {
-          @include dark.border-bottom-radius(dark.$border-radius);
-        }
       }
 
       .ql-stroke-miter {

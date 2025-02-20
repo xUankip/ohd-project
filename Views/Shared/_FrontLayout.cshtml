@@ -10,13 +10,13 @@
 
 
 <!-- Navbar -->
-@await Html.PartialAsync("Sections/Navbar/_Navbar")
+@await Html.PartialAsync("Sections/Navbar/_NavbarFront")
 <!-- / Navbar -->
 
 @RenderBody()
 
 <!-- Footer -->
-@await Html.PartialAsync("Sections/Footer/_Footer")
+@await Html.PartialAsync("Sections/Footer/_FooterFront")
 <!-- / Footer -->
 
 @section VendorScripts { @RenderSection("VendorScripts", required: false) }

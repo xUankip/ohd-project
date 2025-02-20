@@ -7,6 +7,7 @@ body {
   -moz-font-feature-settings: 'liga' on;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  letter-spacing: $letter-spacing;
 }
 
 @include media-breakpoint-up(md) {
@@ -30,6 +31,11 @@ body {
   transition: all 0.25s ease;
   &.show {
     visibility: visible;
+  }
+  @if $dark-style {
+    .dark-style & {
+      background-color: rgba(21, 16, 43, 0.6);
+    }
   }
 }
 
@@ -124,6 +130,20 @@ body {
   }
 }
 
+// *******************************************************************************
+// * Material animations
+
+@include keyframes(dropdownAnimation) {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 // * IE Fixes
 // *******************************************************************************
 
@@ -166,9 +186,9 @@ body {
       right: inherit;
     }
     z-index: $zindex-menu-fixed;
-    box-shadow: 0 1px 20px 1px $danger;
+    box-shadow: 0 1px 20px 1px #ea5455 !important;
     &:hover {
-      box-shadow: none;
+      box-shadow: none !important;
     }
   }
 }

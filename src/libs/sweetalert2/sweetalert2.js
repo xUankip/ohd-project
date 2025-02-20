@@ -4,8 +4,8 @@ const Swal = SwalPlugin.mixin({
   buttonsStyling: false,
   customClass: {
     confirmButton: 'btn btn-primary',
-    cancelButton: 'btn btn-label-danger',
-    denyButton: 'btn btn-label-secondary'
+    cancelButton: 'btn btn-outline-danger',
+    denyButton: 'btn btn-outline-secondary'
   }
 });
 

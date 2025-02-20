@@ -3,16 +3,14 @@
 
 // Treeview click
 @mixin template-treeview-clicked-bg($background) {
-  .jstree-default {
-    .jstree-wholerow-clicked,
-    .jstree-wholerow-hovered {
-      background: mix($white, $background, 85%);
-    }
-  }
-  .jstree-default-dark {
-    .jstree-wholerow-hovered,
-    .jstree-wholerow-clicked {
-      background: mix($dark, $background, 55%);
+  .jstree {
+    .jstree-children {
+      .jstree-wholerow-hovered {
+        background-color: $gray-50;
+      }
+      .jstree-wholerow-clicked {
+        background: rgba($background, 0.08);
+      }
     }
   }
 }

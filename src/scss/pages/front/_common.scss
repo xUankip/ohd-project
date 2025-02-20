@@ -10,9 +10,9 @@
 }
 
 .first-section-pt {
-  padding-top: 11.28rem;
+  padding-top: 10.3rem;
   @include light.media-breakpoint-down(xl) {
-    padding-top: 7.5rem;
+    padding-top: 6.5rem;
   }
 }
 
@@ -31,13 +31,43 @@
   width: 100%;
   object-fit: cover;
   object-position: left;
+  z-index: -1;
 }
 
-.section-title-img {
-  height: 100%;
-  width: 120%;
-  inset-inline-start: -12%;
-  top: 10px;
+.bg-icon-left,
+.bg-icon-right {
+  position: relative;
+  &::before {
+    position: absolute;
+    display: block;
+    top: 0;
+  }
+}
+.bg-icon-left {
+  &::before {
+    left: 0;
+    @include light.media-breakpoint-down(sm) {
+      left: 0.625rem;
+    }
+  }
+}
+.bg-icon-right {
+  &::before {
+    right: 0;
+    @include light.media-breakpoint-down(sm) {
+      right: 0.625rem;
+    }
+  }
+}
+
+.dropdown-toggle::after {
+  margin-top: -0.28em;
+  width: 0.42em;
+  height: 0.42em;
+  border: 1px solid !important;
+  border-top: 0 !important;
+  border-left: 0 !important;
+  transform: rotate(45deg);
 }
 
 // Light style
@@ -54,6 +84,12 @@
   .dark-style {
     body {
       background-color: dark.$card-bg;
+    }
+    .landing-light-mode {
+      display: none;
+    }
+    .landing-dark-mode {
+      display: block;
     }
   }
 }

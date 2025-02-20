@@ -11,13 +11,3 @@ $checkout-wizard-header-width: 800px !default;
     max-width: $checkout-wizard-header-width;
   }
 }
-
-.list-group .btn-pinned.btn-close {
-  top: 1.5rem !important;
-  @include app-ltr() {
-    right: 1.5rem !important;
-  }
-  @include app-rtl() {
-    left: 1.5rem !important;
-  }
-}

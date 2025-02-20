@@ -1,21 +1,18 @@
 @import '../../scss/_bootstrap-extended/functions';
 
 @mixin flatpickr-theme($background, $color: null) {
-  $in-range-bg: rgba-to-hex(rgba($background, 0.16), $card-bg);
+  $in-range-bg: rgba-to-hex(rgba($background, 0.12), $card-bg);
   $color: if($color, $color, color-contrast($background));
+  $in-range-color: $background;
 
   .flatpickr-day {
     &.today,
     &.today:hover {
-      color: $color !important;
-      border-color: $background;
-      background-color: $background !important;
-      box-shadow: 0 0.125rem 0.25rem 0 rgba($background, 0.4);
+      color: $background !important;
+      border-color: rgba-to-hex(rgba($background, 0.16), $card-bg);
+      background-color: rgba-to-hex(rgba($background, 0.16), $card-bg) !important;
     }
 
-    &.selected,
-    &.selected:focus,
-    &.selected:hover,
     &.inRange,
     &.nextMonthDay.inRange,
     &.prevMonthDay.inRange,
@@ -27,7 +24,10 @@
       border-color: $in-range-bg !important;
     }
 
+    &.selected,
     &.selected.inRange,
+    &.selected:focus,
+    &.selected:hover,
     &.selected.nextMonthDay,
     &.selected.prevMonthDay,
     &.startRange,
@@ -46,14 +46,14 @@
       color: $color !important;
       background: $background !important;
       border-color: $background !important;
-      box-shadow: 0 0.125rem 0.25rem 0 rgba($background, 0.4);
     }
   }
 }
 
 @mixin flatpickr-dark-theme($background, $color: null) {
   $color: if($color, $color, color-contrast($background));
-  $in-range-bg: rgba-to-hex(rgba($background, 0.16), $card-bg);
+  $in-range-bg: rgba-to-hex(rgba($background, 0.12), $card-bg);
+  $in-range-color: $background;
 
   .flatpickr-calendar .numInputWrapper span {
     &.arrowUp:after {
@@ -69,16 +69,11 @@
     &.today,
     &.today:hover,
     &.inRange {
-      color: $color !important;
-      border-color: $background !important;
-      background-color: $background !important;
-      box-shadow: 0 0.125rem 0.25rem 0 rgba($background, 0.4);
+      color: $background !important;
+      border-color: rgba-to-hex(rgba($background, 0.16), $card-bg) !important;
+      background-color: rgba-to-hex(rgba($background, 0.16), $card-bg) !important;
     }
 
-    &.selected,
-    &.selected:focus,
-    &.selected:hover,
-    &.inRange,
     &.nextMonthDay.inRange,
     &.prevMonthDay.inRange,
     &.today.inRange,
@@ -89,7 +84,10 @@
       color: $background !important;
     }
 
+    &.selected,
     &.selected.inRange,
+    &.selected:focus,
+    &.selected:hover,
     &.selected.prevMonthDay,
     &.selected.nextMonthDay,
     &.startRange,

@@ -7,29 +7,28 @@
 @import '../_custom-variables/pages';
 
 $email-sidebar-width: 16.25rem;
-$email-app-height: calc(100vh - 12rem);
-$email-app-height-with-no-navbar: calc(100vh - 8.5rem);
-$email-app-horizontal-height-diff: 2.1rem;
+$email-app-height: calc(100vh - 10.5rem);
+$email-app-height-with-no-navbar: calc(100vh - 6.5rem);
+$email-app-horizontal-height-diff: 5rem;
 $email-list-item-meta-padding-left: 2rem;
 $email-view-width: 16.2rem;
 $email-padding-x: 1rem;
-$email-padding-y: 0.875rem;
-$email-filter-padding-y: 0.25rem;
-$email-filter-padding-x: 1.5rem;
+$email-padding-y: 1rem;
+$email-filter-padding-y: 0.3125rem;
+$email-filter-padding-x: 1.25rem;
 
 .app-email {
   position: relative;
   height: $email-app-height !important;
   overflow: hidden;
-  @include light.media-breakpoint-down('md') {
-    height: calc(100vh - 11rem) !important;
-  }
   .layout-navbar-hidden & {
     height: $email-app-height-with-no-navbar !important;
   }
-  .layout-horizontal & {
-    height: calc($email-app-height + calc($email-app-horizontal-height-diff / 2.66)) !important;
-    @include light.media-breakpoint-up($menu-collapsed-layout-breakpoint) {
+  @include light.media-breakpoint-down(md) {
+    height: calc($email-app-height - 0.5rem) !important;
+  }
+  @include light.media-breakpoint-up($menu-collapsed-layout-breakpoint) {
+    .layout-horizontal & {
       height: calc($email-app-height - $email-app-horizontal-height-diff) !important;
     }
   }
@@ -45,7 +44,7 @@ $email-filter-padding-x: 1.5rem;
     transition: all 0.2s;
 
     .btn-compost-wrapper {
-      padding: 1.5rem;
+      padding: 1.25rem 1.25rem;
     }
 
     &.show {
@@ -53,20 +52,18 @@ $email-filter-padding-x: 1.5rem;
     }
 
     .email-filters {
-      height: calc(100vh - 16.6rem);
+      height: calc(100vh - 14.3rem);
       .layout-navbar-hidden & {
-        height: calc(100vh - 12.6rem);
+        height: calc(100vh - 11rem);
       }
-      .layout-horizontal & {
-        height: calc(100vh - 15.6rem);
-        @include light.media-breakpoint-up($menu-collapsed-layout-breakpoint) {
-          height: calc(100vh - 16.6rem - $email-app-horizontal-height-diff);
+      @include light.media-breakpoint-up($menu-collapsed-layout-breakpoint) {
+        .layout-horizontal & {
+          height: calc(100vh - 14rem - $email-app-horizontal-height-diff);
         }
       }
 
       .email-filter-folders {
         li {
-          // margin: $email-filter-spacer 0;
           &:first-child {
             margin-top: 0;
           }
@@ -78,20 +75,15 @@ $email-filter-padding-x: 1.5rem;
           }
         }
       }
+
       li {
         padding: $email-filter-padding-y $email-filter-padding-x;
-        padding-inline-start: calc($email-filter-padding-x - 3px);
         border-left: 3px solid transparent;
-        min-height: 1.875rem;
+
         h6 {
           font-size: 1rem;
         }
       }
-    }
-
-    .email-filter-labels .badge-dot {
-      width: 0.625rem;
-      height: 0.625rem;
     }
   }
 
@@ -106,17 +98,14 @@ $email-filter-padding-x: 1.5rem;
     .email-compose-to {
       .select2-selection {
         border: none;
-        padding-inline: calc(light.$form-select-padding-x - light.$input-border-width);
-        padding-block: 0;
+        padding: 0.5rem 1rem !important;
+        min-height: 3.5rem;
         .select2-selection__choice {
           padding-top: 0.2rem;
           padding-bottom: 0.2rem;
           display: flex;
           align-items: center;
           line-height: 0;
-        }
-        &__choice__remove {
-          top: unset;
         }
       }
     }
@@ -125,6 +114,19 @@ $email-filter-padding-x: 1.5rem;
       width: 80px;
     }
 
+    .email-compose-subject,
+    .email-compose-cc,
+    .email-compose-bcc {
+      .form-control:focus {
+        padding-block: calc(light.$input-padding-y - light.$input-border-width);
+      }
+    }
+    .email-compose-cc,
+    .email-compose-bcc {
+      .form-control:focus {
+        padding-left: calc(light.$input-padding-x - light.$input-border-width);
+      }
+    }
     .ql-editor {
       height: 10rem;
       min-height: 10rem;
@@ -133,11 +135,8 @@ $email-filter-padding-x: 1.5rem;
     .ql-snow.ql-toolbar {
       padding: 0.5rem 1rem;
     }
-    .ql-editor.ql-blank {
-      padding-inline: 1.5rem;
-      &::before {
-        padding-left: 1.5rem;
-      }
+    .ql-editor.ql-blank::before {
+      padding-left: 1.5rem;
     }
   }
 
@@ -150,47 +149,40 @@ $email-filter-padding-x: 1.5rem;
     }
     .email-list {
       @include light.media-breakpoint-up(lg) {
-        height: calc(100vh - 18.9rem);
+        height: calc(100vh - 17.4rem);
       }
       @include light.media-breakpoint-down(lg) {
-        height: calc(100vh - 18.9rem);
-      }
-      @include light.media-breakpoint-down(md) {
-        height: calc(100vh - 18rem);
+        height: calc(100vh - 17.9rem);
       }
       .layout-navbar-hidden & {
         @include light.media-breakpoint-up(lg) {
-          height: calc(100vh - 15.5rem);
+          height: calc(100vh - 13.4rem);
         }
         @include light.media-breakpoint-down(lg) {
-          height: calc(100vh - 15.5rem);
+          height: calc(100vh - 13.5rem);
         }
       }
-      .layout-horizontal & {
-        height: calc(100vh - 18.2rem);
-        @include light.media-breakpoint-up(lg) {
-          height: calc(100vh - 17.75rem);
-        }
-        @include light.media-breakpoint-up(xl) {
-          height: calc(100vh - 18.75rem - $email-app-horizontal-height-diff) !important;
+      @include light.media-breakpoint-up($menu-collapsed-layout-breakpoint) {
+        .layout-horizontal & {
+          height: calc(100vh - 15.4rem - 7rem);
         }
       }
 
-      li.email-list-item {
+      li {
         padding: $email-padding-y $email-padding-x;
-        min-height: 4.375rem;
-        transition: all 0.2s ease-in-out;
+        transition: all 0.15s ease-in-out;
         cursor: pointer;
         z-index: 1;
-        &:last-child {
-          border-bottom: 0;
+
+        .email-list-item-subject {
+          font-size: 0.8125rem;
         }
 
         .email-list-item-username {
           font-weight: light.$font-weight-medium;
         }
         .email-list-item-time {
-          width: 60px;
+          width: 64px;
           display: inline-block;
           text-align: right;
         }
@@ -201,12 +193,10 @@ $email-filter-padding-x: 1.5rem;
 
             li {
               padding: 0;
+              &:not(:last-child) {
+                margin-right: 0.25rem;
+              }
             }
-          }
-        }
-        .list-inline-item {
-          &:not(:last-child) {
-            margin-inline-end: 0.25rem;
           }
         }
 
@@ -227,25 +217,22 @@ $email-filter-padding-x: 1.5rem;
     height: $email-app-height;
     z-index: -1;
     transition: all 0.25s ease;
-    @include light.media-breakpoint-down(md) {
-      height: calc($email-app-height + 2rem);
-    }
     .layout-navbar-hidden & {
       height: $email-app-height-with-no-navbar;
     }
     .layout-horizontal & {
-      height: calc($email-app-height + 1rem);
-      @include light.media-breakpoint-up(lg) {
-        height: calc($email-app-height + 1rem);
-      }
-      @include light.media-breakpoint-up(xl) {
-        height: calc($email-app-height - $email-app-horizontal-height-diff) !important;
+      @include light.media-breakpoint-up($menu-collapsed-layout-breakpoint) {
+        height: calc($email-app-height - $email-app-horizontal-height-diff);
       }
     }
 
     &.show {
-      right: -1px;
+      right: 0;
       z-index: 4;
+      height: 100%;
+      @include light.media-breakpoint-up(lg) {
+        right: -1px;
+      }
     }
 
     .app-email-view-header {
@@ -254,15 +241,18 @@ $email-filter-padding-x: 1.5rem;
 
     .app-email-view-content {
       @include light.media-breakpoint-up(md) {
-        height: calc(100vh - 19.6rem);
+        height: calc(100vh - 17.9rem);
+
+        .layout-navbar-hidden & {
+          height: calc(100vh - 13.9rem);
+        }
       }
       @include light.media-breakpoint-down(md) {
-        height: calc(100vh - 17.65rem);
+        height: calc(100vh - 17.9rem);
       }
-      .layout-horizontal & {
-        height: calc(100vh - 18rem);
-        @include light.media-breakpoint-up($menu-collapsed-layout-breakpoint) {
-          height: calc(100vh - 19.2rem - $email-app-horizontal-height-diff) !important;
+      @include light.media-breakpoint-up($menu-collapsed-layout-breakpoint) {
+        .layout-horizontal & {
+          height: calc(100vh - 17.9rem - $email-app-horizontal-height-diff);
         }
       }
 
@@ -292,9 +282,9 @@ $email-filter-padding-x: 1.5rem;
           left: 2.5rem;
           right: 2.5rem;
           top: -2rem;
-          border-radius: 0.375rem;
           z-index: -1;
           content: '';
+          border-radius: light.$border-radius-lg;
         }
 
         &:after {
@@ -303,9 +293,9 @@ $email-filter-padding-x: 1.5rem;
           left: 1rem;
           right: 1rem;
           top: -1rem;
-          border-radius: 0.375rem;
           z-index: -1;
           content: '';
+          border-radius: light.$border-radius-lg;
         }
 
         &.hide-pseudo {
@@ -315,18 +305,6 @@ $email-filter-padding-x: 1.5rem;
           }
         }
       }
-    }
-  }
-
-  .app-email-compose .email-compose-actions .email-send-btn {
-    &::after {
-      display: none;
-    }
-  }
-
-  .email-compose-form {
-    .form-control {
-      padding: $input-padding-y $input-padding-x;
     }
   }
 
@@ -346,7 +324,7 @@ $email-filter-padding-x: 1.5rem;
     }
 
     .email-list {
-      li.email-list-item:hover {
+      li:hover {
         .email-list-item-meta {
           .email-list-item-attachment,
           .email-list-item-time,
@@ -356,6 +334,7 @@ $email-filter-padding-x: 1.5rem;
 
           .email-list-item-actions {
             display: block;
+            text-wrap: nowrap;
           }
         }
       }
@@ -373,7 +352,7 @@ $email-filter-padding-x: 1.5rem;
       }
 
       .email-list {
-        li.email-list-item {
+        li {
           padding: 1rem;
 
           .email-list-item-username {
@@ -415,21 +394,23 @@ $email-filter-padding-x: 1.5rem;
 
       .email-list {
         li.email-list-item {
-          border-bottom: 1px solid light.$border-color;
           .email-list-item-user {
             min-width: 12rem;
           }
           &.email-marked-read {
-            background-color: light.$gray-60;
+            background-color: light.rgba-to-hex(rgba(light.$black, 0.06), light.$rgba-to-hex-bg);
           }
 
           &:hover {
             box-shadow: light.$box-shadow-sm;
-            border-bottom-color: transparent;
           }
 
           .email-list-item-actions li {
             box-shadow: none;
+          }
+
+          &:not(:first-child) {
+            border-top: 1px solid light.$border-color;
           }
 
           &[data-starred='true'] {
@@ -442,33 +423,23 @@ $email-filter-padding-x: 1.5rem;
 
       .app-email-view {
         .email-card-last {
-          border: 1px solid light.$card-border-color;
+          border: 1px solid light.$border-color;
           &:before {
             background-color: rgba(light.$card-bg, 0.4);
-            box-shadow: light.$card-box-shadow;
-            border: 1px solid light.$card-border-color;
+            border: 1px solid light.$border-color;
           }
 
           &:after {
             background-color: rgba(light.$card-bg, 0.7);
-            box-shadow: light.$card-box-shadow;
-            border: 1px solid light.$card-border-color;
+            border: 1px solid light.$border-color;
           }
         }
-        .email-reply {
-          border: 1px solid light.$card-border-color;
-        }
-        .email-attachment-title {
-          font-weight: 500;
+        .app-email-view-header {
+          background-color: light.$card-bg;
         }
       }
-      .app-email-compose .modal-dialog {
-        .modal-header {
-          background-color: light.$gray-60;
-        }
-        .modal-content {
-          box-shadow: light.$box-shadow-xl;
-        }
+      .app-email-compose .modal-dialog .modal-header {
+        background-color: light.$gray-50;
       }
     }
   }
@@ -500,14 +471,16 @@ $email-filter-padding-x: 1.5rem;
 
       .email-list {
         li.email-list-item {
-          border-bottom: 1px solid dark.$border-color;
           &.email-marked-read {
-            background-color: dark.$gray-60;
+            background-color: dark.rgba-to-hex(rgba(dark.$base, 0.06), dark.$rgba-to-hex-bg);
+          }
+
+          &:not(:first-child) {
+            border-top: 1px solid dark.$border-color;
           }
 
           &:hover {
             box-shadow: dark.$box-shadow-sm;
-            border-bottom-color: transparent;
           }
 
           .email-list-item-actions li {
@@ -523,33 +496,23 @@ $email-filter-padding-x: 1.5rem;
 
       .app-email-view {
         .email-card-last {
-          border: 1px solid dark.$card-border-color;
+          border: 1px solid dark.$border-color;
           &:before {
             background-color: rgba(dark.$card-bg, 0.4);
-            box-shadow: dark.$card-box-shadow;
-            border: 1px solid dark.$card-border-color;
+            border: 1px solid dark.$border-color;
           }
 
           &:after {
             background-color: rgba(dark.$card-bg, 0.7);
-            box-shadow: dark.$card-box-shadow;
-            border: 1px solid dark.$card-border-color;
+            border: 1px solid dark.$border-color;
           }
-        }
-        .email-reply {
-          border: 1px solid dark.$card-border-color;
         }
         .app-email-view-header {
           background-color: dark.$card-bg;
         }
       }
-      .app-email-compose .modal-dialog {
-        .modal-header {
-          background-color: dark.$gray-60;
-        }
-        .modal-content {
-          box-shadow: dark.$box-shadow-xl;
-        }
+      .app-email-compose .modal-dialog .modal-header {
+        background-color: dark.$gray-50;
       }
     }
   }
@@ -597,12 +560,15 @@ $email-filter-padding-x: 1.5rem;
 
         &.show {
           right: auto;
-          left: -1px;
+          left: 0;
+          @include light.media-breakpoint-up(lg) {
+            left: -1px;
+          }
         }
 
         .app-email-view-header {
-          .bx-chevron-right,
-          .bx-chevron-left {
+          .ri-arrow-right-s-line,
+          .ri-arrow-left-s-line {
             transform: rotate(180deg);
           }
         }
@@ -620,13 +586,16 @@ $email-filter-padding-x: 1.5rem;
     @media (max-width: 576px) {
       .app-emails-list {
         .email-list {
-          li.email-list-item {
+          li {
             .email-list-item-user {
               margin-left: 1rem;
             }
           }
         }
       }
+    }
+    .ps--active-y > .ps__rail-y {
+      right: calc(100% - 4px) !important;
     }
   }
 }

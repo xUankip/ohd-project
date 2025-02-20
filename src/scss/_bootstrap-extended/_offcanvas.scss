@@ -4,10 +4,6 @@
 .offcanvas {
   box-shadow: $offcanvas-box-shadow;
 }
-.offcanvas-header {
-  padding-bottom: $offcanvas-padding-y * 0.5;
-}
-
 // RTL
 // *******************************************************************************
 @include rtl-only {

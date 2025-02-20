@@ -6,7 +6,7 @@
 // Sweet Alert2 Modal
 .swal2-modal.swal2-popup {
   .swal2-title {
-    margin: 1.875rem 0 1rem 0;
+    margin: 1.875rem auto 1rem;
     max-width: $swal2-width * 0.5;
     line-height: light.$line-height-base;
   }
@@ -103,9 +103,9 @@
 
     .swal2-modal.swal2-popup {
       font-family: light.$font-family-base;
-      box-shadow: light.$modal-content-box-shadow-xs;
+      box-shadow: light.$box-shadow-xl;
 
-      @include light.border-radius(light.$border-radius);
+      @include light.border-radius(light.$modal-content-border-radius);
     }
 
     .swal2-container.swal2-shown {
@@ -113,7 +113,6 @@
     }
 
     .swal2-popup .swal2-title {
-      font-size: light.$h2-font-size;
       font-weight: light.$headings-font-weight;
       color: light.$body-color;
     }
@@ -132,7 +131,7 @@
       font-size: light.$font-size-lg;
       color: light.$body-color;
 
-      @include light.border-radius(light.$border-radius-lg);
+      @include light.border-radius(light.$modal-content-border-radius);
     }
 
     .swal2-popup .swal2-validationerror {
@@ -195,9 +194,9 @@
     .swal2-modal.swal2-popup {
       background: dark.$modal-content-bg;
       font-family: dark.$font-family-base;
-      box-shadow: dark.$modal-content-box-shadow-xs;
+      box-shadow: dark.$box-shadow-xl;
 
-      @include dark.border-radius(dark.$border-radius);
+      @include dark.border-radius(dark.$modal-content-border-radius);
     }
 
     .swal2-container.swal2-shown {
@@ -205,7 +204,6 @@
     }
 
     .swal2-popup .swal2-title {
-      font-size: dark.$h2-font-size;
       font-weight: dark.$headings-font-weight;
       color: dark.$body-color;
     }
@@ -234,7 +232,7 @@
       border: dark.$input-border-width solid dark.$input-border-color !important;
       font-size: dark.$font-size-lg;
 
-      @include dark.border-radius(dark.$border-radius-lg);
+      @include dark.border-radius(dark.$modal-content-border-radius);
     }
 
     .swal2-popup .swal2-validationerror {

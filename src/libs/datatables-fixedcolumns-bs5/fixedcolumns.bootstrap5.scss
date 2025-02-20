@@ -32,14 +32,9 @@ div.dataTables_scrollBody {
     table.DTFC_Cloned tr {
       border-color: light.$table-border-color;
     }
-    // fixed header and footer border
-    div.dataTables_scrollFootInner table.table-bordered tr th:first-child,
-    div.dataTables_scrollHeadInner table.table-bordered tr th:first-child {
-      border-left: 1px solid light.$table-border-color;
-    }
     // fixed column background color
-    table.dataTable thead tr > .dtfc-fixed-left,
-    table.dataTable thead tr > .dtfc-fixed-right,
+    // table.dataTable thead tr > .dtfc-fixed-left,
+    // table.dataTable thead tr > .dtfc-fixed-right,
     table.dataTable tbody tr > .dtfc-fixed-left,
     table.dataTable tbody tr > .dtfc-fixed-right,
     div.dtfc-right-top-blocker,
@@ -82,9 +77,7 @@ div.dataTables_scrollBody {
       border-color: dark.$table-border-color;
     }
     div.dataTables_scrollHead table,
-    div.DTFC_RightHeadWrapper table,
-    table.dataTable.fixedHeader-floating,
-    table.dataTable.fixedHeader-locked {
+    div.DTFC_RightHeadWrapper table {
       background-color: dark.$card-bg;
     }
     // fixed header and footer border
