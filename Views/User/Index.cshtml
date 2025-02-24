@@ -22,7 +22,7 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RoleID)
+                @Html.DisplayNameFor(model => model.RoleId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FullName)
@@ -58,7 +58,7 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RoleID)
+                @Html.DisplayFor(modelItem => item.RoleId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FullName)
@@ -79,9 +79,9 @@
                 @Html.DisplayFor(modelItem => item.DeletedAt)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.UserID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UserID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UserID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
             </td>
         </tr>
 }

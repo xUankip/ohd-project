@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using AspnetCoreMvcStarter.Models.Enums;
+using AspnetCoreMvcStarter.Models;
 
 namespace AspnetCoreMvcStarter.Models
 {

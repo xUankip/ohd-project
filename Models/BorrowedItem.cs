@@ -1,34 +1,22 @@
+using System;
 using System.ComponentModel.DataAnnotations;
-using AspnetCoreMvcStarter.Models.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AspnetCoreMvcStarter.Models
 {
-  public class BorrowedItem
-  {
-    [Key]
-    public int BorrowID { get; set; }
-
-    [Required]
-    public int UserID { get; set; }
-
-    [Required]
-    public int ItemID { get; set; }
-
-    [Required]
-    public int FacilityID { get; set; }
-
-    [Required]
-    public int QuantityBorrowed { get; set; }
-
-    public DateTime BorrowDate { get; set; } = DateTime.UtcNow;
-    public DateTime? ReturnDate { get; set; }
-
-    [Required]
-    public string Status { get; set; } = "Borrowed";
-
-    // Navigation properties
-    public virtual User User { get; set; }
-    public virtual Item Item { get; set; }
-    public virtual Facility Facility { get; set; }
-  }
+    public class BorrowedItem
+    {
+        [Key]
+        public int BorrowId { get; set; }
+        public int? UserId { get; set; }
+        public User User { get; set; }
+        public int? ItemId { get; set; }
+        public FacilityItem FacilityItem { get; set; }
+        public int? FacilityId { get; set; }
+        public Facility Facility { get; set; }
+        public int QuantityBorrowed { get; set; }
+        public DateTime BorrowDate { get; set; } = DateTime.UtcNow;
+        public DateTime? ReturnDate { get; set; }
+        public string Status { get; set; } = "Borrowed";
+    }
 }

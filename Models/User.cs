@@ -1,49 +1,44 @@
+using System;
 using System.ComponentModel.DataAnnotations;
-using AspnetCoreMvcStarter.Models.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AspnetCoreMvcStarter.Models
 {
+    public class User
+    {
+        [Key]
+        public int UserId { get; set; }
 
-  public class User
-  {
-    [Key]
-    public int UserID { get; set; }
+        [Required(ErrorMessage = "Tên đăng nhập là bắt buộc")]
+        [MaxLength(50, ErrorMessage = "Tên đăng nhập không được vượt quá 50 ký tự")]
+        public string Username { get; set; }
 
-    [Required]
-    [StringLength(50)]
-    public string Username { get; set; }
+        [Required(ErrorMessage = "Mật khẩu là bắt buộc")]
+        public string PasswordHash { get; set; }
 
-    [Required]
-    [StringLength(255)]
-    public string PasswordHash { get; set; }
+        [Required(ErrorMessage = "Email là bắt buộc")]
+        [EmailAddress(ErrorMessage = "Email không hợp lệ")]
+        [MaxLength(100, ErrorMessage = "Email không được vượt quá 100 ký tự")]
+        public string Email { get; set; }
 
-    [Required]
-    [StringLength(100)]
-    [EmailAddress]
-    public string Email { get; set; }
+        [Required(ErrorMessage = "Họ tên là bắt buộc")]
+        [MaxLength(100, ErrorMessage = "Họ tên không được vượt quá 100 ký tự")]
+        public string FullName { get; set; }
 
-    [Required]
-    public UserRole RoleID { get; set; }
+        [MaxLength(15, ErrorMessage = "Số điện thoại không được vượt quá 15 ký tự")]
+        public string Phone { get; set; }
 
-    [Required]
-    [StringLength(100)]
-    public string FullName { get; set; }
+        public bool IsActive { get; set; } = true;
 
-    [StringLength(15)]
-    public string Phone { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
 
-    public bool IsActive { get; set; } = true;
+        [Required(ErrorMessage = "Vai trò là bắt buộc")]
+        public int RoleId { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
-    public DateTime? DeletedAt { get; set; }
-
-    // Navigation properties
-    public virtual ICollection<Facility> ManagedFacilities { get; set; }
-    public virtual ICollection<User_Facility> UserFacilities { get; set; }
-    public virtual ICollection<BorrowedItem> BorrowedItems { get; set; }
-    public virtual ICollection<Request> Requests { get; set; }
-    public virtual ICollection<Notification> Notifications { get; set; }
-  }
+        // Navigation property
+        [ForeignKey("RoleId")]
+        public virtual UserRole? Role { get; set; }
+    }
 }
-

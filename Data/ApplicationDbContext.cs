@@ -1,78 +1,92 @@
-using AspnetCoreMvcStarter.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using AspnetCoreMvcStarter.Models;
 
 namespace AspnetCoreMvcStarter.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Facility> Facilities { get; set; }
-        public DbSet<User_Facility> User_Facilities { get; set; }
-        public DbSet<Item> Items { get; set; }
+        public DbSet<UserFacility> UserFacilities { get; set; }
+        public DbSet<FacilityItem> FacilityItems { get; set; }
         public DbSet<BorrowedItem> BorrowedItems { get; set; }
         public DbSet<Request> Requests { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
-            // Configure composite key for User_Facility
-            modelBuilder.Entity<User_Facility>()
-                .HasKey(uf => new { uf.UserID, uf.FacilityID });
-
-            // Configure relationships for User
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.ManagedFacilities)
-                .WithOne(f => f.FacilityHead)
-                .HasForeignKey(f => f.FacilityHeadID)
+            modelBuilder.Entity<UserFacility>().HasKey(uf => new { uf.UserId, uf.FacilityId });
+            modelBuilder.Entity<UserFacility>()
+                .HasOne(uf => uf.User)
+                .WithMany()
+                .HasForeignKey(uf => uf.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Configure relationships for Facility
-            modelBuilder.Entity<Facility>()
-                .HasMany(f => f.Items)
-                .WithOne(i => i.Facility)
-                .HasForeignKey(i => i.FacilityID)
+            modelBuilder.Entity<UserFacility>()
+                .HasOne(uf => uf.Facility)
+                .WithMany()
+                .HasForeignKey(uf => uf.FacilityId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Configure soft delete filter
-            modelBuilder.Entity<User>().HasQueryFilter(u => u.DeletedAt == null);
-            modelBuilder.Entity<Facility>().HasQueryFilter(f => f.DeletedAt == null);
-            modelBuilder.Entity<Item>().HasQueryFilter(i => i.DeletedAt == null);
-            modelBuilder.Entity<Request>().HasQueryFilter(r => r.DeletedAt == null);
-            modelBuilder.Entity<Notification>().HasQueryFilter(n => n.DeletedAt == null);
-
-            // Configure indexes
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Username)
-                .IsUnique();
-
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Email)
-                .IsUnique();
-
-            modelBuilder.Entity<Facility>()
-                .HasIndex(f => f.FacilityName)
-                .IsUnique();
-
-            // Configure cascade delete behavior
             modelBuilder.Entity<BorrowedItem>()
-                .HasOne(bi => bi.User)
-                .WithMany(u => u.BorrowedItems)
-                .HasForeignKey(bi => bi.UserID)
+                .HasOne(b => b.User)
+                .WithMany()
+                .HasForeignKey(b => b.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<BorrowedItem>()
+                .HasOne(b => b.FacilityItem)
+                .WithMany()
+                .HasForeignKey(b => b.ItemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<BorrowedItem>()
+                .HasOne(b => b.Facility)
+                .WithMany()
+                .HasForeignKey(b => b.FacilityId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Request>()
                 .HasOne(r => r.Requestor)
-                .WithMany(u => u.Requests)
-                .HasForeignKey(r => r.RequestorID)
+                .WithMany()
+                .HasForeignKey(r => r.RequestorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Request>()
+                .HasOne(r => r.Facility)
+                .WithMany()
+                .HasForeignKey(r => r.FacilityId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Request>()
+                .HasOne(r => r.FacilityItem)
+                .WithMany()
+                .HasForeignKey(r => r.ItemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.Request)
+                .WithMany()
+                .HasForeignKey(c => c.RequestId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.User)
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Notification>()
+                .HasOne(n => n.User)
+                .WithMany()
+                .HasForeignKey(n => n.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
