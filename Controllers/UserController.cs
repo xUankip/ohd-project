@@ -22,7 +22,8 @@ namespace AspnetCoreMvcStarter.Controllers
         // GET: User
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Users.ToListAsync());
+          var activeUsers = await _context.Users.Where(u => u.IsActive).ToListAsync();
+          return View(activeUsers);
         }
 
         // GET: User/Details/5
@@ -54,7 +55,7 @@ namespace AspnetCoreMvcStarter.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserID,Username,PasswordHash,Email,RoleID,FullName,Phone,IsActive,CreatedAt,UpdatedAt,DeletedAt")] User user)
+        public async Task<IActionResult> Create([Bind("Username,PasswordHash,Email,RoleID,FullName,Phone,IsActive,CreatedAt")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -142,7 +143,8 @@ namespace AspnetCoreMvcStarter.Controllers
             var user = await _context.Users.FindAsync(id);
             if (user != null)
             {
-                _context.Users.Remove(user);
+              user.IsActive = false;  // Đổi giá trị thành false
+              _context.Update(user);   // Đánh dấu user đã bị thay đổi
             }
 
             await _context.SaveChangesAsync();
