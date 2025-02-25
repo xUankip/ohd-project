@@ -1,54 +1,68 @@
 @model IEnumerable<AspnetCoreMvcStarter.Models.User>
 
 @{
-    ViewData["Title"] = "Users";
+  ViewData["Title"] = "Users";
 }
 
 <h2>List Users</h2>
 <a asp-action="Create" class="btn btn-success mb-3">Create New User</a>
 
 <table class="table table-bordered">
-    <thead>
-        <tr>
-          <th>
-            @Html.DisplayNameFor(model => model.Username)
-          </th>
-          <th>
-            @Html.DisplayNameFor(model => model.Email)
-          </th>
-          <th>
-            @Html.DisplayNameFor(model => model.RoleId)
-          </th>
-          <th>
-            @Html.DisplayNameFor(model => model.Phone)
-          </th>
-          <th>
-            @Html.DisplayNameFor(model => model.IsActive)
-          </th>
-          <th>
-            @Html.DisplayNameFor(model => model.CreatedAt)
-          </th>
-          <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model)
+  <thead>
+  <tr>
+    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Username)</th>
+    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Email)</th>
+    <th>Role</th>
+    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Phone)</th>
+    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().IsActive)</th>
+    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().CreatedAt)</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  @foreach (var item in Model)
   {
     <tr>
-        <td>@item.Username</td>
-        <td>@item.Email</td>
-        <td>@item.RoleId</td>
-        <td>@item.Phone</td>
-        <td>@item.IsActive</td>
-        <td>@item.CreatedAt</td>
-        <td>
-          <div style="display: flex; gap: 5px;">
-            <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-primary btn-sm">Edit</a>
-            <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-info btn-sm">Details</a>
-            <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger btn-sm">Delete</a>
-          </div>
-        </td>
+      <td>@item.Username</td>
+      <td>@item.Email</td>
+      <td>@item.Role?.RoleName</td>
+      <td>@item.Phone</td>
+      <td>@(item.IsActive ? "Active" : "Inactive")</td>
+      <td>@item.CreatedAt</td>
+      <td>
+        <div style="display: flex; gap: 5px;">
+          <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-primary btn-sm">Edit</a>
+          <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-info btn-sm">Details</a>
+          <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger btn-sm">Delete</a>
+        </div>
+      </td>
     </tr>
   }
-    </tbody>
+  </tbody>
 </table>
+
+<!-- Phân trang -->
+@if (ViewBag.TotalPages > 1)
+{
+  <nav>
+    <ul class="pagination">
+      <!-- Nút Previous -->
+      <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Previous</a>
+      </li>
+
+      <!-- Số trang -->
+      @for (int i = 1; i <= ViewBag.TotalPages; i++)
+      {
+        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+          <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+        </li>
+      }
+
+      <!-- Nút Next -->
+      <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Next</a>
+      </li>
+    </ul>
+  </nav>
+}
