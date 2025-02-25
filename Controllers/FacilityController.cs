@@ -106,17 +106,18 @@ namespace AspnetCoreMvcStarter.Controllers
             return View(facility);
         }
 
-        // Form cập nhật Facility
+           // GET: Facility/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var facility = await _context.Facilities
-                .FirstOrDefaultAsync(f => f.FacilityId == id && f.DeletedAt == null);
+                .FirstOrDefaultAsync(m => m.FacilityId == id && m.DeletedAt == null);
 
             if (facility == null)
             {
                 return NotFound();
             }
 
+            // Populate users for the dropdown
             ViewBag.Users = await _context.Users
                 .Where(u => u.DeletedAt == null)
                 .ToListAsync();
@@ -124,57 +125,39 @@ namespace AspnetCoreMvcStarter.Controllers
             return View(facility);
         }
 
-        // Xử lý POST cập nhật Facility
+        // POST: Facility/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Facility facility)
         {
-            if (id != facility.FacilityId)
-            {
-                return NotFound();
-            }
+          // Cập nhật trực tiếp
+          facility.UpdatedAt = DateTime.UtcNow;
+          facility.UpdatedBy = 1;
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var existingFacility = await _context.Facilities
-                        .FirstOrDefaultAsync(f => f.FacilityId == id && f.DeletedAt == null);
+          _context.Entry(facility).State = EntityState.Modified;
 
-                    if (existingFacility == null)
-                    {
-                        return NotFound();
-                    }
+          // Không muốn cập nhật CreatedAt và CreatedBy
+          _context.Entry(facility).Property(x => x.CreatedAt).IsModified = false;
+          _context.Entry(facility).Property(x => x.CreatedBy).IsModified = false;
 
-                    // Cập nhật các thuộc tính
-                    existingFacility.FacilityName = facility.FacilityName;
-                    existingFacility.Description = facility.Description;
-                    existingFacility.FacilityHeadId = facility.FacilityHeadId;
-                    existingFacility.UpdatedAt = DateTime.UtcNow;
-                    existingFacility.UpdatedBy = 1; // Placeholder: thay bằng userId thực tế từ người dùng đăng nhập
+          try
+          {
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+          }
+          catch (Exception ex)
+          {
+            Console.WriteLine($"Lỗi: {ex.Message}");
+            ModelState.AddModelError(string.Empty, ex.Message);
+          }
 
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FacilityExists(facility.FacilityId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
+          ViewBag.Users = await _context.Users
+            .Where(u => u.DeletedAt == null)
+            .ToListAsync();
 
-            ViewBag.Users = await _context.Users
-                .Where(u => u.DeletedAt == null)
-                .ToListAsync();
-
-            return View(facility);
+          return View(facility);
         }
+        //
 
         // Form xác nhận xóa Facility
         public async Task<IActionResult> Delete(int id)
