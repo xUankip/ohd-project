@@ -193,6 +193,7 @@ namespace AspnetCoreMvcStarter.Controllers
                 _context.Users.Remove(user);
                 await _context.SaveChangesAsync();
             }
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
     }
