@@ -1,0 +1,100 @@
+@model AspnetCoreMvcStarter.Models.Facility
+
+@{
+    ViewData["Title"] = "Chi tiết cơ sở";
+    var facilityItems = ViewBag.FacilityItems as IEnumerable<AspnetCoreMvcStarter.Models.FacilityItem>;
+}
+
+<div class="container mt-4">
+    <h1>Chi tiết cơ sở</h1>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>@Model.FacilityName</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID:</dt>
+                <dd class="col-sm-9">@Model.FacilityId</dd>
+
+                <dt class="col-sm-3">Tên cơ sở:</dt>
+                <dd class="col-sm-9">@Model.FacilityName</dd>
+
+                <dt class="col-sm-3">Mô tả:</dt>
+                <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Description) ? "-" : Model.Description)</dd>
+
+                <dt class="col-sm-3">Người phụ trách:</dt>
+                <dd class="col-sm-9">@(Model.FacilityHead != null ? Model.FacilityHead.FullName : "-")</dd>
+
+                <dt class="col-sm-3">Ngày tạo:</dt>
+                <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                @if (Model.UpdatedAt.HasValue)
+                {
+                    <dt class="col-sm-3">Cập nhật lần cuối:</dt>
+                    <dd class="col-sm-9">@Model.UpdatedAt.Value.ToString("dd/MM/yyyy HH:mm")</dd>
+                }
+            </dl>
+        </div>
+        <div class="card-footer">
+            <a asp-action="Edit" asp-route-id="@Model.FacilityId" class="btn btn-warning">Chỉnh sửa</a>
+            <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4>Danh sách thiết bị</h4>
+            <a asp-controller="FacilityItem" asp-action="Create" asp-route-facilityId="@Model.FacilityId" class="btn btn-primary">Thêm thiết bị mới</a>
+        </div>
+        <div class="card-body">
+            @if (facilityItems != null && facilityItems.Any())
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên thiết bị</th>
+                            <th>Ảnh</th>
+                            <th>Số lượng</th>
+                            <th>Mô tả</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in facilityItems)
+                        {
+                            <tr>
+                                <td>@item.ItemId</td>
+                                <td>@item.ItemName</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.ItemImage))
+                                    {
+                                        <img src="@item.ItemImage" alt="@item.ItemName" style="max-width: 50px; max-height: 50px" />
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
+                                </td>
+                                <td>@item.Quantity</td>
+                                <td>@(string.IsNullOrEmpty(item.Description) ? "-" : item.Description)</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a asp-controller="FacilityItem" asp-action="Details" asp-route-id="@item.ItemId" class="btn btn-info btn-sm">Chi tiết</a>
+                                        <a asp-controller="FacilityItem" asp-action="Edit" asp-route-id="@item.ItemId" class="btn btn-warning btn-sm">Sửa</a>
+                                        <a asp-controller="FacilityItem" asp-action="Delete" asp-route-id="@item.ItemId" class="btn btn-danger btn-sm">Xóa</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-info">Chưa có thiết bị nào trong cơ sở này.</div>
+            }
+        </div>
+    </div>
+</div>

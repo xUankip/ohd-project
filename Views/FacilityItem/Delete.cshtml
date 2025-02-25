@@ -1,0 +1,51 @@
+@model AspnetCoreMvcStarter.Models.FacilityItem
+
+@{
+    ViewData["Title"] = "Xóa thiết bị";
+}
+
+<div class="container mt-4">
+    <h1>Xác nhận xóa thiết bị</h1>
+
+    <div class="alert alert-danger">
+        <h4>Bạn có chắc chắn muốn xóa thiết bị này?</h4>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>@Model.ItemName</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    @if (!string.IsNullOrEmpty(Model.ItemImage))
+                    {
+                        <img src="@Model.ItemImage" alt="@Model.ItemName" class="img-fluid mb-3" />
+                    }
+                </div>
+                <div class="col-md-8">
+                    <dl class="row">
+                        <dt class="col-sm-3">ID:</dt>
+                        <dd class="col-sm-9">@Model.ItemId</dd>
+
+                        <dt class="col-sm-3">Tên thiết bị:</dt>
+                        <dd class="col-sm-9">@Model.ItemName</dd>
+
+                        <dt class="col-sm-3">Số lượng:</dt>
+                        <dd class="col-sm-9">@Model.Quantity</dd>
+
+                        <dt class="col-sm-3">Mô tả:</dt>
+                        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Description) ? "-" : Model.Description)</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="ItemId" />
+                <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+                <a asp-controller="Facility" asp-action="Details" asp-route-id="@Model.FacilityId" class="btn btn-secondary">Quay lại</a>
+            </form>
+        </div>
+    </div>
+</div>

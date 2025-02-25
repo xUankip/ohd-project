@@ -1,0 +1,57 @@
+@model AspnetCoreMvcStarter.Models.Facility
+
+@{
+    ViewData["Title"] = "Chỉnh sửa cơ sở";
+    var users = ViewBag.Users as IEnumerable<AspnetCoreMvcStarter.Models.User>;
+}
+
+<div class="container mt-4">
+    <h1>Chỉnh sửa cơ sở</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="FacilityId" />
+                <input type="hidden" asp-for="CreatedAt" />
+                <input type="hidden" asp-for="CreatedBy" />
+
+                <div class="form-group">
+                    <label asp-for="FacilityName" class="control-label">Tên cơ sở</label>
+                    <input asp-for="FacilityName" class="form-control" />
+                    <span asp-validation-for="FacilityName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label">Mô tả</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FacilityHeadId" class="control-label">Người phụ trách</label>
+                    <select asp-for="FacilityHeadId" class="form-control">
+                        <option value="">-- Chọn người phụ trách --</option>
+                        @if (users != null)
+                        {
+                            foreach (var user in users)
+                            {
+                                <option value="@user.UserId">@user.FullName</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="FacilityHeadId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

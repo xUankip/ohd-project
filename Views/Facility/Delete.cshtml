@@ -1,0 +1,33 @@
+@model AspnetCoreMvcStarter.Models.Facility
+
+@{
+  ViewData["Title"] = "Xác nhận xóa";
+}
+
+<h1>Xác nhận xóa</h1>
+
+<div class="alert alert-danger">
+  <h3>Bạn có chắc chắn muốn xóa cơ sở này?</h3>
+</div>
+
+<div>
+  <dl class="row">
+    <dt class="col-sm-3">ID</dt>
+    <dd class="col-sm-9">@Model.FacilityId</dd>
+
+    <dt class="col-sm-3">Tên cơ sở</dt>
+    <dd class="col-sm-9">@Model.FacilityName</dd>
+
+    <dt class="col-sm-3">Mô tả</dt>
+    <dd class="col-sm-9">@Model.Description</dd>
+
+    <dt class="col-sm-3">Người quản lý</dt>
+    <dd class="col-sm-9">@(Model.FacilityHead != null ? Model.FacilityHead.FullName : "Chưa phân công")</dd>
+  </dl>
+
+  <form asp-action="Delete">
+    <input type="hidden" asp-for="FacilityId" />
+    <input type="submit" value="Xác nhận xóa" class="btn btn-danger" />
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+  </form>
+</div>
