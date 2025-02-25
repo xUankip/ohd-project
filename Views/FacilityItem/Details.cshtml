@@ -1,0 +1,59 @@
+@model AspnetCoreMvcStarter.Models.FacilityItem
+
+@{
+    ViewData["Title"] = "Chi tiết thiết bị";
+}
+
+<div class="container mt-4">
+    <h1>Chi tiết thiết bị</h1>
+
+    <div class="card">
+        <div class="card-header">
+            <h4>@Model.ItemName</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    @if (!string.IsNullOrEmpty(Model.ItemImage))
+                    {
+                        <img src="@Model.ItemImage" alt="@Model.ItemName" class="img-fluid mb-3" />
+                    }
+                    else
+                    {
+                        <div class="text-center p-5 bg-light mb-3">
+                            <em>Không có hình ảnh</em>
+                        </div>
+                    }
+                </div>
+                <div class="col-md-8">
+                    <dl class="row">
+                        <dt class="col-sm-3">ID:</dt>
+                        <dd class="col-sm-9">@Model.ItemId</dd>
+
+                        <dt class="col-sm-3">Tên thiết bị:</dt>
+                        <dd class="col-sm-9">@Model.ItemName</dd>
+
+                        <dt class="col-sm-3">Số lượng:</dt>
+                        <dd class="col-sm-9">@Model.Quantity</dd>
+
+                        <dt class="col-sm-3">Mô tả:</dt>
+                        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Description) ? "-" : Model.Description)</dd>
+
+                        <dt class="col-sm-3">Ngày tạo:</dt>
+                        <dd class="col-sm-9">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                        @if (Model.UpdatedAt.HasValue)
+                        {
+                            <dt class="col-sm-3">Cập nhật lần cuối:</dt>
+                            <dd class="col-sm-9">@Model.UpdatedAt.Value.ToString("dd/MM/yyyy HH:mm")</dd>
+                        }
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a asp-action="Edit" asp-route-id="@Model.ItemId" class="btn btn-warning">Chỉnh sửa</a>
+            <a asp-controller="Facility" asp-action="Details" asp-route-id="@Model.FacilityId" class="btn btn-secondary">Quay lại</a>
+        </div>
+    </div>
+</div>
