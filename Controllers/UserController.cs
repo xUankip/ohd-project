@@ -19,12 +19,21 @@ namespace AspnetCoreMvcStarter.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        [Route("User")]
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 5)
         {
+          var totalUsers = await _context.Users.CountAsync();
           var users = await _context.Users
             .Include(u => u.Role)
+            .OrderByDescending(u => u.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
-            return View(users);
+
+          ViewBag.CurrentPage = page;
+          ViewBag.TotalPages = (int)Math.Ceiling((double)totalUsers / pageSize);
+          return View(users);
         }
 
         // GET: Users/Details/5
