@@ -1,0 +1,19 @@
+﻿@model AspnetCoreMvcStarter.Models.Request
+
+@{
+  ViewData["Title"] = "Request Details";
+}
+
+<h2>Request Details</h2>
+
+<div>
+  <p><strong>Requestor:</strong> @Model.Requestor.FullName</p>
+  <p><strong>Facility:</strong> @Model.Facility.FacilityName</p>
+  <p><strong>Item:</strong> @Model.FacilityItem.ItemName</p>
+  <p><strong>Quantity:</strong> @Model.QuantityRequested</p>
+  <p><strong>Status:</strong> @Model.Status</p>
+  <p><strong>Remarks:</strong> @Model.Remarks</p>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.RequestId" class="btn btn-warning">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

@@ -1,0 +1,39 @@
+﻿@model IEnumerable<AspnetCoreMvcStarter.Models.Request>
+
+@{
+  ViewData["Title"] = "Requests";
+}
+
+<h2>Request List</h2>
+<p>
+  <a asp-action="Create" class="btn btn-primary">Create New Request</a>
+</p>
+<table class="table">
+  <thead>
+  <tr>
+    <th>Requestor</th>
+    <th>Facility</th>
+    <th>Item</th>
+    <th>Quantity</th>
+    <th>Status</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  @foreach (var item in Model)
+  {
+    <tr>
+      <td>@item.Requestor.FullName</td>
+      <td>@item.Facility.FacilityName</td>
+      <td>@item.FacilityItem.ItemName</td>
+      <td>@item.QuantityRequested</td>
+      <td>@item.Status</td>
+      <td>
+        <a asp-action="Edit" asp-route-id="@item.RequestId" class="btn btn-warning">Edit</a>
+        <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info">Details</a>
+        <a asp-action="Delete" asp-route-id="@item.RequestId" class="btn btn-danger">Delete</a>
+      </td>
+    </tr>
+  }
+  </tbody>
+</table>
