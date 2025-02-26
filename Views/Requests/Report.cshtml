@@ -1,0 +1,85 @@
+﻿@model AspnetCoreMvcStarter.Models.ReportViewModel
+
+@{
+  ViewData["Title"] = "Request Report";
+}
+
+<h2>Request Report</h2>
+
+<div class="card mt-3">
+  <div class="card-body">
+    <h4>Total Requests: @Model.TotalRequests</h4>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        Requests by Month
+      </div>
+      <div class="card-body">
+        @if (Model.RequestsByMonth.Any())
+        {
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>Month</th>
+              <th>Request Count</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var entry in Model.RequestsByMonth.OrderBy(e => e.Key))
+            {
+              <tr>
+                <td>@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(entry.Key)</td>
+                <td>@entry.Value</td>
+              </tr>
+            }
+            </tbody>
+          </table>
+        }
+        else
+        {
+          <p>No requests available for monthly breakdown.</p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header bg-success text-white">
+        Requests by Status
+      </div>
+      <div class="card-body">
+        @if (Model.RequestsByStatus.Any())
+        {
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>Status</th>
+              <th>Request Count</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var entry in Model.RequestsByStatus)
+            {
+              <tr>
+                <td>@entry.Key</td>
+                <td>@entry.Value</td>
+              </tr>
+            }
+            </tbody>
+          </table>
+        }
+        else
+        {
+          <p>No requests available for status breakdown.</p>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Back to Requests</a>

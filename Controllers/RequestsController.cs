@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using AspnetCoreMvcStarter.Models;
 using AspnetCoreMvcStarter.Data;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace AspnetCoreMvcStarter.Controllers
 {
@@ -49,24 +49,23 @@ namespace AspnetCoreMvcStarter.Controllers
 
             try
             {
-                // Validate Foreign Keys before saving
-                if (!_context.Users.Any(u => u.UserId == request.RequestorId) ||
-                    !_context.Facilities.Any(f => f.FacilityId == request.FacilityId) ||
-                    !_context.FacilityItems.Any(i => i.ItemId == request.ItemId))
+                var requestorExists = _context.Users.Any(u => u.UserId == request.RequestorId);
+                var facilityExists = _context.Facilities.Any(f => f.FacilityId == request.FacilityId);
+                var itemExists = _context.FacilityItems.Any(i => i.ItemId == request.ItemId);
+
+                if (!requestorExists || !facilityExists || !itemExists)
                 {
-                    ModelState.AddModelError("", "Invalid selection for Requestor, Facility, or Item.");
+                    ModelState.AddModelError("", "Invalid selections made.");
                     LoadDropdowns();
                     return View(request);
                 }
 
-                // Assign default values for missing fields
                 request.Status = "Open";
                 request.RequestDate = DateTime.UtcNow;
 
                 _context.Requests.Add(request);
                 _context.SaveChanges();
 
-                // Save comment if provided
                 if (!string.IsNullOrEmpty(commentText))
                 {
                     var comment = new Comment
@@ -92,7 +91,7 @@ namespace AspnetCoreMvcStarter.Controllers
             }
         }
 
-        // ✅ Assign a Request to a User
+        // ✅ Assign a Request to a User (GET: /Requests/Assign/{id})
         public IActionResult Assign(int id)
         {
             var request = _context.Requests
@@ -105,17 +104,21 @@ namespace AspnetCoreMvcStarter.Controllers
             }
 
             var assignees = _context.Users.Where(u => u.IsActive).ToList();
-            ViewBag.Assignees = new SelectList(assignees, "UserId", "FullName");
+            ViewBag.Assignees = assignees.Any() ? new SelectList(assignees, "UserId", "FullName") : null;
 
             return View(request);
         }
 
+        // ✅ Handle Request Assignment (POST: /Requests/Assign/{id})
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Assign(int id, int RequestorId)
         {
             var request = _context.Requests.Find(id);
-            if (request == null) return NotFound();
+            if (request == null)
+            {
+                return NotFound();
+            }
 
             if (!_context.Users.Any(u => u.UserId == RequestorId))
             {
@@ -131,11 +134,14 @@ namespace AspnetCoreMvcStarter.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ✅ Update Request Status
+        // ✅ Update Request Status (GET: /Requests/UpdateStatus/{id})
         public IActionResult UpdateStatus(int id)
         {
             var request = _context.Requests.Find(id);
-            if (request == null) return NotFound();
+            if (request == null)
+            {
+                return NotFound();
+            }
 
             ViewBag.StatusOptions = new List<SelectListItem>
             {
@@ -149,12 +155,16 @@ namespace AspnetCoreMvcStarter.Controllers
             return View(request);
         }
 
+        // ✅ Handle Status Update (POST: /Requests/UpdateStatus/{id})
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult UpdateStatus(int id, string status)
         {
             var request = _context.Requests.Find(id);
-            if (request == null) return NotFound();
+            if (request == null)
+            {
+                return NotFound();
+            }
 
             request.Status = status;
             _context.SaveChanges();
@@ -162,42 +172,34 @@ namespace AspnetCoreMvcStarter.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ✅ Generate Report (GET: /Requests/Report)
+        // ✅ Report Page (GET: /Requests/Report)
         public IActionResult Report()
         {
-            var totalRequests = _context.Requests.Count();
-
-            var requestsByMonth = _context.Requests
-                .GroupBy(r => r.RequestDate.Month)
-                .Select(g => new { Month = g.Key, Count = g.Count() })
-                .ToDictionary(g => g.Month, g => g.Count);
-
-            var requestsByStatus = _context.Requests
-                .GroupBy(r => r.Status)
-                .Select(g => new { Status = g.Key, Count = g.Count() })
-                .ToDictionary(g => g.Status, g => g.Count);
-
-
-
-
-
-            var report = new ReportViewModel
+            var model = new ReportViewModel
             {
-                TotalRequests = totalRequests,
-                RequestsByMonth = requestsByMonth,
-                RequestsByStatus = requestsByStatus,
-
+                TotalRequests = _context.Requests.Count(),
+                RequestsByMonth = _context.Requests
+                    .GroupBy(r => r.RequestDate.Month)
+                    .ToDictionary(g => g.Key, g => g.Count()),
+                RequestsByStatus = _context.Requests
+                    .GroupBy(r => r.Status)
+                    .ToDictionary(g => g.Key, g => g.Count())
             };
 
-            return View(report);
+            return View(model);
         }
 
         // ✅ Load dropdown data
         private void LoadDropdowns()
         {
-            ViewBag.Users = new SelectList(_context.Users.Where(u => u.IsActive), "UserId", "FullName");
-            ViewBag.Facilities = new SelectList(_context.Facilities, "FacilityId", "FacilityName");
-            ViewBag.Items = new SelectList(_context.FacilityItems, "ItemId", "ItemName");
+            var users = _context.Users.Where(u => u.IsActive).ToList();
+            ViewBag.Users = users.Any() ? new SelectList(users, "UserId", "FullName") : null;
+
+            var facilities = _context.Facilities.ToList();
+            ViewBag.Facilities = facilities.Any() ? new SelectList(facilities, "FacilityId", "FacilityName") : null;
+
+            var items = _context.FacilityItems.ToList();
+            ViewBag.Items = items.Any() ? new SelectList(items, "ItemId", "ItemName") : null;
         }
     }
 }
