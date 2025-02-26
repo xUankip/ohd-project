@@ -9,14 +9,14 @@ document.addEventListener('DOMContentLoaded', function (e) {
         const userName = this.getAttribute('data-transaction-username');
         Swal.fire({
           title: 'Delete Transaction?',
-          html: `<p class="text-danger">Are you sure you want to delete transaction of ?<br> <span class="fw-medium text-body">${userName}</span></p>`,
+          html: `<p>Are you sure you want to delete transaction of ?<br> <span class="fw-medium text-danger">${userName}</span></p>`,
           icon: 'warning',
           showCancelButton: true,
           confirmButtonText: 'Delete',
           cancelButtonText: 'Cancel',
           customClass: {
-            confirmButton: 'btn btn-primary',
-            cancelButton: 'btn btn-secondary'
+            confirmButton: 'btn btn-primary waves-effect waves-light me-3',
+            cancelButton: 'btn btn-label-secondary waves-effect waves-light'
           }
         }).then(result => {
           if (result.isConfirmed) {
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               icon: 'error',
               confirmButtonText: 'Ok',
               customClass: {
-                confirmButton: 'btn btn-success'
+                confirmButton: 'btn btn-success waves-effect waves-light'
               }
             });
           }

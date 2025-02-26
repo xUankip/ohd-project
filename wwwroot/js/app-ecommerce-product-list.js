@@ -104,7 +104,7 @@ $(function () {
                 $image +
                 '" alt="Product-' +
                 $id +
-                '" class="rounded">';
+                '" class="rounded-2">';
             } else {
               // For Product badge
               var stateNum = Math.floor(Math.random() * 6);
@@ -118,15 +118,15 @@ $(function () {
             // Creates full output for Product name and product_brand
             var $row_output =
               '<div class="d-flex justify-content-start align-items-center product-name">' +
-              '<div class="avatar-wrapper">' +
-              '<div class="avatar avatar me-4 rounded-2 bg-label-secondary">' +
+              '<div class="avatar-wrapper me-4">' +
+              '<div class="avatar rounded-2 bg-label-secondary">' +
               $output +
               '</div>' +
               '</div>' +
               '<div class="d-flex flex-column">' +
-              '<h6 class="text-nowrap mb-0">' +
+              '<span class="text-nowrap text-heading fw-medium">' +
               $name +
-              '</h6>' +
+              '</span>' +
               '<small class="text-truncate d-none d-sm-block">' +
               $product_brand +
               '</small>' +
@@ -144,22 +144,22 @@ $(function () {
             var $category = categoryObj[full['category']].title;
             var categoryBadgeObj = {
               Household:
-                '<span class="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-warning me-4 p-3"><i class="bx bx-briefcase bx-sm"></i></span>',
+                '<span class="avatar-sm rounded-circle d-flex justify-content-center align-items-center bg-label-warning me-4"><i class="ri-home-6-line"></i></span>',
               Office:
-                '<span class="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-info me-4 p-3"><i class="bx bx-home-smile bx-sm"></i></span>',
+                '<span class="avatar-sm rounded-circle d-flex justify-content-center align-items-center bg-label-success me-4"><i class="ri-footprint-line"></i></span>',
               Electronics:
-                '<span class="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-danger me-4 p-3"><i class="bx bx-headphone bx-sm"></i></span>',
+                '<span class="avatar-sm rounded-circle d-flex justify-content-center align-items-center bg-label-primary me-4"><i class="ri-computer-line"></i></span>',
               Shoes:
-                '<span class="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-success me-4"><i class="bx bx-walk bx-sm"></i></span>',
+                '<span class="avatar-sm rounded-circle d-flex justify-content-center align-items-center bg-label-info me-4"><i class="ri-home-6-line"></i></span>',
               Accessories:
-                '<span class="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-secondary me-4"><i class="bx bxs-watch bx-sm"></i></span>',
-              Game: '<span class="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-primary me-4"><i class="bx bx-laptop bx-sm"></i></span>'
+                '<span class="avatar-sm rounded-circle d-flex justify-content-center align-items-center bg-label-secondary me-4"><i class="ri-headphone-line"></i></span>',
+              Game: '<span class="avatar-sm rounded-circle d-flex justify-content-center align-items-center bg-label-dark me-4"><i class="ri-gamepad-line"></i></span>'
             };
             return (
-              "<span class='text-truncate d-flex align-items-center text-heading'>" +
+              "<h6 class='text-truncate d-flex align-items-center mb-0 fw-normal'>" +
               categoryBadgeObj[$category] +
               $category +
-              '</span>'
+              '</h6>'
             );
           }
         },
@@ -233,7 +233,7 @@ $(function () {
             var $status = full['status'];
 
             return (
-              '<span class="badge ' +
+              '<span class="badge rounded-pill ' +
               statusObj[$status].class +
               '" text-capitalized>' +
               statusObj[$status].title +
@@ -250,8 +250,8 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="d-inline-block text-nowrap">' +
-              '<button class="btn btn-icon"><i class="bx bx-edit bx-md"></i></button>' +
-              '<button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded bx-md"></i></button>' +
+              '<button class="btn btn-sm btn-icon btn-text-secondary waves-effect rounded-pill text-body me-1"><i class="ri-edit-box-line ri-22px"></i></button>' +
+              '<button class="btn btn-sm btn-icon btn-text-secondary waves-effect rounded-pill text-body dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ri-more-2-line ri-22px"></i></button>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
               '<a href="javascript:0;" class="dropdown-item">View</a>' +
               '<a href="javascript:0;" class="dropdown-item">Suspend</a>' +
@@ -263,11 +263,11 @@ $(function () {
       ],
       order: [2, 'asc'], //set any columns order asc/desc
       dom:
-        '<"card-header d-flex border-top rounded-0 flex-wrap py-0 flex-column flex-md-row align-items-start"' +
-        '<"me-5 ms-n4 pe-5 mb-n6 mb-md-0"f>' +
-        '<"d-flex justify-content-start justify-content-md-end align-items-baseline"<"dt-action-buttons d-flex flex-column align-items-start align-items-sm-center justify-content-sm-center pt-0 gap-sm-4 gap-sm-0 flex-sm-row"lB>>' +
+        '<"card-header d-flex border-top rounded-0 flex-wrap py-0 pb-5 pb-md-0"' +
+        '<"me-5 ms-n2"f>' +
+        '<"d-flex justify-content-start justify-content-md-end align-items-baseline"<"dt-action-buttons d-flex align-items-start align-items-md-center justify-content-sm-center gap-4"lB>>' +
         '>t' +
-        '<"row"' +
+        '<"row mx-1"' +
         '<"col-sm-12 col-md-6"i>' +
         '<"col-sm-12 col-md-6"p>' +
         '>',
@@ -275,26 +275,27 @@ $(function () {
       language: {
         sLengthMenu: '_MENU_',
         search: '',
-        searchPlaceholder: 'Search Product',
+        searchPlaceholder: 'Search',
         info: 'Displaying _START_ to _END_ of _TOTAL_ entries',
         paginate: {
-          next: '<i class="bx bx-chevron-right bx-18px"></i>',
-          previous: '<i class="bx bx-chevron-left bx-18px"></i>'
+          next: '<i class="ri-arrow-right-s-line"></i>',
+          previous: '<i class="ri-arrow-left-s-line"></i>'
         }
       },
       // Buttons with Dropdown
       buttons: [
         {
           extend: 'collection',
-          className: 'btn btn-label-secondary dropdown-toggle me-4',
-          text: '<i class="bx bx-export me-2 bx-xs"></i>Export',
+          className: 'btn btn-outline-secondary dropdown-toggle me-4 waves-effect waves-light',
+          text: '<i class="ri-download-line ri-16px me-2"></i><span class="d-none d-sm-inline-block">Export </span>',
           buttons: [
             {
               extend: 'print',
-              text: '<i class="bx bx-printer me-2" ></i>Print',
+              text: '<i class="ri-printer-line me-1" ></i>Print',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6, 7],
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be print
                 format: {
                   body: function (inner, coldex, rowdex) {
                     if (inner.length <= 0) return inner;
@@ -312,7 +313,7 @@ $(function () {
                 }
               },
               customize: function (win) {
-                // Customize print view for dark
+                //customize print view for dark
                 $(win.document.body)
                   .css('color', headingColor)
                   .css('border-color', borderColor)
@@ -327,10 +328,11 @@ $(function () {
             },
             {
               extend: 'csv',
-              text: '<i class="bx bx-file me-2" ></i>Csv',
+              text: '<i class="ri-file-text-line me-1" ></i>Csv',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6, 7],
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be display
                 format: {
                   body: function (inner, coldex, rowdex) {
                     if (inner.length <= 0) return inner;
@@ -350,10 +352,11 @@ $(function () {
             },
             {
               extend: 'excel',
-              text: '<i class="bx bxs-file-export me-2"></i>Excel',
+              text: '<i class="ri-file-excel-line me-1"></i>Excel',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6, 7],
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be display
                 format: {
                   body: function (inner, coldex, rowdex) {
                     if (inner.length <= 0) return inner;
@@ -373,10 +376,11 @@ $(function () {
             },
             {
               extend: 'pdf',
-              text: '<i class="bx bxs-file-pdf me-2"></i>Pdf',
+              text: '<i class="ri-file-pdf-line me-1"></i>Pdf',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6, 7],
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be display
                 format: {
                   body: function (inner, coldex, rowdex) {
                     if (inner.length <= 0) return inner;
@@ -396,10 +400,11 @@ $(function () {
             },
             {
               extend: 'copy',
-              text: '<i class="bx bx-copy me-2" ></i>Copy',
+              text: '<i class="ri-file-copy-line me-1"></i>Copy',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6, 7],
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be display
                 format: {
                   body: function (inner, coldex, rowdex) {
                     if (inner.length <= 0) return inner;
@@ -420,8 +425,8 @@ $(function () {
           ]
         },
         {
-          text: '<i class="bx bx-plus me-0 me-sm-1 bx-xs"></i><span class="d-none d-sm-inline-block">Add Product</span>',
-          className: 'add-new btn btn-primary',
+          text: '<i class="ri-add-line ri-16px me-0 me-sm-1_5"></i><span class="d-none d-sm-inline-block">Add Product</span>',
+          className: 'add-new btn btn-primary waves-effect waves-light',
           action: function () {
             window.location.href = productAdd;
           }
@@ -467,7 +472,7 @@ $(function () {
           .every(function () {
             var column = this;
             var select = $(
-              '<select id="ProductStatus" class="form-select text-capitalize"><option value="">Status</option></select>'
+              '<select id="ProductStatus" class="form-select text-capitalize"><option value="">Select Status</option></select>'
             )
               .appendTo('.product_status')
               .on('change', function () {
@@ -529,19 +534,8 @@ $(function () {
           });
       }
     });
-    $('.dataTables_length').addClass('mx-n2');
-    $('.dt-buttons').addClass('d-flex flex-wrap mb-6 mb-sm-0');
+    $('.dataTables_length').addClass('my-0');
+    $('.dt-action-buttons').addClass('pt-0');
+    $('.dt-buttons').addClass('d-flex flex-wrap');
   }
-
-  // Delete Record
-  $('.datatables-products tbody').on('click', '.delete-record', function () {
-    dt_products.row($(this).parents('tr')).remove().draw();
-  });
-
-  // Filter form control to default size
-  // ? setTimeout used for multilingual table initialization
-  setTimeout(() => {
-    $('.dataTables_filter .form-control').removeClass('form-control-sm');
-    $('.dataTables_length .form-select').removeClass('form-select-sm');
-  }, 300);
 });

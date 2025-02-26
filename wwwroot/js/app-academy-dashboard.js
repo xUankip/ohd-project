@@ -7,37 +7,40 @@
 // Hour pie chart
 
 (function () {
-  let labelColor, headingColor, borderColor;
+  let labelColor, headingColor, borderColor, currentTheme;
 
   if (isDarkStyle) {
     labelColor = config.colors_dark.textMuted;
     headingColor = config.colors_dark.headingColor;
     borderColor = config.colors_dark.borderColor;
+    currentTheme = 'dark';
   } else {
     labelColor = config.colors.textMuted;
     headingColor = config.colors.headingColor;
     borderColor = config.colors.borderColor;
+    currentTheme = 'light';
   }
 
   // Donut Chart Colors
   const chartColors = {
     donut: {
-      series1: '#5AB12C',
-      series2: '#66C732',
+      series1: '#49AC00',
+      series2: '#4DB600',
       series3: config.colors.success,
-      series4: '#8DE45F',
-      series5: '#AAEB87',
-      series6: '#C6F1AF'
+      series4: '#78D533',
+      series5: '#9ADF66',
+      series6: '#BBEA99'
     }
   };
 
   const leadsReportChartEl = document.querySelector('#leadsReportChart'),
     leadsReportChartConfig = {
       chart: {
-        height: 170,
-        width: 150,
+        height: 157,
+        width: 130,
         parentHeightOffset: 0,
-        type: 'donut'
+        type: 'donut',
+        opacity: 1
       },
       labels: ['36h', '56h', '16h', '32h', '56h', '16h'],
       series: [23, 35, 10, 20, 35, 23],
@@ -62,7 +65,7 @@
         show: false
       },
       tooltip: {
-        theme: false
+        theme: currentTheme
       },
       grid: {
         padding: {
@@ -72,22 +75,22 @@
       plotOptions: {
         pie: {
           donut: {
-            size: '70%',
+            size: '75%',
             labels: {
               show: true,
               value: {
                 fontSize: '1.125rem',
-                fontFamily: 'Public Sans',
+                fontFamily: 'Inter',
                 color: headingColor,
                 fontWeight: 500,
-                offsetY: -20,
+                offsetY: -15,
                 formatter: function (val) {
                   return parseInt(val) + '%';
                 }
               },
               name: {
                 offsetY: 20,
-                fontFamily: 'Public Sans'
+                fontFamily: 'Inter'
               },
               total: {
                 show: true,
@@ -113,11 +116,14 @@
   const horizontalBarChartEl = document.querySelector('#horizontalBarChart'),
     horizontalBarChartConfig = {
       chart: {
-        height: 300,
+        height: 270,
         type: 'bar',
         toolbar: {
           show: false
         }
+      },
+      fill: {
+        opacity: 1
       },
       plotOptions: {
         bar: {
@@ -155,16 +161,13 @@
         config.colors.danger,
         config.colors.warning
       ],
-      fill: {
-        opacity: [1, 1, 1, 1, 1, 1]
-      },
       dataLabels: {
         enabled: true,
         style: {
           colors: ['#fff'],
-          fontWeight: 400,
+          fontWeight: 200,
           fontSize: '13px',
-          fontFamily: 'Public Sans'
+          fontFamily: 'Inter'
         },
         formatter: function (val, opts) {
           return horizontalBarChartConfig.labels[opts.dataPointIndex];
@@ -192,7 +195,7 @@
         labels: {
           style: {
             colors: labelColor,
-            fontFamily: 'Public Sans',
+            fontFamily: 'Inter',
             fontSize: '13px'
           },
           formatter: function (val) {
@@ -205,7 +208,7 @@
         labels: {
           style: {
             colors: [labelColor],
-            fontFamily: 'Public Sans',
+            fontFamily: 'Inter',
             fontSize: '13px'
           }
         }
@@ -213,7 +216,8 @@
       tooltip: {
         enabled: true,
         style: {
-          fontSize: '12px'
+          fontFamily: 'Inter',
+          fontSize: '13px'
         },
         onDatasetHover: {
           highlightDataSeries: false
@@ -251,7 +255,7 @@
               offsetY: -10,
               fontSize: '15px',
               fontWeight: 500,
-              fontFamily: 'Public Sans',
+              fontFamily: 'Inter',
               color: headingColor
             }
           },
@@ -295,11 +299,15 @@
   // Variable declaration for table
   var dt_academy_course = $('.datatables-academy-course'),
     logoObj = {
-      angular: '<span class="badge bg-label-danger rounded p-1_5"><i class="bx bxl-angular bx-28px"></i></span>',
-      figma: '<span class="badge bg-label-warning rounded p-1_5"><i class="bx bxl-figma bx-28px"></i></span>',
-      react: '<span class="badge bg-label-info rounded p-1_5"><i class="bx bxl-react bx-28px"></i></span>',
-      art: '<span class="badge bg-label-success rounded p-1_5"><i class="bx bxs-color bx-28px"></i></span>',
-      fundamentals: '<span class="badge bg-label-primary rounded p-1_5"><i class="bx bx-diamond bx-28px"></i></span>'
+      angular:
+        '<div class="avatar"><div class="avatar-initial bg-label-danger rounded"><i class="ri-angularjs-line ri-28px"></i></div></div>',
+      figma:
+        '<div class="avatar"><div class="avatar-initial bg-label-warning rounded"><i class="ri-pencil-line ri-28px"></i></div></div>',
+      react:
+        '<div class="avatar"><div class="avatar-initial bg-label-info rounded"><i class="ri-reactjs-line ri-28px"></i></div></div>',
+      art: '<div class="avatar"><div class="avatar-initial bg-label-success rounded"><i class="ri-palette-line ri-28px"></i></div></div>',
+      fundamentals:
+        '<div class="avatar"><div class="avatar-initial bg-label-primary rounded"><i class="ri-star-smile-line ri-28px"></i></div></div>'
     };
 
   // orders datatable
@@ -370,18 +378,18 @@
               logoObj[$logo] +
               '</span>' +
               '<div>' +
-              '<a class="text-heading text-truncate fw-medium mb-2 text-wrap" href="app-academy-course-details.html">' +
+              '<a href="/Academy/CourseDetails"><span class="text-heading mb-2 text-wrap fw-medium">' +
               $course +
-              '</a>' +
+              '</span></a>' +
               '<div class="d-flex align-items-center mt-1">' +
               '<div class="avatar-wrapper me-2">' +
               '<div class="avatar avatar-xs">' +
               $output +
               '</div>' +
               '</div>' +
-              '<small class="text-nowrap text-heading">' +
+              '<span class="text-nowrap small text-heading">' +
               $user +
-              '</small>' +
+              '</span>' +
               '</div>' +
               '</div>' +
               '</div>';
@@ -396,7 +404,7 @@
             var Hs = Math.floor(duration.asHours());
             var minutes = Math.floor(duration.asMinutes()) - Hs * 60;
             var formattedTime = Hs + 'h ' + minutes + 'm';
-            return '<span class="fw-medium text-nowrap text-heading">' + formattedTime + '</span>';
+            return '<h6 class="mb-0 text-nowrap">' + formattedTime + '</h6>';
           }
         },
         {
@@ -407,11 +415,11 @@
             var $average_number = full['number'];
 
             return (
-              '<div class="d-flex align-items-center gap-3">' +
-              '<p class="fw-medium mb-0 text-heading">' +
+              '<div class="d-flex align-items-center gap-4">' +
+              '<h6 class="mb-0">' +
               $status_number +
-              '</p>' +
-              '<div class="progress w-100" style="height: 8px;">' +
+              '</h6>' +
+              '<div class="progress w-100 rounded-pill" style="height: 8px;">' +
               '<div class="progress-bar" style="width: ' +
               $status_number +
               '" aria-valuenow="' +
@@ -435,17 +443,17 @@
             return (
               '<div class="d-flex align-items-center justify-content-between">' +
               '<div class="w-px-50 d-flex align-items-center">' +
-              '<i class="bx bx-user bx-lg me-1_5 text-primary"></i><span>' +
+              '<i class="ri-group-line ri-24px me-1_5 text-primary"></i>' +
               $user_number +
-              '</span></div>' +
+              '</div>' +
               '<div class="w-px-50 d-flex align-items-center">' +
-              '<i class="bx bx-book-open bx-lg me-1_5 text-info"></i><span>' +
+              '<i class="ri-computer-line ri-24px me-1_5 text-info" ></i>' +
               $note +
-              '</span></div>' +
+              '</div>' +
               '<div class="w-px-50 d-flex align-items-center">' +
-              '<i class="bx bx-video bx-lg me-1_5 text-danger"></i><span>' +
+              '<i class="ri-video-upload-line ri-24px me-1_5 text-danger scaleX-n1-rtl" ></i>' +
               $view +
-              '</span></div>' +
+              '</div>' +
               '</div>'
             );
           }
@@ -453,20 +461,20 @@
       ],
       order: [[2, 'desc']],
       dom:
-        '<"card-header py-sm-0"<"head-label text-center">f' +
+        '<"card-header pb-0 py-md-0 flex-column flex-md-row"<"head-label text-center">f' +
         '>t' +
-        '<"row mx-md-4 flex-column flex-md-row align-items-center"' +
-        '<"col-sm-6 col-12 text-center text-md-start pb-2 pb-xl-0 px-0"i>' +
-        '<"col-sm-6 col-12 d-flex justify-content-center justify-content-md-end px-0"p>' +
+        '<"row mx-4"' +
+        '<"col-md-6 col-12 text-center text-md-start pb-2 pb-md-0 px-0"i>' +
+        '<"col-md-6 col-12 d-flex justify-content-center justify-content-md-end px-0"p>' +
         '>',
       lengthMenu: [5],
       language: {
         sLengthMenu: '_MENU_',
         search: '',
-        searchPlaceholder: 'Search Course',
+        searchPlaceholder: 'Course name',
         paginate: {
-          next: '<i class="bx bx-chevron-right bx-18px"></i>',
-          previous: '<i class="bx bx-chevron-left bx-18px"></i>'
+          next: '<i class="ri-arrow-right-s-line"></i>',
+          previous: '<i class="ri-arrow-left-s-line"></i>'
         }
       },
       // Buttons with Dropdown
@@ -477,7 +485,7 @@
           display: $.fn.dataTable.Responsive.display.modal({
             header: function (row) {
               var data = row.data();
-              return 'Details of ' + data['order'];
+              return 'Details of ' + data['user_number'];
             }
           }),
           type: 'column',
@@ -512,11 +520,4 @@
   $('.datatables-orders tbody').on('click', '.delete-record', function () {
     dt_course.row($(this).parents('tr')).remove().draw();
   });
-
-  // Filter form control to default size
-  // ? setTimeout used for multilingual table initialization
-  setTimeout(() => {
-    $('.dataTables_filter .form-control').removeClass('form-control-sm');
-    $('.dataTables_length .form-select').removeClass('form-select-sm');
-  }, 300);
 })();

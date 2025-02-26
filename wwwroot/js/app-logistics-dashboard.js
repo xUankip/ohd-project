@@ -5,27 +5,27 @@
 'use strict';
 
 (function () {
-  let labelColor, headingColor, borderColor, legendColor;
+  let labelColor, bodyColor, headingColor, currentTheme;
 
   if (isDarkStyle) {
     labelColor = config.colors_dark.textMuted;
+    bodyColor = config.colors_dark.bodyColor;
     headingColor = config.colors_dark.headingColor;
-    borderColor = config.colors_dark.borderColor;
-    legendColor = config.colors_dark.bodyColor;
+    currentTheme = 'dark';
   } else {
     labelColor = config.colors.textMuted;
+    bodyColor = config.colors.bodyColor;
     headingColor = config.colors.headingColor;
-    borderColor = config.colors.borderColor;
-    legendColor = config.colors.bodyColor;
+    currentTheme = 'light';
   }
 
   // Chart Colors
   const chartColors = {
     donut: {
-      series1: '#5AB12C',
-      series2: '#66C732',
-      series3: '#8DE45F',
-      series4: '#C6F1AF'
+      series1: config.colors.success,
+      series2: '#56ca00cc',
+      series3: '#56ca0099',
+      series4: '#56ca0066'
     },
     line: {
       series1: config.colors.warning,
@@ -51,18 +51,24 @@
         }
       ],
       chart: {
-        height: 320,
+        height: 280,
         type: 'line',
         stacked: false,
         parentHeightOffset: 0,
-        toolbar: { show: false },
-        zoom: { enabled: false }
+        toolbar: {
+          show: false
+        },
+        zoom: {
+          enabled: false
+        }
       },
       markers: {
-        size: 5,
+        size: 4,
         colors: [config.colors.white],
         strokeColors: chartColors.line.series2,
-        hover: { size: 6 },
+        hover: {
+          size: 6
+        },
         borderRadius: 4
       },
       stroke: {
@@ -79,12 +85,13 @@
           offsetX: -3
         },
         height: 40,
+        offsetY: 10,
         itemMargin: {
           horizontal: 10,
           vertical: 0
         },
         fontSize: '15px',
-        fontFamily: 'Public Sans',
+        fontFamily: 'Inter',
         fontWeight: 400,
         labels: {
           colors: headingColor,
@@ -93,8 +100,7 @@
         offsetY: 10
       },
       grid: {
-        strokeDashArray: 8,
-        borderColor
+        strokeDashArray: 8
       },
       colors: [chartColors.line.series1, chartColors.line.series2],
       fill: {
@@ -108,7 +114,9 @@
           borderRadius: 4
         }
       },
-      dataLabels: { enabled: false },
+      dataLabels: {
+        enabled: false
+      },
       xaxis: {
         tickAmount: 10,
         categories: ['1 Jan', '2 Jan', '3 Jan', '4 Jan', '5 Jan', '6 Jan', '7 Jan', '8 Jan', '9 Jan', '10 Jan'],
@@ -116,22 +124,26 @@
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: 'Public Sans',
+            fontFamily: 'Inter',
             fontWeight: 400
           }
         },
-        axisBorder: { show: false },
-        axisTicks: { show: false }
+        axisBorder: {
+          show: false
+        },
+        axisTicks: {
+          show: false
+        }
       },
       yaxis: {
         tickAmount: 4,
-        min: 0,
+        min: 10,
         max: 50,
         labels: {
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: 'Public Sans',
+            fontFamily: 'Inter',
             fontWeight: 400
           },
           formatter: function (val) {
@@ -143,8 +155,16 @@
         {
           breakpoint: 1400,
           options: {
-            chart: { height: 320 },
-            xaxis: { labels: { style: { fontSize: '10px' } } },
+            chart: {
+              height: 270
+            },
+            xaxis: {
+              labels: {
+                style: {
+                  fontSize: '10px'
+                }
+              }
+            },
             legend: {
               itemMargin: {
                 vertical: 0,
@@ -156,21 +176,37 @@
           }
         },
         {
-          breakpoint: 1025,
+          breakpoint: 1399,
           options: {
-            chart: { height: 415 },
-            plotOptions: { bar: { columnWidth: '50%' } }
+            chart: {
+              height: 415
+            },
+            plotOptions: {
+              bar: {
+                columnWidth: '50%'
+              }
+            }
           }
         },
         {
           breakpoint: 982,
-          options: { plotOptions: { bar: { columnWidth: '30%' } } }
+          options: {
+            plotOptions: {
+              bar: {
+                columnWidth: '30%'
+              }
+            }
+          }
         },
         {
           breakpoint: 480,
           options: {
-            chart: { height: 250 },
-            legend: { offsetY: 7 }
+            chart: {
+              height: 250
+            },
+            legend: {
+              offsetY: 7
+            }
           }
         }
       ]
@@ -185,7 +221,7 @@
   const deliveryExceptionsChartE1 = document.querySelector('#deliveryExceptionsChart'),
     deliveryExceptionsChartConfig = {
       chart: {
-        height: 430,
+        height: 420,
         parentHeightOffset: 0,
         type: 'donut'
       },
@@ -209,7 +245,7 @@
       legend: {
         show: true,
         position: 'bottom',
-        offsetY: 15,
+        offsetY: 10,
         markers: {
           width: 8,
           height: 8,
@@ -217,10 +253,10 @@
         },
         itemMargin: {
           horizontal: 15,
-          vertical: 8
+          vertical: 5
         },
         fontSize: '13px',
-        fontFamily: 'Public Sans',
+        fontFamily: 'Inter',
         fontWeight: 400,
         labels: {
           colors: headingColor,
@@ -228,7 +264,7 @@
         }
       },
       tooltip: {
-        theme: false
+        theme: currentTheme
       },
       grid: {
         padding: {
@@ -238,29 +274,28 @@
       plotOptions: {
         pie: {
           donut: {
-            size: '77%',
+            size: '75%',
             labels: {
               show: true,
               value: {
-                fontSize: '24px',
-                fontFamily: 'Public Sans',
+                fontSize: '1.5rem',
+                fontFamily: 'Inter',
                 color: headingColor,
                 fontWeight: 500,
-                offsetY: -20,
+                offsetY: -30,
                 formatter: function (val) {
                   return parseInt(val) + '%';
                 }
               },
               name: {
-                offsetY: 30,
-                fontFamily: 'Public Sans'
+                offsetY: 20,
+                fontFamily: 'Inter'
               },
               total: {
                 show: true,
-                fontSize: '15px',
-                fontFamily: 'Public Sans',
-                color: legendColor,
+                fontSize: '0.9375rem',
                 label: 'AVG. Exceptions',
+                color: bodyColor,
                 formatter: function (w) {
                   return '30%';
                 }
@@ -342,11 +377,11 @@ $(function () {
               '<div class="d-flex justify-content-start align-items-center user-name">' +
               '<div class="avatar-wrapper">' +
               '<div class="avatar me-4">' +
-              '<span class="avatar-initial rounded-circle bg-label-secondary"><i class="bx bxs-truck bx-lg"></i></span>' +
+              '<span class="avatar-initial rounded-circle bg-label-secondary"><i class="ri-car-line ri-28px"></i></span>' +
               '</div>' +
               '</div>' +
               '<div class="d-flex flex-column">' +
-              '<a class="text-heading fw-medium" href="/Logistics/Fleet">VOL-' +
+              '<a class="text-heading fw-medium text-nowrap" href="/Logistics/Fleet">VOL-' +
               $location +
               '</a>' +
               '</div>' +
@@ -360,7 +395,7 @@ $(function () {
           render: function (data, type, full, meta) {
             var $start_city = full['start_city'],
               $start_country = full['start_country'];
-            var $row_output = '<div class="text-body">' + $start_city + ', ' + $start_country + '</div >';
+            var $row_output = '<div class="text-body text-nowrap">' + $start_city + ', ' + $start_country + '</div >';
             return $row_output;
           }
         },
@@ -370,7 +405,7 @@ $(function () {
           render: function (data, type, full, meta) {
             var $end_city = full['end_city'],
               $end_country = full['end_country'];
-            var $row_output = '<div class="text-body">' + $end_city + ', ' + $end_country + '</div >';
+            var $row_output = '<div class="text-body text-nowrap">' + $end_city + ', ' + $end_country + '</div >';
             return $row_output;
           }
         },
@@ -393,7 +428,7 @@ $(function () {
               return data;
             }
             return (
-              '<span class="badge rounded ' +
+              '<span class="badge rounded-pill ' +
               $status[$status_number].class +
               '">' +
               $status[$status_number].title +
@@ -408,14 +443,14 @@ $(function () {
             var $progress = full['progress'];
             var $progress_output =
               '<div class="d-flex align-items-center">' +
-              '<div div class="progress w-100" style="height: 8px;">' +
+              '<div div class="progress rounded-pill w-100" style="height: 8px;">' +
               '<div class="progress-bar" role="progressbar" style="width:' +
               $progress +
               '%;" aria-valuenow="' +
               $progress +
               '" aria-valuemin="0" aria-valuemax="100"></div>' +
               '</div>' +
-              '<div class="text-body ms-3">' +
+              '<div class="text-body ms-2">' +
               $progress +
               '%</div>' +
               '</div>';
@@ -428,8 +463,8 @@ $(function () {
       displayLength: 5,
       language: {
         paginate: {
-          next: '<i class="bx bx-chevron-right bx-18px"></i>',
-          previous: '<i class="bx bx-chevron-left bx-18px"></i>'
+          next: '<i class="ri-arrow-right-s-line"></i>',
+          previous: '<i class="ri-arrow-left-s-line"></i>'
         }
       },
       responsive: {

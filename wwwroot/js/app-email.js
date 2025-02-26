@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
         modules: {
           toolbar: '.email-editor-toolbar'
         },
-        placeholder: 'Message... ',
+        placeholder: 'Message ',
         theme: 'snow'
       });
     }
@@ -248,8 +248,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (Helpers._hasClass('email-read', emailItemEnvelop)) {
               emailItemEnvelop.classList.remove('email-read');
               emailItemEnvelop.classList.add('email-unread');
-              emailItemEnvelop.querySelector('i').classList.remove('bx-envelope-open');
-              emailItemEnvelop.querySelector('i').classList.add('bx-envelope');
+              emailItemEnvelop.querySelector('i').classList.remove('ri-mail-open-line');
+              emailItemEnvelop.querySelector('i').classList.add('ri-mail-line');
             }
           }
         });
@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return option.text;
           }
           let $avatar =
-            "<div class='d-flex flex-wrap align-items-center'>" +
+            "<div class='d-flex flex-wrap align-items-center lh-1 me-1'>" +
             "<div class='avatar avatar-xs me-2 w-px-20 h-px-20'>" +
             "<img src='" +
             assetsPath +
@@ -376,11 +376,11 @@ document.addEventListener('DOMContentLoaded', function () {
           } else if (Helpers._hasClass('email-read', currentTarget)) {
             currentTarget.parentNode.closest('li.email-list-item').classList.add('email-marked-read');
             Helpers._toggleClass(currentTarget, 'email-read', 'email-unread');
-            Helpers._toggleClass(currentTarget.querySelector('i'), 'bx-envelope-open', 'bx-envelope');
+            Helpers._toggleClass(currentTarget.querySelector('i'), 'ri-mail-open-line', 'ri-mail-line');
           } else if (Helpers._hasClass('email-unread', currentTarget)) {
             currentTarget.parentNode.closest('li.email-list-item').classList.remove('email-marked-read');
             Helpers._toggleClass(currentTarget, 'email-read', 'email-unread');
-            Helpers._toggleClass(currentTarget.querySelector('i'), 'bx-envelope-open', 'bx-envelope');
+            Helpers._toggleClass(currentTarget.querySelector('i'), 'ri-mail-open-line', 'ri-mail-line');
           }
         });
       });

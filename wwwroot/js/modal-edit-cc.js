@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         onCreditCardTypeChanged: function (type) {
           if (type != '' && type != 'unknown') {
             document.querySelector('.card-type-edit').innerHTML =
-              '<img src="' + assetsPath + 'img/icons/payments/' + type + '-cc.png" height="20"/>';
+              '<img src="' + assetsPath + 'img/icons/payments/' + type + '-cc.png" height="18"/>';
           } else {
             document.querySelector('.card-type-edit').innerHTML = '';
           }

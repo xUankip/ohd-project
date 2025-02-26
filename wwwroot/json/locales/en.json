@@ -7,8 +7,6 @@
   "Collapsed menu": "Collapsed menu",
   "Content navbar": "Content navbar",
   "Content nav + Sidebar": "Content nav + Sidebar",
-  "Navbar full": "Navbar full",
-  "Navbar full + Sidebar": "Navbar full + Sidebar",
   "Horizontal": "Horizontal",
   "Vertical": "Vertical",
   "Without menu": "Without menu",
@@ -77,6 +75,7 @@
   "Coming Soon": "Coming Soon",
   "Under Maintenance": "Under Maintenance",
   "Not Authorized": "Not Authorized",
+  "Server Error": "Server Error",
   "Authentications": "Authentications",
   "Login": "Login",
   "Register": "Register",
@@ -93,8 +92,6 @@
   "Property Listing": "Property Listing",
   "Create Deal": "Create Deal",
   "Icons": "Icons",
-  "Boxicons": "Boxicons",
-  "Fontawesome": "Fontawesome",
   "User interface": "User interface",
   "Accordion": "Accordion",
   "Alerts": "Alerts",
@@ -173,5 +170,6 @@
   "Apps & Pages": "Apps & Pages",
   "Components": "Components",
   "Forms & Tables": "Forms & Tables",
-  "Charts & Maps": "Charts & Maps"
+  "Charts & Maps": "Charts & Maps",
+  "Transactions (CRUD)": "Transactions (CRUD)"
 }
