@@ -17,5 +17,6 @@ namespace AspnetCoreMvcStarter.Models
         public virtual Request Request { get; set; }
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
+
     }
 }

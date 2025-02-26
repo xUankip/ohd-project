@@ -9,6 +9,7 @@ namespace AspnetCoreMvcStarter.Models
         [Key]
         public int RequestId { get; set; }
         public int? RequestorId { get; set; }
+
         public User Requestor { get; set; }
         public int? FacilityId { get; set; }
         public Facility Facility { get; set; }
@@ -22,5 +23,6 @@ namespace AspnetCoreMvcStarter.Models
         public string Remarks { get; set; }
         public DateTime? ClosedDate { get; set; }
         public string ClosureReason { get; set; }
+        public virtual Comment? Comments { get; set; }
     }
 }
