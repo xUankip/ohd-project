@@ -31,15 +31,15 @@
                 <div class="form-group">
                     <label asp-for="FacilityHeadId" class="control-label">Người phụ trách</label>
                     <select asp-for="FacilityHeadId" class="form-control">
-                        <option value="">-- Chọn người phụ trách --</option>
-                        @if (users != null)
+                      <option value="">-- Chọn người phụ trách --</option>
+                       @if (users != null)
                         {
-                            foreach (var user in users)
-                            {
-                                <option value="@user.UserId">@user.FullName</option>
-                            }
-                        }
-                    </select>
+                          foreach (var user in users.Where(u => u.RoleId == 3))
+                           {
+                              <option value="@user.UserId">@user.FullName</option>
+                           }
+                         }
+                       </select>
                     <span asp-validation-for="FacilityHeadId" class="text-danger"></span>
                 </div>
 

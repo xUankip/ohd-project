@@ -7,8 +7,25 @@ window.isRtl = window.Helpers.isRtl();
 window.isDarkStyle = window.Helpers.isDarkStyle();
 
 (function () {
+  // Button & Pagination Waves effect
+  if (typeof Waves !== 'undefined') {
+    Waves.init();
+    Waves.attach(
+      ".btn[class*='btn-']:not(.position-relative):not([class*='btn-outline-']):not([class*='btn-label-'])",
+      ['waves-light']
+    );
+    Waves.attach("[class*='btn-outline-']:not(.position-relative)");
+    Waves.attach("[class*='btn-label-']:not(.position-relative)");
+    Waves.attach('.pagination .page-item .page-link');
+    Waves.attach('.dropdown-menu .dropdown-item');
+    Waves.attach('.light-style .list-group .list-group-item-action');
+    Waves.attach('.dark-style .list-group .list-group-item-action', ['waves-light']);
+    Waves.attach('.nav-tabs:not(.nav-tabs-widget) .nav-item .nav-link');
+    Waves.attach('.nav-pills .nav-item .nav-link', ['waves-light']);
+  }
+
   const menu = document.getElementById('navbarSupportedContent'),
-    nav = document.querySelector('.layout-navbar'),
+    nav = document.querySelector('.landing-navbar'),
     navItemLink = document.querySelectorAll('.navbar-nav .nav-link');
 
   // Initialised custom options if checked
@@ -114,19 +131,19 @@ window.isDarkStyle = window.Helpers.isDarkStyle();
     const styleSwitcherIcon = styleSwitcher.querySelector('i');
 
     if (storedStyle === 'light') {
-      styleSwitcherIcon.classList.add('bx-sun');
+      styleSwitcherIcon.classList.add('ri-sun-line');
       new bootstrap.Tooltip(styleSwitcherIcon, {
         title: 'Light Mode',
         fallbackPlacements: ['bottom']
       });
     } else if (storedStyle === 'dark') {
-      styleSwitcherIcon.classList.add('bx-moon');
+      styleSwitcherIcon.classList.add('ri-moon-clear-line');
       new bootstrap.Tooltip(styleSwitcherIcon, {
         title: 'Dark Mode',
         fallbackPlacements: ['bottom']
       });
     } else {
-      styleSwitcherIcon.classList.add('bx-desktop');
+      styleSwitcherIcon.classList.add('ri-computer-line');
       new bootstrap.Tooltip(styleSwitcherIcon, {
         title: 'System Mode',
         fallbackPlacements: ['bottom']
@@ -152,4 +169,21 @@ window.isDarkStyle = window.Helpers.isDarkStyle();
       imageEl.src = assetsPath + 'img/' + setImage; // Using window.assetsPath to get the exact relative path
     });
   }
+
+  // Accordion active class and previous-active class
+  const accordionActiveFunction = function (e) {
+    if (e.type == 'show.bs.collapse' || e.type == 'show.bs.collapse') {
+      e.target.closest('.accordion-item').classList.add('active');
+      e.target.closest('.accordion-item').previousElementSibling?.classList.add('previous-active');
+    } else {
+      e.target.closest('.accordion-item').classList.remove('active');
+      e.target.closest('.accordion-item').previousElementSibling?.classList.remove('previous-active');
+    }
+  };
+
+  const accordionTriggerList = [].slice.call(document.querySelectorAll('.accordion'));
+  const accordionList = accordionTriggerList.map(function (accordionTriggerEl) {
+    accordionTriggerEl.addEventListener('show.bs.collapse', accordionActiveFunction);
+    accordionTriggerEl.addEventListener('hide.bs.collapse', accordionActiveFunction);
+  });
 })();

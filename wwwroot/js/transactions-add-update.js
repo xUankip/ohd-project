@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
     if (select2.length) {
       select2.each(function () {
         var $this = $(this);
+        select2Focus($this);
         $this.wrap('<div class="position-relative"></div>').select2({
           placeholder: 'Select Status',
           dropdownParent: $this.parent()
@@ -108,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           trigger: new FormValidation.plugins.Trigger(),
           bootstrap5: new FormValidation.plugins.Bootstrap5({
             eleValidClass: '',
-            rowSelector: '.mb-6'
+            rowSelector: '.mb-5'
           }),
           submitButton: new FormValidation.plugins.SubmitButton(),
 
@@ -180,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           trigger: new FormValidation.plugins.Trigger(),
           bootstrap5: new FormValidation.plugins.Bootstrap5({
             eleValidClass: '',
-            rowSelector: '.mb-6'
+            rowSelector: '.mb-5'
           }),
           submitButton: new FormValidation.plugins.SubmitButton(),
 

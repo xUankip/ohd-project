@@ -13,6 +13,7 @@ $(function () {
   // --------------------------------------------------------------------
   if (selectPicker.length) {
     selectPicker.selectpicker();
+    handleBootstrapSelectEvents();
   }
 
   // Select2
@@ -22,6 +23,7 @@ $(function () {
   if (select2.length) {
     select2.each(function () {
       var $this = $(this);
+      select2Focus($this);
       $this.wrap('<div class="position-relative"></div>').select2({
         placeholder: 'Select value',
         dropdownParent: $this.parent()
@@ -40,6 +42,7 @@ $(function () {
 
       return $icon;
     }
+    select2Focus(select2Icons);
     select2Icons.wrap('<div class="position-relative"></div>').select2({
       dropdownParent: select2Icons.parent(),
       templateResult: renderIcons,

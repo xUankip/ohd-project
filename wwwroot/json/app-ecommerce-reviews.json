@@ -3,7 +3,7 @@
     {
       "id": 1,
       "product": "iPhone 14 Pro",
-      "company_name": "Super Retina XDR display footnote Pro Motion technology",
+      "company_name": "Apple",
       "product_image": "product-1.png",
       "reviewer": "Zane Scraggs",
       "email": "zscraggs0@flavors.me",
@@ -17,7 +17,7 @@
     {
       "id": 2,
       "product": "Echo Dot (4th Gen)",
-      "company_name": "Echo Dot Smart speaker with Alexa",
+      "company_name": "Apple",
       "product_image": "product-2.png",
       "reviewer": "Stacey Hallgalley",
       "email": "shallgalley1@google.nl",
@@ -31,7 +31,7 @@
     {
       "id": 3,
       "product": "Dohioue Wall Clock",
-      "company_name": "Modern 10 Inch Battery Operated Wall Clocks",
+      "company_name": "Dohioue",
       "product_image": "product-3.png",
       "reviewer": "Francyne Coulthurst",
       "email": "fcoulthurst2@upenn.edu",
@@ -45,7 +45,7 @@
     {
       "id": 4,
       "product": "INZCOU Running Shoes",
-      "company_name": "Lightweight Tennis Shoes Non Slip Gym Workout Shoes",
+      "company_name": "Inzcou",
       "product_image": "product-4.png",
       "reviewer": "Nate De Mitris",
       "email": "nde3@intel.com",
@@ -59,7 +59,7 @@
     {
       "id": 5,
       "product": "Apple Watch Series 7",
-      "company_name": "Starlight Aluminum Case with Starlight Sport Band.",
+      "company_name": "Apple",
       "product_image": "product-5.png",
       "reviewer": "Ethel Zanardii",
       "email": "ezanardii4@mapy.cz",
@@ -73,7 +73,7 @@
     {
       "id": 6,
       "product": "Meta Quest 2",
-      "company_name": "Advanced All-In-One Virtual Reality Headset",
+      "company_name": "Meta",
       "product_image": "product-6.png",
       "reviewer": "Fancy Tweedell",
       "email": "ftweedell5@telegraph.co.uk",
@@ -87,7 +87,7 @@
     {
       "id": 7,
       "product": "MacBook Pro 16",
-      "company_name": "Laptop M2 Pro chip with 12‑core CPU and 19‑core GPU",
+      "company_name": "Apple",
       "product_image": "product-7.png",
       "reviewer": "Abeu Gregorace",
       "email": "agregorace6@godaddy.com",
@@ -101,7 +101,7 @@
     {
       "id": 8,
       "product": "SAMSUNG Galaxy S22 Ultra",
-      "company_name": "Android Smartphone, 256GB, 8K Camera",
+      "company_name": "SAMSUNG",
       "product_image": "product-8.png",
       "reviewer": "Sibylle Goodacre",
       "email": "sgoodacre7@washingtonpost.com",
@@ -115,7 +115,7 @@
     {
       "id": 9,
       "product": "Air Jordan",
-      "company_name": "Air Jordan is a line of basketball shoes produced by Nike",
+      "company_name": "Nike",
       "product_image": "product-9.png",
       "reviewer": "Gisela Leppard",
       "email": "gleppard8@yandex.ru",
@@ -129,7 +129,7 @@
     {
       "id": 10,
       "product": "VISKABACKA",
-      "company_name": "Armchair, Skartofta black/light grey",
+      "company_name": "Ikea",
       "product_image": "product-10.png",
       "reviewer": "Hilario Wheldon",
       "email": "hwheldon9@apple.com",
@@ -143,7 +143,7 @@
     {
       "id": 11,
       "product": "Nintendo Switch",
-      "company_name": "TV Mode, Tabletop Mode, Handheld Mode",
+      "company_name": "Nintendo",
       "product_image": "product-11.png",
       "reviewer": "Ivie McGlaughn",
       "email": "imcglaughna@mapquest.com",
@@ -157,7 +157,7 @@
     {
       "id": 12,
       "product": "PlayStation 5",
-      "company_name": "Marvel at incredible graphics and experience",
+      "company_name": "Sony",
       "product_image": "product-12.png",
       "reviewer": "Neel Kingscott",
       "email": "nkingscottb@soup.io",
@@ -171,7 +171,7 @@
     {
       "id": 13,
       "product": "Amazon Fire TV",
-      "company_name": "4K UHD smart TV, stream live TV without cable",
+      "company_name": "Amazon",
       "product_image": "product-13.png",
       "reviewer": "Tracey Ventham",
       "email": "tventhamc@thetimes.co.uk",
@@ -213,7 +213,7 @@
     {
       "id": 16,
       "product": "BANGE Anti Theft Backpack",
-      "company_name": "Smart Business Laptop Fits 15.6 Inch Notebook",
+      "company_name": "Bange",
       "product_image": "product-16.png",
       "reviewer": "Micaela Rowesby",
       "email": "mrowesbyf@surveymonkey.com",
@@ -241,7 +241,7 @@
     {
       "id": 18,
       "product": "Canon EOS Rebel T7",
-      "company_name": "18-55mm Lens | Built-in Wi-Fi | 24.1 MP CMOS Sensor",
+      "company_name": "Canon",
       "product_image": "product-18.png",
       "reviewer": "Emery Breitling",
       "email": "ebreitlingh@friendfeed.com",
@@ -255,7 +255,7 @@
     {
       "id": 19,
       "product": "Honiway Wall Mirror",
-      "company_name": "Decorative 12 inch Rustic Wood Mirror Sunburst Boho",
+      "company_name": "Honiway",
       "product_image": "product-19.png",
       "reviewer": "Wilona Fields",
       "email": "wfieldsi@columbia.edu",

@@ -21,8 +21,8 @@
         new bootstrap.Collapse(collapseElement.closest('.card').querySelector('.collapse'));
         // Toggle collapsed class in `.card-header` element
         collapseElement.closest('.card-header').classList.toggle('collapsed');
-        // Toggle class bx-chevron-down & bx-chevron-up
-        Helpers._toggleClass(collapseElement.firstElementChild, 'bx-chevron-down', 'bx-chevron-up');
+        // Toggle class ri-arrow-down-s-line & ri-arrow-up-s-line
+        Helpers._toggleClass(collapseElement.firstElementChild, 'ri-arrow-down-s-line', 'ri-arrow-up-s-line');
       });
     });
   }
@@ -33,8 +33,8 @@
     expandElementList.map(function (expandElement) {
       expandElement.addEventListener('click', event => {
         event.preventDefault();
-        // Toggle class bx-fullscreen & bx-exit-fullscreen
-        Helpers._toggleClass(expandElement.firstElementChild, 'bx-fullscreen', 'bx-exit-fullscreen');
+        // Toggle class ri-fullscreen-line & ri-fullscreen-exit-line
+        Helpers._toggleClass(expandElement.firstElementChild, 'ri-fullscreen-line', 'ri-fullscreen-exit-line');
 
         expandElement.closest('.card').classList.toggle('card-fullscreen');
       });
@@ -47,13 +47,13 @@
     //Esc button
     if (event.key === 'Escape') {
       const cardFullscreen = document.querySelector('.card-fullscreen');
-      // Toggle class bx-fullscreen & bx-exit-fullscreen
+      // Toggle class ri-fullscreen-line & ri-fullscreen-exit-line
 
       if (cardFullscreen) {
         Helpers._toggleClass(
           cardFullscreen.querySelector('.card-expand').firstChild,
-          'bx-fullscreen',
-          'bx-exit-fullscreen'
+          'ri-fullscreen-line',
+          'ri-fullscreen-exit-line'
         );
         cardFullscreen.classList.toggle('card-fullscreen');
       }
@@ -109,7 +109,7 @@ $(function () {
             .closest('.card')
             .find('.card-alert')
             .html(
-              '<div class="alert alert-danger alert-dismissible fade show" role="alert"><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button><span class="fw-medium">Holy grail!</span> Your success/error message here.</div>'
+              '<div class="alert alert-solid-danger alert-dismissible fade show" role="alert"><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button><span class="fw-medium">Holy grail!</span> Your success/error message here.</div>'
             );
         }
       }, 2500);

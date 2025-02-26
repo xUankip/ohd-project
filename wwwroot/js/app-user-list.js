@@ -30,6 +30,7 @@ $(function () {
 
   if (select2.length) {
     var $this = select2;
+    select2Focus($this);
     $this.wrap('<div class="position-relative"></div>').select2({
       placeholder: 'Select Country',
       dropdownParent: $this.parent()
@@ -42,12 +43,12 @@ $(function () {
       ajax: assetsPath + 'json/user-list.json', // JSON file to add data
       columns: [
         // columns according to JSON
-        { data: 'id' },
+        { data: '' },
         { data: 'id' },
         { data: 'full_name' },
+        { data: 'email' },
         { data: 'role' },
         { data: 'current_plan' },
-        { data: 'billing' },
         { data: 'status' },
         { data: 'action' }
       ],
@@ -67,13 +68,13 @@ $(function () {
           // For Checkboxes
           targets: 1,
           orderable: false,
+          render: function () {
+            return '<input type="checkbox" class="dt-checkboxes form-check-input">';
+          },
           checkboxes: {
             selectAllRender: '<input type="checkbox" class="form-check-input">'
           },
-          render: function () {
-            return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
-          },
-          searchable: false
+          responsivePriority: 4
         },
         {
           // User full name and email
@@ -81,7 +82,7 @@ $(function () {
           responsivePriority: 4,
           render: function (data, type, full, meta) {
             var $name = full['full_name'],
-              $email = full['email'],
+              $user = full['username'],
               $image = full['avatar'];
             if ($image) {
               // For Avatar image
@@ -112,7 +113,7 @@ $(function () {
               $name +
               '</span></a>' +
               '<small>' +
-              $email +
+              $user +
               '</small>' +
               '</div>' +
               '</div>';
@@ -120,16 +121,24 @@ $(function () {
           }
         },
         {
-          // User Role
+          // User email
           targets: 3,
+          render: function (data, type, full, meta) {
+            var $email = full['email'];
+            return '<span >' + $email + '</span>';
+          }
+        },
+        {
+          // User Role
+          targets: 4,
           render: function (data, type, full, meta) {
             var $role = full['role'];
             var roleBadgeObj = {
-              Subscriber: '<i class="bx bx-crown text-primary me-2"></i>',
-              Author: '<i class="bx bx-edit text-warning me-2"></i>',
-              Maintainer: '<i class="bx bx-user text-success me-2"></i>',
-              Editor: '<i class="bx bx-pie-chart-alt text-info me-2"></i>',
-              Admin: '<i class="bx bx-desktop text-danger me-2"></i>'
+              Subscriber: '<i class="ri-user-line ri-22px text-primary me-2"></i>',
+              Author: '<i class="ri-vip-crown-line ri-22px text-warning me-2"></i>',
+              Maintainer: '<i class="ri-pie-chart-line ri-22px text-success me-2"></i>',
+              Editor: '<i class="ri-edit-box-line ri-22px text-info me-2"></i>',
+              Admin: '<i class="ri-computer-line ri-22px text-danger me-2"></i>'
             };
             return (
               "<span class='text-truncate d-flex align-items-center text-heading'>" +
@@ -141,7 +150,7 @@ $(function () {
         },
         {
           // Plans
-          targets: 4,
+          targets: 5,
           render: function (data, type, full, meta) {
             var $plan = full['current_plan'];
 
@@ -155,7 +164,7 @@ $(function () {
             var $status = full['status'];
 
             return (
-              '<span class="badge ' +
+              '<span class="badge rounded-pill ' +
               statusObj[$status].class +
               '" text-capitalized>' +
               statusObj[$status].title +
@@ -172,14 +181,17 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="d-flex align-items-center">' +
-              '<a href="javascript:;" class="btn btn-icon delete-record"><i class="bx bx-trash bx-md"></i></a>' +
+              '<a href="javascript:;" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect delete-record" data-bs-toggle="tooltip" title="Delete Invoice"><i class="ri-delete-bin-7-line ri-22px"></i></a>' +
               '<a href="' +
               userView +
-              '" class="btn btn-icon"><i class="bx bx-show bx-md"></i></a>' +
-              '<a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded bx-md"></i></a>' +
+              '" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect" data-bs-toggle="tooltip" title="Preview"><i class="ri-eye-line ri-22px"></i></a>' +
+              '<button class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ri-more-2-line ri-22px"></i></button>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
-              '<a href="javascript:;" class="dropdown-item">Edit</a>' +
-              '<a href="javascript:;" class="dropdown-item">Suspend</a>' +
+              '<a href="' +
+              userView +
+              '" class="dropdown-item"><i class="ri-eye-line me-2"></i><span>View</span></a>' +
+              '<a href="javascript:;" class="dropdown-item"><i class="ri-edit-box-line me-2"></i><span>Edit</span></a>' +
+              '<a href="javascript:;" class="dropdown-item delete-record"><i class="ri-delete-bin-7-line me-2"></i><span>Delete</span></a>' +
               '</div>' +
               '</div>'
             );
@@ -188,33 +200,33 @@ $(function () {
       ],
       order: [[2, 'desc']],
       dom:
-        '<"row"' +
-        '<"col-md-2"<"ms-n2"l>>' +
-        '<"col-md-10"<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-6 mb-md-0 mt-n6 mt-md-0 gap-md-4"fB>>' +
+        '<"row mx-1"' +
+        '<"col-md-2 d-flex align-items-center justify-content-md-start justify-content-center ps-4"<"dt-action-buttons mt-4 mt-md-0"B>>' +
+        '<"col-md-10"<"d-flex align-items-center justify-content-md-end justify-content-center"<"me-4"f><"add-new">>>' +
         '>t' +
-        '<"row"' +
+        '<"row mx-1"' +
         '<"col-sm-12 col-md-6"i>' +
         '<"col-sm-12 col-md-6"p>' +
         '>',
       language: {
-        sLengthMenu: '_MENU_',
+        sLengthMenu: 'Show _MENU_',
         search: '',
         searchPlaceholder: 'Search User',
         paginate: {
-          next: '<i class="bx bx-chevron-right bx-18px"></i>',
-          previous: '<i class="bx bx-chevron-left bx-18px"></i>'
+          next: '<i class="ri-arrow-right-s-line"></i>',
+          previous: '<i class="ri-arrow-left-s-line"></i>'
         }
       },
       // Buttons with Dropdown
       buttons: [
         {
           extend: 'collection',
-          className: 'btn btn-label-secondary dropdown-toggle me-4',
-          text: '<i class="bx bx-export me-2 bx-sm"></i>Export',
+          className: 'btn btn-outline-secondary dropdown-toggle me-4 waves-effect waves-light',
+          text: '<i class="ri-download-line ri-16px me-1"></i> <span class="d-none d-sm-inline-block">Export</span>',
           buttons: [
             {
               extend: 'print',
-              text: '<i class="bx bx-printer me-2" ></i>Print',
+              text: '<i class="ri-printer-line me-1" ></i>Print',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [1, 2, 3, 4, 5],
@@ -251,7 +263,7 @@ $(function () {
             },
             {
               extend: 'csv',
-              text: '<i class="bx bx-file me-2" ></i>Csv',
+              text: '<i class="ri-file-text-line me-1" ></i>Csv',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [1, 2, 3, 4, 5],
@@ -275,7 +287,7 @@ $(function () {
             },
             {
               extend: 'excel',
-              text: '<i class="bx bxs-file-export me-2"></i>Excel',
+              text: '<i class="ri-file-excel-line me-1"></i>Excel',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [1, 2, 3, 4, 5],
@@ -299,7 +311,7 @@ $(function () {
             },
             {
               extend: 'pdf',
-              text: '<i class="bx bxs-file-pdf me-2"></i>Pdf',
+              text: '<i class="ri-file-pdf-line me-1"></i>Pdf',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [1, 2, 3, 4, 5],
@@ -323,7 +335,7 @@ $(function () {
             },
             {
               extend: 'copy',
-              text: '<i class="bx bx-copy me-2" ></i>Copy',
+              text: '<i class="ri-file-copy-line me-1"></i>Copy',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [1, 2, 3, 4, 5],
@@ -346,16 +358,9 @@ $(function () {
               }
             }
           ]
-        },
-        {
-          text: '<i class="bx bx-plus bx-sm me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Add New User</span>',
-          className: 'add-new btn btn-primary',
-          attr: {
-            'data-bs-toggle': 'offcanvas',
-            'data-bs-target': '#offcanvasAddUser'
-          }
         }
       ],
+
       // For responsive popup
       responsive: {
         details: {
@@ -392,7 +397,7 @@ $(function () {
       initComplete: function () {
         // Adding role filter once table initialized
         this.api()
-          .columns(3)
+          .columns(4)
           .every(function () {
             var column = this;
             var select = $(
@@ -414,7 +419,7 @@ $(function () {
           });
         // Adding plan filter once table initialized
         this.api()
-          .columns(4)
+          .columns(5)
           .every(function () {
             var column = this;
             var select = $(
@@ -464,21 +469,15 @@ $(function () {
           });
       }
     });
-    // To remove default btn-secondary in export buttons
-    $('.dt-buttons > .btn-group > button').removeClass('btn-secondary');
+    $('.add-new').html(
+      "<button class='btn btn-primary waves-effect waves-light' data-bs-toggle='offcanvas' data-bs-target='#offcanvasAddUser'><i class='ri-add-line me-0 me-sm-1 d-inline-block d-sm-none'></i><span class= 'd-none d-sm-inline-block'> Add New User </span ></button>"
+    );
   }
 
   // Delete Record
   $('.datatables-users tbody').on('click', '.delete-record', function () {
     dt_user.row($(this).parents('tr')).remove().draw();
   });
-
-  // Filter form control to default size
-  // ? setTimeout used for multilingual table initialization
-  setTimeout(() => {
-    $('.dataTables_filter .form-control').removeClass('form-control-sm');
-    $('.dataTables_length .form-select').removeClass('form-select-sm');
-  }, 300);
 });
 
 // Validation & Phone mask
@@ -523,7 +522,7 @@ $(function () {
         eleValidClass: '',
         rowSelector: function (field, ele) {
           // field is the field name & ele is the field element
-          return '.mb-6';
+          return '.mb-5';
         }
       }),
       submitButton: new FormValidation.plugins.SubmitButton(),

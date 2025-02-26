@@ -35,15 +35,13 @@
   if (invoiceDate) {
     invoiceDate.flatpickr({
       monthSelectorType: 'static',
-      defaultDate: date,
-      dateFormat: 'm/d/Y'
+      defaultDate: date
     });
   }
   if (dueDate) {
     dueDate.flatpickr({
       monthSelectorType: 'static',
-      defaultDate: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 5),
-      dateFormat: 'm/d/Y'
+      defaultDate: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 5)
     });
   }
 })();

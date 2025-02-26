@@ -12,10 +12,12 @@
         "due-date": "5 April",
         "attachments": "4",
         "assigned": [
+          "1.png",
           "12.png",
           "5.png"
         ],
         "members": [
+          "John",
           "Bruce",
           "Clark"
         ]
@@ -47,7 +49,7 @@
         "id": "in-review-1",
         "title": "Review completed Apps",
         "comments": "17",
-        "badge-text": "Dashboard",
+        "badge-text": "Info",
         "badge": "info",
         "due-date": "8 April",
         "attachments": "8",
@@ -65,7 +67,7 @@
         "title": "Find new images for pages",
         "comments": "18",
         "badge-text": "Images",
-        "image": "21.jpg",
+        "image": "21.png",
         "badge": "warning",
         "due-date": "2 April",
         "attachments": "10",
@@ -76,8 +78,8 @@
           "12.png"
         ],
         "members": [
-          "Jordan",
           "Dianna",
+          "Jordan",
           "Vinnie",
           "Lasa"
         ]
@@ -120,6 +122,30 @@
         ],
         "members": [
           "Sarah"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "live",
+    "title": "Live",
+    "item": [
+      {
+        "id": "live",
+        "title": "Food delivery ios app",
+        "image": "21.png",
+        "comments": "8",
+        "badge-text": "IOS App",
+        "badge": "success",
+        "due-date": "8 March",
+        "attachments": "2",
+        "assigned": [
+          "9.png",
+          "10.png"
+        ],
+        "members": [
+          "Daisy",
+          "Darcey"
         ]
       }
     ]

@@ -200,10 +200,10 @@ $(function () {
               '</div>' +
               '</div>' +
               '<div class="d-flex flex-column">' +
-              '<span class="emp_name text-truncate">' +
+              '<span class="emp_name text-truncate h6 mb-0">' +
               $name +
               '</span>' +
-              '<small class="emp_post text-truncate text-muted">' +
+              '<small class="emp_post text-truncate">' +
               $post +
               '</small>' +
               '</div>' +
@@ -231,7 +231,11 @@ $(function () {
               return data;
             }
             return (
-              '<span class="badge ' + $status[$status_number].class + '">' + $status[$status_number].title + '</span>'
+              '<span class="badge rounded-pill ' +
+              $status[$status_number].class +
+              '">' +
+              $status[$status_number].title +
+              '</span>'
             );
           }
         },
@@ -244,7 +248,7 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="d-inline-block">' +
-              '<a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow me-1" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded bx-md"></i></a>' +
+              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ri-more-2-line ri-22px"></i></a>' +
               '<ul class="dropdown-menu dropdown-menu-end m-0">' +
               '<li><a href="javascript:;" class="dropdown-item">Details</a></li>' +
               '<li><a href="javascript:;" class="dropdown-item">Archive</a></li>' +
@@ -252,30 +256,30 @@ $(function () {
               '<li><a href="javascript:;" class="dropdown-item text-danger delete-record">Delete</a></li>' +
               '</ul>' +
               '</div>' +
-              '<a href="javascript:;" class="btn btn-icon item-edit"><i class="bx bx-edit bx-md"></i></a>'
+              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon item-edit"><i class="ri-edit-box-line ri-22px"></i></a>'
             );
           }
         }
       ],
       order: [[2, 'desc']],
-      dom: '<"card-header flex-column flex-md-row pb-0"<"head-label text-center"><"dt-action-buttons text-end pt-6 pt-md-0"B>><"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+      dom: '<"card-header flex-column flex-md-row"<"head-label text-center"><"dt-action-buttons text-end pt-3 pt-md-0"B>><"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
       displayLength: 7,
       lengthMenu: [7, 10, 25, 50, 75, 100],
       language: {
         paginate: {
-          next: '<i class="bx bx-chevron-right bx-18px"></i>',
-          previous: '<i class="bx bx-chevron-left bx-18px"></i>'
+          next: '<i class="ri-arrow-right-s-line"></i>',
+          previous: '<i class="ri-arrow-left-s-line"></i>'
         }
       },
       buttons: [
         {
           extend: 'collection',
-          className: 'btn btn-label-primary dropdown-toggle me-4',
-          text: '<i class="bx bx-export bx-sm me-sm-2"></i> <span class="d-none d-sm-inline-block">Export</span>',
+          className: 'btn btn-label-primary dropdown-toggle me-4 waves-effect waves-light border-none',
+          text: '<i class="ri-external-link-line me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span>',
           buttons: [
             {
               extend: 'print',
-              text: '<i class="bx bx-printer me-1" ></i>Print',
+              text: '<i class="ri-printer-line me-1" ></i>Print',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [3, 4, 5, 6, 7],
@@ -312,7 +316,7 @@ $(function () {
             },
             {
               extend: 'csv',
-              text: '<i class="bx bx-file me-1" ></i>Csv',
+              text: '<i class="ri-file-text-line me-1" ></i>Csv',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [3, 4, 5, 6, 7],
@@ -336,7 +340,7 @@ $(function () {
             },
             {
               extend: 'excel',
-              text: '<i class="bx bxs-file-export me-1"></i>Excel',
+              text: '<i class="ri-file-excel-line me-1"></i>Excel',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [3, 4, 5, 6, 7],
@@ -360,7 +364,7 @@ $(function () {
             },
             {
               extend: 'pdf',
-              text: '<i class="bx bxs-file-pdf me-1"></i>Pdf',
+              text: '<i class="ri-file-pdf-line me-1"></i>Pdf',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [3, 4, 5, 6, 7],
@@ -384,7 +388,7 @@ $(function () {
             },
             {
               extend: 'copy',
-              text: '<i class="bx bx-copy me-1" ></i>Copy',
+              text: '<i class="ri-file-copy-line me-1" ></i>Copy',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [3, 4, 5, 6, 7],
@@ -409,8 +413,8 @@ $(function () {
           ]
         },
         {
-          text: '<i class="bx bx-plus bx-sm me-sm-2"></i> <span class="d-none d-sm-inline-block">Add New Record</span>',
-          className: 'create-new btn btn-primary'
+          text: '<i class="ri-add-line"></i> <span class="d-none d-sm-inline-block">Add New Record</span>',
+          className: 'create-new btn btn-primary waves-effect waves-light'
         }
       ],
       responsive: {
@@ -444,11 +448,12 @@ $(function () {
             return data ? $('<table class="table"/><tbody />').append(data) : false;
           }
         }
+      },
+      initComplete: function (settings, json) {
+        $('.card-header').after('<hr class="my-0">');
       }
     });
     $('div.head-label').html('<h5 class="card-title mb-0">DataTable with Buttons</h5>');
-    // To remove default btn-secondary in export buttons
-    $('.dt-buttons > .btn-group > button').removeClass('btn-secondary');
   }
 
   // Add New record
@@ -518,7 +523,11 @@ $(function () {
               return data;
             }
             return (
-              '<span class="badge ' + $status[$status_number].class + '">' + $status[$status_number].title + '</span>'
+              '<span class="badge rounded-pill ' +
+              $status[$status_number].class +
+              '">' +
+              $status[$status_number].title +
+              '</span>'
             );
           }
         },
@@ -530,7 +539,7 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="d-inline-block">' +
-              '<a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow me-1" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded bx-md"></i></a>' +
+              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ri-more-2-line ri-22px"></i></a>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
               '<a href="javascript:;" class="dropdown-item">Details</a>' +
               '<a href="javascript:;" class="dropdown-item">Archive</a>' +
@@ -538,18 +547,18 @@ $(function () {
               '<a href="javascript:;" class="dropdown-item text-danger delete-record">Delete</a>' +
               '</div>' +
               '</div>' +
-              '<a href="javascript:;" class="btn btn-icon item-edit"><i class="bx bx-edit bx-md"></i></a>'
+              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon item-edit"><i class="ri-edit-box-line ri-22px"></i></a>'
             );
           }
         }
       ],
-      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0"f>><"table-responsive"t><"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>><"table-responsive"t><"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
       displayLength: 7,
       lengthMenu: [7, 10, 25, 50, 75, 100],
       language: {
         paginate: {
-          next: '<i class="bx bx-chevron-right bx-18px"></i>',
-          previous: '<i class="bx bx-chevron-left bx-18px"></i>'
+          next: '<i class="ri-arrow-right-s-line"></i>',
+          previous: '<i class="ri-arrow-left-s-line"></i>'
         }
       }
     });
@@ -601,7 +610,11 @@ $(function () {
               return data;
             }
             return (
-              '<span class="badge ' + $status[$status_number].class + '">' + $status[$status_number].title + '</span>'
+              '<span class="badge rounded-pill ' +
+              $status[$status_number].class +
+              '">' +
+              $status[$status_number].title +
+              '</span>'
             );
           }
         },
@@ -614,7 +627,7 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="d-inline-block">' +
-              '<a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow me-1" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded bx-sm"></i></a>' +
+              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ri-more-2-line ri-22px"></i></a>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
               '<a href="javascript:;" class="dropdown-item">Details</a>' +
               '<a href="javascript:;" class="dropdown-item">Archive</a>' +
@@ -622,19 +635,19 @@ $(function () {
               '<a href="javascript:;" class="dropdown-item text-danger delete-record">Delete</a>' +
               '</div>' +
               '</div>' +
-              '<a href="javascript:;" class="btn btn-icon item-edit"><i class="bx bx-edit bx-sm"></i></a>'
+              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon item-edit"><i class="ri-edit-box-line ri-22px"></i></a>'
             );
           }
         }
       ],
       order: [[groupColumn, 'asc']],
-      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
       displayLength: 7,
       lengthMenu: [7, 10, 25, 50, 75, 100],
       language: {
         paginate: {
-          next: '<i class="bx bx-chevron-right bx-18px"></i>',
-          previous: '<i class="bx bx-chevron-left bx-18px"></i>'
+          next: '<i class="ri-arrow-right-s-line"></i>',
+          previous: '<i class="ri-arrow-left-s-line"></i>'
         }
       },
       drawCallback: function (settings) {
@@ -744,7 +757,11 @@ $(function () {
               return data;
             }
             return (
-              '<span class="badge ' + $status[$status_number].class + '">' + $status[$status_number].title + '</span>'
+              '<span class="badge rounded-pill ' +
+              $status[$status_number].class +
+              '">' +
+              $status[$status_number].title +
+              '</span>'
             );
           }
         },
@@ -757,7 +774,7 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="d-inline-block">' +
-              '<a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow me-1" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded bx-sm"></i></a>' +
+              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ri-more-2-line ri-22px"></i></a>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
               '<a href="javascript:;" class="dropdown-item">Details</a>' +
               '<a href="javascript:;" class="dropdown-item">Archive</a>' +
@@ -765,7 +782,7 @@ $(function () {
               '<a href="javascript:;" class="dropdown-item text-danger delete-record">Delete</a>' +
               '</div>' +
               '</div>' +
-              '<a href="javascript:;" class="btn btn-icon item-edit"><i class="bx bx-edit bx-sm"></i></a>'
+              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon item-edit"><i class="ri-edit-box-line ri-22px"></i></a>'
             );
           }
         }
@@ -773,13 +790,13 @@ $(function () {
       language: {
         url: '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/' + lang + '.json',
         paginate: {
-          next: '<i class="bx bx-chevron-right bx-18px"></i>',
-          previous: '<i class="bx bx-chevron-left bx-18px"></i>'
+          next: '<i class="ri-arrow-right-s-line"></i>',
+          previous: '<i class="ri-arrow-left-s-line"></i>'
         }
       },
       order: [[2, 'desc']],
       displayLength: 7,
-      dom: '<"row"<"col-sm-12 col-md-6 ps-md-4"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
       lengthMenu: [7, 10, 25, 50, 75, 100],
       responsive: {
         details: {
@@ -815,11 +832,4 @@ $(function () {
       }
     });
   }
-
-  // Filter form control to default size
-  // ? setTimeout used for multilingual table initialization
-  setTimeout(() => {
-    $('.dataTables_filter .form-control').removeClass('form-control-sm');
-    $('.dataTables_length .form-select').removeClass('form-select-sm');
-  }, 300);
 });

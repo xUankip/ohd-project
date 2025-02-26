@@ -7,8 +7,6 @@
   "Collapsed menu": "Reduziertes Menü",
   "Content navbar": "Inhaltsnavigationsleiste",
   "Content nav + Sidebar": "Inhaltsnavigation + Seitenleiste",
-  "Navbar full": "Navbar voll",
-  "Navbar full + Sidebar": "Navbar voll + Sidebar",
   "Horizontal": "Horizontal",
   "Vertical": "Vertikal",
   "Without menu": "Ohne Menü",
@@ -77,6 +75,7 @@
   "Coming Soon": "Demnächst",
   "Under Maintenance": "Wird gewartet",
   "Not Authorized": "Nicht berechtigt",
+  "Server Error": "Serverfehler",
   "Authentications": "Authentifizierung",
   "Login": "Anmeldung",
   "Register": "Registrieren",
@@ -93,8 +92,6 @@
   "Property Listing": "Immobilienliste",
   "Create Deal": "Deal erstellen",
   "Icons": "Symbole",
-  "Boxicons": "Boxicons",
-  "Fontawesome": "Fontawesome",
   "User interface": "Benutzeroberfläche",
   "Accordion": "Akkordeon",
   "Alerts": "Warnungen",
@@ -173,5 +170,6 @@
   "Apps & Pages": "Apps und Seiten",
   "Components": "Komponenten",
   "Forms & Tables": "Formulare und Tabellen",
-  "Charts & Maps": "Diagramme und Karten"
+  "Charts & Maps": "Diagramme und Karten",
+  "Transactions (CRUD)": "Transaktionen (CRUD)"
 }

@@ -12,6 +12,7 @@ $(function () {
   if (select2.length) {
     select2.each(function () {
       var $this = $(this);
+      select2Focus($this);
       $this.wrap('<div class="position-relative"></div>');
       $this.select2({
         placeholder: 'Select an country',
@@ -83,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           onCreditCardTypeChanged: function (type) {
             if (type != '' && type != 'unknown') {
               document.querySelector('.card-type').innerHTML =
-                '<img src="' + assetsPath + 'img/icons/payments/' + type + '-cc.png" height="20"/>';
+                '<img src="' + assetsPath + 'img/icons/payments/' + type + '-cc.png" height="18"/>';
             } else {
               document.querySelector('.card-type').innerHTML = '';
             }

@@ -77,6 +77,7 @@
   "Coming Soon": "قريبًا",
   "Under Maintenance": "تحت الصيانة",
   "Not Authorized": "غير مصرح",
+  "Server Error": "خطأ في الخادم",
   "Authentications": "المصادقات",
   "Login": "تسجيل الدخول",
   "Register": "التسجيل",
@@ -93,7 +94,7 @@
   "Property Listing": "قائمة العقارات",
   "Create Deal": "إنشاء صفقة",
   "Icons": "الرموز",
-  "Boxicons": "صناديق الرموز",
+  "Feather": "الريشة",
   "Fontawesome": "الخطوط الرائعة",
   "User interface": "واجهة المستخدم",
   "Accordion": "الأكورديون",
@@ -173,5 +174,6 @@
   "Apps & Pages": "التطبيقات والصفحات",
   "Components": "المكونات",
   "Forms & Tables": "النماذج والجداول",
-  "Charts & Maps": "الرسوم البيانية والخرائط"
+  "Charts & Maps": "الرسوم البيانية والخرائط",
+  "Transactions (CRUD)": "المعاملات (الخام)"
 }
