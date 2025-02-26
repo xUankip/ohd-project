@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return $badge;
       }
+      select2Focus(eventLabel);
       eventLabel.wrap('<div class="position-relative"></div>').select2({
         placeholder: 'Select value',
         dropdownParent: eventLabel.parent(),
@@ -100,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return $avatar;
       }
+      select2Focus(eventGuests);
       eventGuests.wrap('<div class="position-relative"></div>').select2({
         placeholder: 'Select value',
         dropdownParent: eventGuests.parent(),
@@ -191,6 +193,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // Modify sidebar toggler
     function modifyToggler() {
       const fcSidebarToggleButton = document.querySelector('.fc-sidebarToggle-button');
+      const fcPrevButton = document.querySelector('.fc-prev-button');
+      const fcNextButton = document.querySelector('.fc-next-button');
+      const fcHeaderToolbar = document.querySelector('.fc-header-toolbar');
+      fcPrevButton.classList.add('btn', 'btn-sm', 'btn-icon', 'btn-outline-secondary', 'me-2');
+      fcNextButton.classList.add('btn', 'btn-sm', 'btn-icon', 'btn-outline-secondary', 'me-4');
+      fcHeaderToolbar.classList.add('row-gap-4', 'gap-2');
       fcSidebarToggleButton.classList.remove('fc-button-primary');
       fcSidebarToggleButton.classList.add('d-lg-none', 'd-inline-block', 'ps-0');
       while (fcSidebarToggleButton.firstChild) {
@@ -199,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
       fcSidebarToggleButton.setAttribute('data-bs-toggle', 'sidebar');
       fcSidebarToggleButton.setAttribute('data-overlay', '');
       fcSidebarToggleButton.setAttribute('data-target', '#app-calendar-sidebar');
-      fcSidebarToggleButton.insertAdjacentHTML('beforeend', '<i class="bx bx-menu bx-lg text-heading"></i>');
+      fcSidebarToggleButton.insertAdjacentHTML('beforeend', '<i class="ri-menu-line ri-24px text-body"></i>');
     }
 
     // Filter events by calender
@@ -339,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
           eleValidClass: '',
           rowSelector: function (field, ele) {
             // field is the field name & ele is the field element
-            return '.mb-6';
+            return '.mb-5';
           }
         }),
         submitButton: new FormValidation.plugins.SubmitButton(),

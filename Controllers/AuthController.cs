@@ -1,58 +1,75 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
-
-namespace AspnetCoreMvcFull.Controllers;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using AspnetCoreMvcStarter.Data;
+using AspnetCoreMvcStarter.Models;
 
 public class AuthController : Controller
 {
-  private readonly SignInManager<IdentityUser> _signInManager;
-  // private readonly UserManager<IdentityUser> _userManager;
-  // private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly ApplicationDbContext _context;
 
-  public AuthController(
-    SignInManager<IdentityUser> signInManager
-    // UserManager<IdentityUser> _userManager,
-    // RoleManager<IdentityRole> _roleManager
-    )
-  {
-    _signInManager = signInManager;
-  }
-
-  public IActionResult ForgotPasswordBasic() => View();
-  public IActionResult ForgotPasswordCover() => View();
-
-  public IActionResult Login()
-  {
-    return View();
-  }
-  [HttpPost]
-  public async Task<IActionResult> Login(string email, string password)
-  {
-    var result = await _signInManager.PasswordSignInAsync(email, password, false, false);
-    if (result.Succeeded)
+    public AuthController(ApplicationDbContext context)
     {
-      return RedirectToAction("Index", "Home"); // check return url.
+        _context = context;
     }
-    ModelState.AddModelError("error", "Invalid login attempt.");
-    return View();
-  }
 
-  [HttpGet]
-  public async Task<IActionResult> Logout()
-  {
-    await _signInManager.SignOutAsync();
-    return RedirectToAction("Login");
-  }
+    [HttpGet]
+    public IActionResult Login()
+    {
+        return View();
+    }
 
-  public IActionResult LoginCover() => View();
-  public IActionResult RegisterBasic() => View();
-  public IActionResult RegisterCover() => View();
-  public IActionResult RegisterMultiSteps() => View();
-  public IActionResult ResetPasswordBasic() => View();
-  public IActionResult ResetPasswordCover() => View();
-  public IActionResult TwoStepsBasic() => View();
-  public IActionResult TwoStepsCover() => View();
-  public IActionResult VerifyEmailBasic() => View();
-  public IActionResult VerifyEmailCover() => View();
+    [HttpPost]
+    public async Task<IActionResult> Login(string email, string password)
+    {
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                ModelState.AddModelError("Email", "Email không được để trống.");
+            if (string.IsNullOrWhiteSpace(password))
+                ModelState.AddModelError("Password", "Mật khẩu không được để trống.");
+
+            return View();
+        }
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        if (user == null)
+        {
+            ModelState.AddModelError("", "Email hoặc mật khẩu không chính xác.");
+            return View();
+        }
+
+        if (!VerifyPassword(password, user.PasswordHash))
+        {
+            ModelState.AddModelError("", "Email hoặc mật khẩu không chính xác.");
+            return View();
+        }
+
+        // Đăng nhập thành công -> Lưu UserId vào session
+        HttpContext.Session.SetString("UserId", user.UserId.ToString());
+
+        return RedirectToAction("Index", "Home");
+    }
+
+    [HttpGet]
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Clear(); // Xóa toàn bộ session khi logout
+        return RedirectToAction("Login");
+    }
+
+    private bool VerifyPassword(string inputPassword, string storedHash)
+    {
+        using (SHA256 sha256 = SHA256.Create())
+        {
+            byte[] inputBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(inputPassword));
+            byte[] storedBytes = Enumerable.Range(0, storedHash.Length / 2)
+                .Select(i => Convert.ToByte(storedHash.Substring(i * 2, 2), 16))
+                .ToArray();
+
+            return CryptographicOperations.FixedTimeEquals(inputBytes, storedBytes);
+        }
+    }
 }

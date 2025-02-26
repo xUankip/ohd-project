@@ -24,6 +24,7 @@ $(function () {
     customerView = '/Ecommerce/CustomerDetailsOverview';
   if (select2.length) {
     var $this = select2;
+    select2Focus($this);
     $this.wrap('<div class="position-relative"></div>').select2({
       placeholder: 'United States ',
       dropdownParent: $this.parent()
@@ -96,18 +97,18 @@ $(function () {
             // Creates full output for row
             var $row_output =
               '<div class="d-flex justify-content-start align-items-center customer-name">' +
-              '<div class="avatar-wrapper">' +
-              '<div class="avatar avatar-sm me-3">' +
+              '<div class="avatar-wrapper me-3">' +
+              '<div class="avatar avatar-sm">' +
               $output +
               '</div>' +
               '</div>' +
               '<div class="d-flex flex-column">' +
               '<a href="' +
               customerView +
-              '" class="text-heading" ><span class="fw-medium">' +
+              '" class="text-heading"><span class="fw-medium text-truncate">' +
               $name +
               '</span></a>' +
-              '<small>' +
+              '<small class="text-truncate">' +
               $email +
               '</small>' +
               '</div>' +
@@ -121,7 +122,7 @@ $(function () {
           render: function (data, type, full, meta) {
             var $id = full['customer_id'];
 
-            return "<span class='text-heading'>#" + $id + '</span>';
+            return '<span class="text-heading">#' + $id + '</span>';
           }
         },
         {
@@ -167,17 +168,18 @@ $(function () {
           render: function (data, type, full, meta) {
             var $spent = full['total_spent'];
 
-            return '<span class="fw-medium text-heading">' + $spent + '</span>';
+            return '<h6 class="mb-0">' + $spent + '</h6>';
           }
         }
       ],
       order: [[2, 'desc']],
       dom:
-        '<"card-header d-flex flex-wrap flex-md-row flex-column align-items-start align-items-sm-center py-0"' +
-        '<"d-flex align-items-center me-5"f>' +
-        '<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-md-end flex-wrap flex-sm-nowrap mb-6 mb-sm-0"lB>' +
+        //
+        '<"card-header d-flex rounded-0 flex-wrap py-0 pb-5 pb-md-0"' +
+        '<"me-5 pe-5 ms-n1_5 ps-2"f>' +
+        '<"d-flex justify-content-start justify-content-md-end align-items-baseline"<"dt-action-buttons d-flex align-items-start align-items-md-center justify-content-sm-center gap-4"lB>>' +
         '>t' +
-        '<"row"' +
+        '<"row mx-1"' +
         '<"col-sm-12 col-md-6"i>' +
         '<"col-sm-12 col-md-6"p>' +
         '>',
@@ -187,23 +189,23 @@ $(function () {
         search: '',
         searchPlaceholder: 'Search Order',
         paginate: {
-          next: '<i class="bx bx-chevron-right bx-18px"></i>',
-          previous: '<i class="bx bx-chevron-left bx-18px"></i>'
+          next: '<i class="ri-arrow-right-s-line"></i>',
+          previous: '<i class="ri-arrow-left-s-line"></i>'
         }
       },
       // Buttons with Dropdown
       buttons: [
         {
           extend: 'collection',
-          className: 'btn btn-label-secondary dropdown-toggle me-4',
-          text: '<i class="bx bx-export bx-sm me-2"></i>Export',
+          className: 'btn btn-outline-secondary dropdown-toggle me-4 waves-effect waves-light',
+          text: '<i class="ri-download-line ri-16px me-1 align-baseline"></i> <span class="d-none d-sm-inline-block">Export</span>',
           buttons: [
             {
               extend: 'print',
-              text: '<i class="bx bx-printer me-2" ></i>Print',
+              text: '<i class="ri-printer-line me-1"></i>Print',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6],
+                columns: [1, 2, 3, 4, 5],
                 // prevent avatar to be print
                 format: {
                   body: function (inner, coldex, rowdex) {
@@ -237,10 +239,10 @@ $(function () {
             },
             {
               extend: 'csv',
-              text: '<i class="bx bx-file me-2" ></i>Csv',
+              text: '<i class="ri-file-text-line me-1" ></i>Csv',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6],
+                columns: [1, 2, 3, 4, 5],
                 // prevent avatar to be display
                 format: {
                   body: function (inner, coldex, rowdex) {
@@ -261,10 +263,10 @@ $(function () {
             },
             {
               extend: 'excel',
-              text: '<i class="bx bxs-file-export me-2"></i>Excel',
+              text: '<i class="ri-file-excel-line me-1"></i>Excel',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6],
+                columns: [1, 2, 3, 4, 5],
                 // prevent avatar to be display
                 format: {
                   body: function (inner, coldex, rowdex) {
@@ -285,10 +287,10 @@ $(function () {
             },
             {
               extend: 'pdf',
-              text: '<i class="bx bxs-file-pdf me-2"></i>Pdf',
+              text: '<i class="ri-file-pdf-line me-1"></i>Pdf',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6],
+                columns: [1, 2, 3, 4, 5],
                 // prevent avatar to be display
                 format: {
                   body: function (inner, coldex, rowdex) {
@@ -309,10 +311,10 @@ $(function () {
             },
             {
               extend: 'copy',
-              text: '<i class="bx bx-copy me-2" ></i>Copy',
+              text: '<i class="ri-file-copy-line me-1"></i>Copy',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6],
+                columns: [1, 2, 3, 4, 5],
                 // prevent avatar to be display
                 format: {
                   body: function (inner, coldex, rowdex) {
@@ -334,8 +336,8 @@ $(function () {
           ]
         },
         {
-          text: '<i class="bx bx-plus bx-sm me-0 me-sm-2 mb-1"></i><span class="d-none d-sm-inline-block">Add Customer</span>',
-          className: 'add-new btn btn-primary',
+          text: '<i class="ri-add-line ri-16px me-0 me-sm-1_5 align-baseline"></i><span class="d-none d-sm-inline-block">Add Customer</span>',
+          className: 'add-new btn btn-primary waves-effect waves-light',
           attr: {
             'data-bs-toggle': 'offcanvas',
             'data-bs-target': '#offcanvasEcommerceCustomerAdd'
@@ -376,23 +378,11 @@ $(function () {
         }
       }
     });
-    $('.dataTables_length').addClass('ms-n2 me-2');
+    $('.dataTables_length').addClass('my-0');
     $('.dt-action-buttons').addClass('pt-0');
-    $('.dataTables_filter').addClass('ms-n3 mb-0 mb-md-6');
+    $('.dataTables_filter input').addClass('ms-0');
     $('.dt-buttons').addClass('d-flex flex-wrap');
   }
-
-  // Delete Record
-  $('.datatables-customers tbody').on('click', '.delete-record', function () {
-    dt_customer.row($(this).parents('tr')).remove().draw();
-  });
-
-  // Filter form control to default size
-  // ? setTimeout used for multilingual table initialization
-  setTimeout(() => {
-    $('.dataTables_filter .form-control').removeClass('form-control-sm');
-    $('.dataTables_length .form-select').removeClass('form-select-sm');
-  }, 300);
 });
 
 // Validation & Phone mask
@@ -437,7 +427,7 @@ $(function () {
         eleValidClass: '',
         rowSelector: function (field, ele) {
           // field is the field name & ele is the field element
-          return '.mb-6';
+          return '.mb-5';
         }
       }),
       submitButton: new FormValidation.plugins.SubmitButton(),

@@ -7,8 +7,6 @@
   "Collapsed menu": "Menu réduit",
   "Content navbar": "Barre de navigation du contenu",
   "Content nav + Sidebar": "Navigation dans le contenu + barre latérale",
-  "Navbar full": "Barre de navigation pleine",
-  "Navbar full + Sidebar": "Navbar complet + Sidebar",
   "Horizontal": "Horizontal",
   "Vertical": "Vertical",
   "Without menu": "Sans menu",
@@ -77,6 +75,7 @@
   "Coming Soon": "Bientôt disponible",
   "Under Maintenance": "En maintenance",
   "Not Authorized": "Pas autorisé",
+  "Server Error": "erreur du serveur",
   "Authentications": "Authentification",
   "Login": "Connexion",
   "Register": "S'inscrire",
@@ -93,8 +92,6 @@
   "Property Listing": "Liste des propriétés",
   "Create Deal": "Créer une offre",
   "Icons": "Icônes",
-  "Boxicons": "Icônes de boîte",
-  "Fontawesome": "Police géniale",
   "User interface": "Interface utilisateur",
   "Accordion": "Accordéon",
   "Alerts": "Alertes",
@@ -173,5 +170,6 @@
   "Apps & Pages": "Applications et pages",
   "Components": "Composants",
   "Forms & Tables": "Formulaires et tableaux",
-  "Charts & Maps": "Graphiques et cartes"
+  "Charts & Maps": "Graphiques et cartes",
+  "Transactions (CRUD)": "Transactions (CRUD)"
 }

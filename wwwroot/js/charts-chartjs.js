@@ -5,17 +5,16 @@
 
 (function () {
   // Color Variables
-  const purpleColor = '#836AF9',
+  const purpleColor = '#8c57ff',
     yellowColor = '#ffe800',
     cyanColor = '#28dac6',
     orangeColor = '#FF8132',
-    orangeLightColor = '#FDAC34',
+    orangeLightColor = '#ffcf5c',
     oceanBlueColor = '#299AFF',
     greyColor = '#4F5D70',
     greyLightColor = '#EDF1F4',
     blueColor = '#2B9AFF',
-    blueLightColor = '#84D0FF',
-    blueDarkColor = '#1D9FF2';
+    blueLightColor = '#84D0FF';
 
   let cardColor, headingColor, labelColor, borderColor, legendColor;
 
@@ -65,7 +64,7 @@
         datasets: [
           {
             data: [275, 90, 190, 205, 125, 85, 55, 87, 127, 150, 230, 280, 190],
-            backgroundColor: cyanColor,
+            backgroundColor: orangeLightColor,
             borderColor: 'transparent',
             maxBarThickness: 15,
             borderRadius: {
@@ -102,7 +101,10 @@
               borderColor: borderColor
             },
             ticks: {
-              color: labelColor
+              color: labelColor,
+              font: {
+                size: '13px'
+              }
             }
           },
           y: {
@@ -115,7 +117,10 @@
             },
             ticks: {
               stepSize: 100,
-              color: labelColor
+              color: labelColor,
+              font: {
+                size: '13px'
+              }
             }
           }
         }
@@ -131,13 +136,21 @@
     const horizontalBarChartVar = new Chart(horizontalBarChart, {
       type: 'bar',
       data: {
-        labels: ['MON', 'TUE', 'WED ', 'THU', 'FRI', 'SAT', 'SUN'],
+        labels: ['MON', 'TUE', 'WED ', 'THU', 'FRI'],
         datasets: [
           {
-            data: [710, 350, 470, 580, 230, 460, 120],
-            backgroundColor: blueDarkColor,
+            label: 'Point One',
+            data: [380, 780, 530, 870, 180],
+            backgroundColor: blueColor,
             borderColor: 'transparent',
-            maxBarThickness: 15
+            maxBarThickness: 14
+          },
+          {
+            label: 'Point Two',
+            data: [290, 385, 160, 470, 50],
+            backgroundColor: cyanColor,
+            borderColor: 'transparent',
+            maxBarThickness: 14
           }
         ]
       },
@@ -166,18 +179,36 @@
             borderColor: borderColor
           },
           legend: {
-            display: false
+            position: 'top',
+            align: 'end',
+            rtl: isRtl,
+            labels: {
+              font: {
+                family: 'Inter',
+                size: '13px'
+              },
+              usePointStyle: true,
+              padding: 20,
+              boxWidth: 8,
+              boxHeight: 8,
+              color: legendColor
+            }
           }
         },
         scales: {
           x: {
             min: 0,
+            max: 1000,
             grid: {
               color: borderColor,
-              borderColor: borderColor
+              borderColor: borderColor,
+              drawBorder: false
             },
             ticks: {
-              color: labelColor
+              color: labelColor,
+              font: {
+                size: '13px'
+              }
             }
           },
           y: {
@@ -187,7 +218,10 @@
               drawBorder: false
             },
             ticks: {
-              color: labelColor
+              color: labelColor,
+              font: {
+                size: '13px'
+              }
             }
           }
         }
@@ -208,21 +242,6 @@
           {
             data: [80, 150, 180, 270, 210, 160, 160, 202, 265, 210, 270, 255, 290, 360, 375],
             label: 'Europe',
-            borderColor: config.colors.danger,
-            tension: 0.5,
-            pointStyle: 'circle',
-            backgroundColor: config.colors.danger,
-            fill: false,
-            pointRadius: 1,
-            pointHoverRadius: 5,
-            pointHoverBorderWidth: 5,
-            pointBorderColor: 'transparent',
-            pointHoverBorderColor: cardColor,
-            pointHoverBackgroundColor: config.colors.danger
-          },
-          {
-            data: [80, 125, 105, 130, 215, 195, 140, 160, 230, 300, 220, 170, 210, 200, 280],
-            label: 'Asia',
             borderColor: config.colors.primary,
             tension: 0.5,
             pointStyle: 'circle',
@@ -234,6 +253,21 @@
             pointBorderColor: 'transparent',
             pointHoverBorderColor: cardColor,
             pointHoverBackgroundColor: config.colors.primary
+          },
+          {
+            data: [80, 125, 105, 130, 215, 195, 140, 160, 230, 300, 220, 170, 210, 200, 280],
+            label: 'Asia',
+            borderColor: config.colors.warning,
+            tension: 0.5,
+            pointStyle: 'circle',
+            backgroundColor: config.colors.warning,
+            fill: false,
+            pointRadius: 1,
+            pointHoverRadius: 5,
+            pointHoverBorderWidth: 5,
+            pointBorderColor: 'transparent',
+            pointHoverBorderColor: cardColor,
+            pointHoverBackgroundColor: config.colors.warning
           },
           {
             data: [80, 99, 82, 90, 115, 115, 74, 75, 130, 155, 125, 90, 140, 130, 180],
@@ -263,7 +297,10 @@
               borderColor: borderColor
             },
             ticks: {
-              color: labelColor
+              color: labelColor,
+              font: {
+                size: '13px'
+              }
             }
           },
           y: {
@@ -274,7 +311,10 @@
             max: 400,
             ticks: {
               color: labelColor,
-              stepSize: 100
+              stepSize: 100,
+              font: {
+                size: '13px'
+              }
             },
             grid: {
               color: borderColor,
@@ -298,10 +338,14 @@
             align: 'start',
             rtl: isRtl,
             labels: {
+              font: {
+                family: 'Inter',
+                size: '13px'
+              },
               usePointStyle: true,
               padding: 35,
-              boxWidth: 6,
-              boxHeight: 6,
+              boxWidth: 8,
+              boxHeight: 8,
               color: legendColor
             }
           }
@@ -360,7 +404,10 @@
             ticks: {
               maxTicksLimit: 1,
               display: false,
-              color: labelColor
+              color: labelColor,
+              font: {
+                size: '13px'
+              }
             },
             grid: {
               color: borderColor
@@ -377,7 +424,13 @@
             position: 'top',
             labels: {
               padding: 25,
-              color: legendColor
+              color: legendColor,
+              boxWidth: 8,
+              boxHeight: 8,
+              font: {
+                family: 'Inter',
+                size: '13px'
+              }
             }
           },
           tooltip: {
@@ -422,7 +475,10 @@
           r: {
             ticks: {
               display: false,
-              color: labelColor
+              color: labelColor,
+              font: {
+                size: '13px'
+              }
             },
             grid: {
               display: false
@@ -447,7 +503,11 @@
               padding: 25,
               boxWidth: 8,
               boxHeight: 8,
-              color: legendColor
+              color: legendColor,
+              font: {
+                family: 'Inter',
+                size: '13px'
+              }
             }
           }
         }
@@ -628,7 +688,10 @@
             },
             ticks: {
               stepSize: 10,
-              color: labelColor
+              color: labelColor,
+              font: {
+                size: '13px'
+              }
             }
           },
           y: {
@@ -641,7 +704,10 @@
             },
             ticks: {
               stepSize: 100,
-              color: labelColor
+              color: labelColor,
+              font: {
+                size: '13px'
+              }
             }
           }
         },
@@ -686,7 +752,7 @@
           '18/12',
           '19/12',
           '20/12',
-          ''
+          '21/12'
         ],
         datasets: [
           {
@@ -747,9 +813,13 @@
             labels: {
               usePointStyle: true,
               padding: 35,
-              boxWidth: 6,
-              boxHeight: 6,
-              color: legendColor
+              boxWidth: 8,
+              boxHeight: 8,
+              color: legendColor,
+              font: {
+                family: 'Inter',
+                size: '13px'
+              }
             }
           },
           tooltip: {
@@ -769,7 +839,10 @@
               borderColor: borderColor
             },
             ticks: {
-              color: labelColor
+              color: labelColor,
+              font: {
+                size: '13px'
+              }
             }
           },
           y: {
@@ -781,7 +854,10 @@
             },
             ticks: {
               stepSize: 100,
-              color: labelColor
+              color: labelColor,
+              font: {
+                size: '13px'
+              }
             }
           }
         }
@@ -1072,9 +1148,13 @@
             labels: {
               usePointStyle: true,
               padding: 25,
-              boxWidth: 6,
-              boxHeight: 6,
-              color: legendColor
+              boxWidth: 8,
+              boxHeight: 8,
+              color: legendColor,
+              font: {
+                family: 'Inter',
+                size: '13px'
+              }
             }
           },
           tooltip: {
@@ -1099,7 +1179,10 @@
             },
             ticks: {
               stepSize: 10,
-              color: labelColor
+              color: labelColor,
+              font: {
+                size: '13px'
+              }
             }
           },
           y: {
@@ -1113,7 +1196,10 @@
             },
             ticks: {
               stepSize: 100,
-              color: labelColor
+              color: labelColor,
+              font: {
+                size: '13px'
+              }
             }
           }
         }

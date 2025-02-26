@@ -7,7 +7,16 @@
   // Bootstrap validation example
   //------------------------------------------------------------------------------------------
   // const flatPickrEL = $('.flatpickr-validation');
-  const flatPickrList = [].slice.call(document.querySelectorAll('.flatpickr-validation'));
+  const flatPickrList = [].slice.call(document.querySelectorAll('.flatpickr-validation')),
+    selectPicker = $('.selectpicker');
+
+  // Bootstrap Select
+  // --------------------------------------------------------------------
+  if (selectPicker.length) {
+    selectPicker.selectpicker();
+    handleBootstrapSelectEvents();
+  }
+
   // Flat pickr
   if (flatPickrList) {
     flatPickrList.forEach(flatPickr => {
@@ -53,23 +62,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       formValidationSelect2Ele = jQuery(formValidationExamples.querySelector('[name="formValidationSelect2"]')),
       formValidationTechEle = jQuery(formValidationExamples.querySelector('[name="formValidationTech"]')),
       formValidationLangEle = formValidationExamples.querySelector('[name="formValidationLang"]'),
-      formValidationHobbiesEle = jQuery(formValidationExamples.querySelector('.selectpicker')),
-      tech = [
-        'ReactJS',
-        'Angular',
-        'VueJS',
-        'Html',
-        'Css',
-        'Sass',
-        'Pug',
-        'Gulp',
-        'Php',
-        'Laravel',
-        'Python',
-        'Bootstrap',
-        'Material Design',
-        'NodeJS'
-      ];
+      formValidationHobbiesEle = jQuery(formValidationExamples.querySelector('[name="formValidationHobbies"]'));
 
     const fv = FormValidation.formValidation(formValidationExamples, {
       fields: {
@@ -109,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         formValidationConfirmPass: {
           validators: {
             notEmpty: {
-              message: 'Please confirm password'
+              message: 'Please confirm new password'
             },
             identical: {
               compare: function () {
@@ -279,6 +272,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
     // Select2 (Country)
     if (formValidationSelect2Ele.length) {
+      select2Focus(formValidationSelect2Ele);
       formValidationSelect2Ele.wrap('<div class="position-relative"></div>');
       formValidationSelect2Ele
         .select2({
@@ -291,47 +285,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
         });
     }
 
-    // Typeahead
-
-    // String Matcher function for typeahead
-    const substringMatcher = function (strs) {
-      return function findMatches(q, cb) {
-        var matches, substrRegex;
-        matches = [];
-        substrRegex = new RegExp(q, 'i');
-        $.each(strs, function (i, str) {
-          if (substrRegex.test(str)) {
-            matches.push(str);
-          }
-        });
-
-        cb(matches);
-      };
-    };
-
-    // Check if rtl
-    if (isRtl) {
-      const typeaheadList = [].slice.call(document.querySelectorAll('.typeahead'));
-
-      // Flat pickr
-      if (typeaheadList) {
-        typeaheadList.forEach(typeahead => {
-          typeahead.setAttribute('dir', 'rtl');
-        });
-      }
-    }
-    formValidationTechEle.typeahead(
-      {
-        hint: !isRtl,
-        highlight: true,
-        minLength: 1
-      },
-      {
-        name: 'tech',
-        source: substringMatcher(tech)
-      }
-    );
-
     // Tagify
     let formValidationLangTagify = new Tagify(formValidationLangEle);
     formValidationLangEle.addEventListener('change', onChange);
@@ -340,6 +293,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
     }
 
     //Bootstrap select
+    formValidationTechEle.on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+      fv.revalidateField('formValidationTech');
+    });
     formValidationHobbiesEle.on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
       fv.revalidateField('formValidationHobbies');
     });

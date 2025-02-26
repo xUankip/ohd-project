@@ -23,6 +23,7 @@ $(function () {
       columns: [
         // columns according to JSON
         { data: '' },
+        { data: 'id' },
         { data: 'order' },
         { data: 'date' },
         { data: 'status' },
@@ -42,8 +43,22 @@ $(function () {
           }
         },
         {
-          // order order number
+          // For Checkboxes
           targets: 1,
+          orderable: false,
+          searchable: false,
+          responsivePriority: 3,
+          checkboxes: true,
+          render: function () {
+            return '<input type="checkbox" class="dt-checkboxes form-check-input">';
+          },
+          checkboxes: {
+            selectAllRender: '<input type="checkbox" class="form-check-input">'
+          }
+        },
+        {
+          // order order number
+          targets: 2,
           responsivePriority: 4,
           render: function (data, type, full, meta) {
             var $id = full['order'];
@@ -53,7 +68,7 @@ $(function () {
         },
         {
           // date
-          targets: 2,
+          targets: 3,
           render: function (data, type, full, meta) {
             var date = new Date(full.date); // convert the date string to a Date object
             var formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -62,12 +77,12 @@ $(function () {
         },
         {
           // status
-          targets: 3,
+          targets: 4,
           render: function (data, type, full, meta) {
             var $status = full['status'];
 
             return (
-              '<span class="badge ' +
+              '<span class="badge rounded-pill ' +
               statusObj[$status].class +
               '" text-capitalized>' +
               statusObj[$status].title +
@@ -77,7 +92,7 @@ $(function () {
         },
         {
           // spent
-          targets: 4,
+          targets: 5,
           render: function (data, type, full, meta) {
             var $spent = full['spent'];
 
@@ -92,8 +107,8 @@ $(function () {
           orderable: false,
           render: function (data, type, full, meta) {
             return (
-              '<div class="text-xxl-center">' +
-              '<button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>' +
+              '<div>' +
+              '<button class="btn btn-sm btn-icon btn-text-secondary waves-effect rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ri-more-2-line ri-22px"></i></button>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
               '<a href="javascript:;" class="dropdown-item">View</a>' +
               '<a href="javascript:;" class="dropdown-item  delete-record">Delete</a>' +
@@ -103,12 +118,12 @@ $(function () {
           }
         }
       ],
-      order: [[1, 'desc']],
+      order: [[2, 'desc']],
       dom:
-        '<"card-header flex-column flex-md-row py-0 mt-6 mt-md-0"<"head-label text-center pt-2 pt-md-0">f' +
+        '<"card-header d-flex flex-wrap py-0 pt-5 pt-sm-0 flex-column flex-sm-row"<"head-label text-center me-4 ms-1">f' +
         '>t' +
-        '<"row mx-6"' +
-        '<"col-md-12 col-xxl-6 text-center text-xl-start pb-2 pb-xxl-0 pe-0"i>' +
+        '<"row mx-4"' +
+        '<"col-md-12 col-xxl-6 text-center text-xxl-start pb-2 pb-xxl-0 pe-0"i>' +
         '<"col-md-12 col-xxl-6"p>' +
         '>',
       lengthMenu: [6, 30, 50, 70, 100],
@@ -117,8 +132,8 @@ $(function () {
         search: '',
         searchPlaceholder: 'Search order',
         paginate: {
-          next: '<i class="bx bx-chevron-right bx-18px"></i>',
-          previous: '<i class="bx bx-chevron-left bx-18px"></i>'
+          next: '<i class="ri-arrow-right-s-line"></i>',
+          previous: '<i class="ri-arrow-left-s-line"></i>'
         }
       },
       // Buttons with Dropdown

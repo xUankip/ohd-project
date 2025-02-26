@@ -156,12 +156,14 @@
           FormValidation2.revalidateField('formValidationLanguage');
         });
       });
+      handleBootstrapSelectEvents();
     }
 
     // select2
     if (select2.length) {
       select2.each(function () {
         var $this = $(this);
+        select2Focus($this);
         $this.wrap('<div class="position-relative"></div>');
         $this
           .select2({

@@ -92,15 +92,15 @@ $(function () {
             // Creates full output for row
             var $row_output =
               '<div class="d-flex justify-content-start align-items-center customer-name">' +
-              '<div class="avatar-wrapper">' +
-              '<div class="avatar avatar-sm me-4">' +
+              '<div class="avatar-wrapper me-4">' +
+              '<div class="avatar avatar-sm">' +
               $output +
               '</div>' +
               '</div>' +
               '<div class="d-flex flex-column">' +
               '<a href="' +
               customerView +
-              '" class="text-heading"><span class="fw-medium">' +
+              '" class="text-heading"><span class="fw-medium text-truncate">' +
               $name +
               '</span></a>' +
               '<small class="text-nowrap">' +
@@ -117,7 +117,7 @@ $(function () {
           render: function (data, type, full, meta) {
             var $role = full['referred_id'];
 
-            return '<span>' + $role + '</span>';
+            return '<span class="text-heading">' + $role + '</span>';
           }
         },
 
@@ -128,7 +128,7 @@ $(function () {
             var $status = full['status'];
 
             return (
-              '<span class="badge ' +
+              '<span class="badge rounded-pill ' +
               statusObj[$status].class +
               '" text-capitalized>' +
               statusObj[$status].title +
@@ -142,7 +142,7 @@ $(function () {
           render: function (data, type, full, meta) {
             var $plan = full['value'];
 
-            return '<span>' + $plan + '</span>';
+            return '<span  class="text-heading">' + $plan + '</span>';
           }
         },
         {
@@ -151,35 +151,35 @@ $(function () {
           render: function (data, type, full, meta) {
             var $earn = full['earning'];
 
-            return '<span class="text-heading">' + $earn + '</span > ';
+            return '<span  class="text-heading">' + $earn + '</span > ';
           }
         }
       ],
       order: [[2, 'asc']],
       dom:
-        '<"card-header d-flex flex-column flex-sm-row align-items-center py-0"<"head-label"><"d-flex align-items-center justify-content-end"l<"dt-action-buttons"B>>' +
+        '<"card-header d-flex flex-column flex-md-row pt-md-0 pb-0 align-items-center"<"head-label"><"d-flex align-items-sm-center justify-content-end mt-0 gap-4"l<"dt-action-buttons"B>>' +
         '>t' +
-        '<"row"' +
+        '<"row mx-2"' +
         '<"col-sm-12 col-md-6"i>' +
         '<"col-sm-12 col-md-6"p>' +
         '>',
       language: {
         sLengthMenu: '_MENU_',
         paginate: {
-          next: '<i class="bx bx-chevron-right bx-18px"></i>',
-          previous: '<i class="bx bx-chevron-left bx-18px"></i>'
+          next: '<i class="ri-arrow-right-s-line"></i>',
+          previous: '<i class="ri-arrow-left-s-line"></i>'
         }
       },
       // Buttons with Dropdown
       buttons: [
         {
           extend: 'collection',
-          className: 'btn btn-label-secondary dropdown-toggle',
-          text: '<i class="bx bx-export bx-sm me-2"></i>Export',
+          className: 'btn btn-primary dropdown-toggle waves-effect waves-light',
+          text: '<i class="ri-download-line ri-16px me-1"></i> <span class="d-none d-sm-inline-block">Export</span>',
           buttons: [
             {
               extend: 'print',
-              text: '<i class="bx bx-printer me-2" ></i>Print',
+              text: '<i class="ri-printer-line me-1" ></i>Print',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [1, 2, 3, 4, 5],
@@ -190,7 +190,7 @@ $(function () {
                     var el = $.parseHTML(inner);
                     var result = '';
                     $.each(el, function (index, item) {
-                      if (item.classList !== undefined && item.classList.contains('user-name')) {
+                      if (item.classList !== undefined && item.classList.contains('customer-name')) {
                         result = result + item.lastChild.firstChild.textContent;
                       } else if (item.innerText === undefined) {
                         result = result + item.textContent;
@@ -216,7 +216,7 @@ $(function () {
             },
             {
               extend: 'csv',
-              text: '<i class="bx bx-file me-2" ></i>Csv',
+              text: '<i class="ri-file-text-line me-1" ></i>Csv',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [1, 2, 3, 4, 5],
@@ -227,7 +227,7 @@ $(function () {
                     var el = $.parseHTML(inner);
                     var result = '';
                     $.each(el, function (index, item) {
-                      if (item.classList !== undefined && item.classList.contains('user-name')) {
+                      if (item.classList !== undefined && item.classList.contains('customer-name')) {
                         result = result + item.lastChild.firstChild.textContent;
                       } else if (item.innerText === undefined) {
                         result = result + item.textContent;
@@ -240,7 +240,7 @@ $(function () {
             },
             {
               extend: 'excel',
-              text: '<i class="bx bxs-file-export me-2"></i>Excel',
+              text: '<i class="ri-file-excel-line me-1"></i>Excel',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [1, 2, 3, 4, 5],
@@ -251,7 +251,7 @@ $(function () {
                     var el = $.parseHTML(inner);
                     var result = '';
                     $.each(el, function (index, item) {
-                      if (item.classList !== undefined && item.classList.contains('user-name')) {
+                      if (item.classList !== undefined && item.classList.contains('customer-name')) {
                         result = result + item.lastChild.firstChild.textContent;
                       } else if (item.innerText === undefined) {
                         result = result + item.textContent;
@@ -264,7 +264,7 @@ $(function () {
             },
             {
               extend: 'pdf',
-              text: '<i class="bx bxs-file-pdf me-2"></i>Pdf',
+              text: '<i class="ri-file-pdf-line me-1"></i>Pdf',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [1, 2, 3, 4, 5],
@@ -275,7 +275,7 @@ $(function () {
                     var el = $.parseHTML(inner);
                     var result = '';
                     $.each(el, function (index, item) {
-                      if (item.classList !== undefined && item.classList.contains('user-name')) {
+                      if (item.classList !== undefined && item.classList.contains('customer-name')) {
                         result = result + item.lastChild.firstChild.textContent;
                       } else if (item.innerText === undefined) {
                         result = result + item.textContent;
@@ -288,7 +288,7 @@ $(function () {
             },
             {
               extend: 'copy',
-              text: '<i class="bx bx-copy me-2" ></i>Copy',
+              text: '<i class="ri-file-copy-line me-1"></i>Copy',
               className: 'dropdown-item',
               exportOptions: {
                 columns: [1, 2, 3, 4, 5],
@@ -299,7 +299,7 @@ $(function () {
                     var el = $.parseHTML(inner);
                     var result = '';
                     $.each(el, function (index, item) {
-                      if (item.classList !== undefined && item.classList.contains('user-name')) {
+                      if (item.classList !== undefined && item.classList.contains('customer-name')) {
                         result = result + item.lastChild.firstChild.textContent;
                       } else if (item.innerText === undefined) {
                         result = result + item.textContent;
@@ -347,15 +347,7 @@ $(function () {
         }
       }
     });
-    $('div.head-label').html('<h5 class="card-title mb-0 text-nowrap mt-6 mt-sm-0">Referred users</h5>');
-    $('.dataTables_length').addClass('me-2 ms-n2 ms-sm-0');
-    $('.dt-action-buttons').addClass('pt-0');
+    $('div.head-label').html('<h5 class="card-title text-nowrap mb-0">Referred users</h5>');
+    $('.dt-action-buttons').addClass('pt-0 mt-5 mt-sm-0');
   }
-
-  // Filter form control to default size
-  // ? setTimeout used for multilingual table initialization
-  setTimeout(() => {
-    $('.dataTables_filter .form-control').removeClass('form-control-sm');
-    $('.dataTables_length .form-select').removeClass('form-select-sm');
-  }, 300);
 });

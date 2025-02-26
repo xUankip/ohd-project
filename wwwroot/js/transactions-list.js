@@ -33,31 +33,35 @@ $(document).ready(function () {
     displayLength: 7,
     dom:
       // Datatable DOM positioning
-      '<"mx-6 d-flex flex-wrap flex-column flex-md-row gap-sm-2 pb-6 py-sm-0"' +
-      '<"d-flex align-items-center me-auto mb-n6 mb-md-0"l>' +
-      '<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex flex-sm-row align-items-center justify-content-md-end gap-sm-2 ms-n2 ms-md-2 flex-wrap flex-sm-nowrap"fB>' +
+      '<"row pb-2 pb-md-0"' +
+      '<"col-md-2"<l>>' +
+      '<"col-md-10"<"dt-action-buttons d-flex align-items-center justify-content-end flex-md-row flex-column gap-md-3 mb-3 mb-md-0"fB>>' +
       '>t' +
       '<"row"' +
       '<"col-sm-12 col-md-6"i>' +
-      '<"col-sm-12 col-md-6 pb-6 ps-0"p>' +
+      '<"col-sm-12 col-md-6"p>' +
       '>',
     lengthMenu: [7, 10, 15, 20],
     language: {
-      searchPlaceholder: 'Search..',
+      sLengthMenu: '_MENU_',
       search: '',
-      lengthMenu: '_MENU_'
+      searchPlaceholder: 'Search Transaction',
+      paginate: {
+        next: '<i class="ri-arrow-right-s-line"></i>',
+        previous: '<i class="ri-arrow-left-s-line"></i>'
+      }
     },
     // Buttons with Dropdown
     buttons: [
       {
         extend: 'collection',
-        className: 'btn btn-label-secondary dropdown-toggle shadow-none ms-2 me-0 me-md-4 mx-sm-2',
-        text: '<i class="bx bx-export me-2 align-bottom"></i>Export',
+        className: 'btn btn-outline-secondary dropdown-toggle me-4 waves-effect waves-light',
+        text: '<i class="ri-download-line ri-16px me-1"></i>Export',
         buttons: [
           {
             extend: 'print',
             title: 'Transactions Data',
-            text: '<i class="bx bx-printer me-2" ></i>Print',
+            text: '<i class="ri-printer-line me-1" ></i>Print',
             className: 'dropdown-item',
             customize: function (win) {
               //customize print view for dark
@@ -83,7 +87,7 @@ $(document).ready(function () {
           {
             extend: 'csv',
             title: 'Transactions',
-            text: '<i class="bx bx-file me-2" ></i>Csv',
+            text: '<i class="ri-file-text-line me-1" ></i>Csv',
             className: 'dropdown-item',
             exportOptions: {
               columns: [1, 2, 3, 4, 5, 6]
@@ -92,7 +96,7 @@ $(document).ready(function () {
           {
             extend: 'excel',
             title: 'Transactions',
-            text: '<i class="bx bxs-file-export me-1"></i>Excel',
+            text: '<i class="ri-file-excel-line me-1"></i>Excel',
             className: 'dropdown-item',
             exportOptions: {
               columns: [1, 2, 3, 4, 5, 6]
@@ -101,7 +105,7 @@ $(document).ready(function () {
           {
             extend: 'pdf',
             title: 'Transactions',
-            text: '<i class="bx bxs-file-pdf me-2"></i>Pdf',
+            text: '<i class="ri-file-pdf-line me-1"></i>Pdf',
             className: 'dropdown-item',
             exportOptions: {
               columns: [1, 2, 3, 4, 5, 6]
@@ -110,7 +114,7 @@ $(document).ready(function () {
           {
             extend: 'copy',
             title: 'Transactions',
-            text: '<i class="bx bx-copy me-2" ></i>Copy',
+            text: '<i class="ri-file-copy-line me-1"></i>Copy',
             className: 'dropdown-item',
             exportOptions: {
               columns: [1, 2, 3, 4, 5, 6]
@@ -120,8 +124,8 @@ $(document).ready(function () {
       },
       {
         // For Create Transactions Button (Add New Transactions)
-        text: '<i class="bx bx-plus me-0 me-md-2 align-center"></i><span class="d-none d-md-inline-block">Add Transaction</span>',
-        className: 'add-new btn btn-primary',
+        text: '<i class="ri-add-line ri-16px me-0 me-sm-1_5"></i><span class="d-none d-sm-inline-block">Add Transaction</span>',
+        className: 'add-new btn btn-primary waves-effect waves-light',
         action: function (e, dt, button, config) {
           window.location.href = '/Transactions/Add';
         }
@@ -183,18 +187,12 @@ $(document).ready(function () {
         responsivePriority: 1
       }
     ],
-    language: {
-      paginate: {
-        next: '<i class="bx bx-chevron-right bx-18px"></i>',
-        previous: '<i class="bx bx-chevron-left bx-18px"></i>'
-      }
-    },
     responsive: {
       details: {
         display: $.fn.dataTable.Responsive.display.modal({
           header: function (row) {
             var data = row.data();
-            return 'Details of ' + data[2];
+            return 'Transaction details of ' + data[2];
           }
         }),
         type: 'column',
@@ -221,7 +219,7 @@ $(document).ready(function () {
             return '';
           }).join('');
 
-          return data ? $('<table class="table"/><tbody />').append(data) : false;
+          return data ? $('<table class="table mt-3"/><tbody />').append(data) : false;
         }
       }
     }
@@ -230,9 +228,7 @@ $(document).ready(function () {
 
 // Filter Form styles to default size after DataTable initialization
 setTimeout(() => {
-  $('.dataTables_filter .form-control').removeClass('form-control-sm');
-  $('.dataTables_filter .form-control').addClass('ms-2');
-  $('.dataTables_length .form-select').removeClass('form-select-sm');
-  $('.dt-buttons').addClass('d-flex align-items-center gap-4 gap-md-0');
-  $('#transactionsTable_length').addClass('mx-n2');
+  $('.dataTables_filter input').addClass('ms-0');
+  $('div.dataTables_wrapper .dataTables_filter').addClass('mt-0 mt-md-5');
+  $('div.dataTables_wrapper div.dataTables_info').addClass('text-start text-sm-center text-md-start');
 }, 300);

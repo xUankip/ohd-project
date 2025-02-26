@@ -22,7 +22,10 @@
       selectedType = document.querySelector('#selectType').value;
       selectedAnimation = document.querySelector('#selectAnimation').value;
 
-      toastAnimationExample.classList.add(selectedType, selectedAnimation);
+      toastAnimationExample.querySelectorAll('i[class^="ri-"]').forEach(function (element) {
+        element.classList.add(selectedType);
+      });
+      toastAnimationExample.classList.add(selectedAnimation);
       toastAnimation = new bootstrap.Toast(toastAnimationExample);
       toastAnimation.show();
     };
@@ -32,11 +35,16 @@
   function toastDispose(toast) {
     if (toast && toast._element !== null) {
       if (toastPlacementExample) {
-        toastPlacementExample.classList.remove(selectedType);
+        toastPlacementExample.querySelectorAll('i[class^="ri-"]').forEach(function (element) {
+          element.classList.remove(selectedType);
+        });
         DOMTokenList.prototype.remove.apply(toastPlacementExample.classList, selectedPlacement);
       }
       if (toastAnimationExample) {
-        toastAnimationExample.classList.remove(selectedType, selectedAnimation);
+        toastAnimationExample.querySelectorAll('i[class^="ri-"]').forEach(function (element) {
+          element.classList.remove(selectedType);
+        });
+        toastAnimationExample.classList.remove(selectedAnimation);
       }
       toast.dispose();
     }
@@ -50,7 +58,9 @@
       selectedType = document.querySelector('#selectTypeOpt').value;
       selectedPlacement = document.querySelector('#selectPlacement').value.split(' ');
 
-      toastPlacementExample.classList.add(selectedType);
+      toastPlacementExample.querySelectorAll('i[class^="ri-"]').forEach(function (element) {
+        element.classList.add(selectedType);
+      });
       DOMTokenList.prototype.add.apply(toastPlacementExample.classList, selectedPlacement);
       toastPlacement = new bootstrap.Toast(toastPlacementExample);
       toastPlacement.show();

@@ -25,9 +25,9 @@ $(function () {
         { data: 'id' },
         { data: 'id' },
         { data: 'full_name' },
+        { data: 'email' },
         { data: 'role' },
         { data: 'current_plan' },
-        { data: 'billing' },
         { data: 'status' },
         { data: '' }
       ],
@@ -61,7 +61,7 @@ $(function () {
           responsivePriority: 4,
           render: function (data, type, full, meta) {
             var $name = full['full_name'],
-              $email = full['email'],
+              $user = full['username'],
               $image = full['avatar'];
             if ($image) {
               // For Avatar image
@@ -88,11 +88,11 @@ $(function () {
               '<div class="d-flex flex-column">' +
               '<a href="' +
               userView +
-              '" class="text-heading text-truncate"><span class="fw-medium">' +
+              '" class="text-heading"><span class="fw-medium text-truncate">' +
               $name +
               '</span></a>' +
-              '<small>@' +
-              $email +
+              '<small>' +
+              $user +
               '</small>' +
               '</div>' +
               '</div>';
@@ -100,16 +100,24 @@ $(function () {
           }
         },
         {
-          // User Role
+          // User email
           targets: 3,
+          render: function (data, type, full, meta) {
+            var $email = full['email'];
+            return '<span >' + $email + '</span>';
+          }
+        },
+        {
+          // User Role
+          targets: 4,
           render: function (data, type, full, meta) {
             var $role = full['role'];
             var roleBadgeObj = {
-              Subscriber: '<i class="bx bx-crown text-primary me-2"></i>',
-              Author: '<i class="bx bx-edit text-warning me-2"></i>',
-              Maintainer: '<i class="bx bx-user text-success me-2"></i>',
-              Editor: '<i class="bx bx-pie-chart-alt text-info me-2"></i>',
-              Admin: '<i class="bx bx-desktop text-danger me-2"></i>'
+              Subscriber: '<i class="ri-user-line ri-22px text-primary me-2"></i>',
+              Author: '<i class="ri-vip-crown-line ri-22px text-warning me-2"></i>',
+              Maintainer: '<i class="ri-pie-chart-line ri-22px text-success me-2"></i>',
+              Editor: '<i class="ri-edit-box-line ri-22px text-info me-2"></i>',
+              Admin: '<i class="ri-computer-line ri-22px text-danger me-2"></i>'
             };
             return (
               "<span class='text-truncate d-flex align-items-center text-heading'>" +
@@ -121,7 +129,7 @@ $(function () {
         },
         {
           // Plans
-          targets: 4,
+          targets: 5,
           render: function (data, type, full, meta) {
             var $plan = full['current_plan'];
 
@@ -135,7 +143,7 @@ $(function () {
             var $status = full['status'];
 
             return (
-              '<span class="badge ' +
+              '<span class="badge rounded-pill ' +
               statusObj[$status].class +
               '" text-capitalized>' +
               statusObj[$status].title +
@@ -152,14 +160,14 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="d-flex align-items-center">' +
-              '<a href="javascript:;" class="btn btn-icon delete-record"><i class="bx bx-trash bx-md"></i></a>' +
+              '<button class="btn btn-sm btn-icon btn-text-secondary rounded-pill delete-record waves-effect waves-light"><i class="ri-delete-bin-7-line ri-22px"></i></button>' +
               '<a href="' +
               userView +
-              '" class="btn btn-icon"><i class="bx bx-show bx-md"></i></a>' +
-              '<a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded bx-md"></i></a>' +
+              '" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light"><i class="ri-eye-line ri-22px"></i></a>' +
+              '<button class="btn btn-sm btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow waves-effect waves-light" data-bs-toggle="dropdown"><i class="ri-more-2-fill ri-22px"></i></button>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
-              '<a href="javascript:;" class="dropdown-item">Edit</a>' +
-              '<a href="javascript:;" class="dropdown-item">Suspend</a>' +
+              '<a href="javascript:0;" class="dropdown-item">View</a>' +
+              '<a href="javascript:0;" class="dropdown-item">Suspend</a>' +
               '</div>' +
               '</div>'
             );
@@ -168,23 +176,166 @@ $(function () {
       ],
       order: [[2, 'desc']],
       dom:
-        '<"row"' +
-        '<"col-sm-12 col-md-4 col-lg-6" l>' +
-        '<"col-sm-12 col-md-8 col-lg-6"<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-md-end justify-content-center align-items-center flex-sm-nowrap flex-wrap flex-sm-row flex-column"<"me-4"f><"user_role w-px-200 me-sm-4 mb-6 mb-sm-0"><"user_plan w-px-200 mb-6 mb-sm-0">>>' +
+        '<"row mx-1"' +
+        '<"col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start gap-4"l<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start"B>>' +
+        '<"col-sm-12 col-md-7"<"dt-action-buttons d-flex align-items-center justify-content-md-end justify-content-center flex-column flex-sm-row flex-nowrap"<"me-1 me-sm-4 mt-n5 mt-md-0"f><"user_role w-px-200 pb-5 pb-md-0">>>' +
         '>t' +
-        '<"row"' +
+        '<"row mx-1"' +
         '<"col-sm-12 col-md-6"i>' +
         '<"col-sm-12 col-md-6"p>' +
         '>',
       language: {
-        sLengthMenu: '_MENU_',
+        sLengthMenu: 'Show _MENU_',
         search: '',
         searchPlaceholder: 'Search User',
         paginate: {
-          next: '<i class="bx bx-chevron-right bx-18px"></i>',
-          previous: '<i class="bx bx-chevron-left bx-18px"></i>'
+          next: '<i class="ri-arrow-right-s-line"></i>',
+          previous: '<i class="ri-arrow-left-s-line"></i>'
         }
       },
+      // for buttons
+      buttons: [
+        {
+          extend: 'collection',
+          className: 'btn btn-outline-secondary dropdown-toggle me-4 waves-effect waves-light',
+          text: '<i class="ri-download-line ri-16px me-1"></i> <span class="d-none d-sm-inline-block">Export</span>',
+          buttons: [
+            {
+              extend: 'print',
+              text: '<i class="ri-printer-line me-1" ></i>Print',
+              className: 'dropdown-item',
+              exportOptions: {
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be print
+                format: {
+                  body: function (inner, coldex, rowdex) {
+                    if (inner.length <= 0) return inner;
+                    var el = $.parseHTML(inner);
+                    var result = '';
+                    $.each(el, function (index, item) {
+                      if (item.classList !== undefined && item.classList.contains('user-name')) {
+                        result = result + item.lastChild.firstChild.textContent;
+                      } else if (item.innerText === undefined) {
+                        result = result + item.textContent;
+                      } else result = result + item.innerText;
+                    });
+                    return result;
+                  }
+                }
+              },
+              customize: function (win) {
+                //customize print view for dark
+                $(win.document.body)
+                  .css('color', headingColor)
+                  .css('border-color', borderColor)
+                  .css('background-color', bodyBg);
+                $(win.document.body)
+                  .find('table')
+                  .addClass('compact')
+                  .css('color', 'inherit')
+                  .css('border-color', 'inherit')
+                  .css('background-color', 'inherit');
+              }
+            },
+            {
+              extend: 'csv',
+              text: '<i class="ri-file-text-line me-1" ></i>Csv',
+              className: 'dropdown-item',
+              exportOptions: {
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be display
+                format: {
+                  body: function (inner, coldex, rowdex) {
+                    if (inner.length <= 0) return inner;
+                    var el = $.parseHTML(inner);
+                    var result = '';
+                    $.each(el, function (index, item) {
+                      if (item.classList !== undefined && item.classList.contains('user-name')) {
+                        result = result + item.lastChild.firstChild.textContent;
+                      } else if (item.innerText === undefined) {
+                        result = result + item.textContent;
+                      } else result = result + item.innerText;
+                    });
+                    return result;
+                  }
+                }
+              }
+            },
+            {
+              extend: 'excel',
+              text: '<i class="ri-file-excel-line me-1"></i>Excel',
+              className: 'dropdown-item',
+              exportOptions: {
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be display
+                format: {
+                  body: function (inner, coldex, rowdex) {
+                    if (inner.length <= 0) return inner;
+                    var el = $.parseHTML(inner);
+                    var result = '';
+                    $.each(el, function (index, item) {
+                      if (item.classList !== undefined && item.classList.contains('user-name')) {
+                        result = result + item.lastChild.firstChild.textContent;
+                      } else if (item.innerText === undefined) {
+                        result = result + item.textContent;
+                      } else result = result + item.innerText;
+                    });
+                    return result;
+                  }
+                }
+              }
+            },
+            {
+              extend: 'pdf',
+              text: '<i class="ri-file-pdf-line me-1"></i>Pdf',
+              className: 'dropdown-item',
+              exportOptions: {
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be display
+                format: {
+                  body: function (inner, coldex, rowdex) {
+                    if (inner.length <= 0) return inner;
+                    var el = $.parseHTML(inner);
+                    var result = '';
+                    $.each(el, function (index, item) {
+                      if (item.classList !== undefined && item.classList.contains('user-name')) {
+                        result = result + item.lastChild.firstChild.textContent;
+                      } else if (item.innerText === undefined) {
+                        result = result + item.textContent;
+                      } else result = result + item.innerText;
+                    });
+                    return result;
+                  }
+                }
+              }
+            },
+            {
+              extend: 'copy',
+              text: '<i class="ri-file-copy-line me-1"></i>Copy',
+              className: 'dropdown-item',
+              exportOptions: {
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be display
+                format: {
+                  body: function (inner, coldex, rowdex) {
+                    if (inner.length <= 0) return inner;
+                    var el = $.parseHTML(inner);
+                    var result = '';
+                    $.each(el, function (index, item) {
+                      if (item.classList !== undefined && item.classList.contains('user-name')) {
+                        result = result + item.lastChild.firstChild.textContent;
+                      } else if (item.innerText === undefined) {
+                        result = result + item.textContent;
+                      } else result = result + item.innerText;
+                    });
+                    return result;
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
       // For responsive popup
       responsive: {
         details: {
@@ -221,11 +372,11 @@ $(function () {
       initComplete: function () {
         // Adding role filter once table initialized
         this.api()
-          .columns(3)
+          .columns(4)
           .every(function () {
             var column = this;
             var select = $(
-              '<select id="UserRole" class="form-select text-capitalize"><option value=""> Select Role </option></select>'
+              '<select id="UserRole" class="form-select text-capitalize form-select-sm"><option value=""> Select Role </option></select>'
             )
               .appendTo('.user_role')
               .on('change', function () {
@@ -241,43 +392,17 @@ $(function () {
                 select.append('<option value="' + d + '" class="text-capitalize">' + d + '</option>');
               });
           });
-        this.api()
-          .columns(4)
-          .every(function () {
-            var column = this;
-            var select = $(
-              '<select id="Userplan" class="form-select text-capitalize"><option value=""> Select Plan </option></select>'
-            )
-              .appendTo('.user_plan')
-              .on('change', function () {
-                var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                column.search(val ? '^' + val + '$' : '', true, false).draw();
-              });
-
-            column
-              .data()
-              .unique()
-              .sort()
-              .each(function (d, j) {
-                select.append('<option value="' + d + '" class="text-capitalize">' + d + '</option>');
-              });
-          });
       }
     });
+    $('.add-new').html(
+      "<button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#editUser'><i class='mdi mdi-plus me-0 me-sm-1'></i><span class= 'd-none d-sm-inline-block'> Add User </span ></button>"
+    );
   }
 
   // Delete Record
   $('.datatables-users tbody').on('click', '.delete-record', function () {
     dt_User.row($(this).parents('tr')).remove().draw();
   });
-  // Filter form control to default size
-  // ? setTimeout used for multilingual table initialization
-  setTimeout(() => {
-    $('.dataTables_filter .form-control').removeClass('form-control-sm');
-    $('.dataTables_length .form-select').removeClass('form-select-sm');
-    $('.dataTables_length .form-select').addClass('mx-0');
-    $('.dataTables_length').addClass('mb-0 mb-md-6');
-  }, 300);
 });
 
 (function () {

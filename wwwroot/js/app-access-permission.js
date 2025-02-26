@@ -55,12 +55,20 @@ $(function () {
             var $assignedTo = full['assigned_to'],
               $output = '';
             var roleBadgeObj = {
-              Admin: '<a href="' + userList + '"><span class="badge  bg-label-primary me-4">Administrator</span></a>',
-              Manager: '<a href="' + userList + '"><span class="badge  bg-label-warning me-4">Manager</span></a>',
-              Users: '<a href="' + userList + '"><span class="badge  bg-label-success me-4">Users</span></a>',
-              Support: '<a href="' + userList + '"><span class="badge  bg-label-info me-4">Support</span></a>',
+              Admin:
+                '<a href="' +
+                userList +
+                '"><span class="badge rounded-pill bg-label-primary me-4">Administrator</span></a>',
+              Manager:
+                '<a href="' + userList + '"><span class="badge rounded-pill bg-label-warning me-4">Manager</span></a>',
+              Users:
+                '<a href="' + userList + '"><span class="badge rounded-pill bg-label-success me-4">Users</span></a>',
+              Support:
+                '<a href="' + userList + '"><span class="badge rounded-pill bg-label-info me-4">Support</span></a>',
               Restricted:
-                '<a href="' + userList + '"><span class="badge  bg-label-danger me-4">Restricted User</span></a>'
+                '<a href="' +
+                userList +
+                '"><span class="badge rounded-pill bg-label-danger me-4">Restricted User</span></a>'
             };
             for (var i = 0; i < $assignedTo.length; i++) {
               var val = $assignedTo[i];
@@ -87,12 +95,8 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="d-flex align-items-center">' +
-              '<span class="text-nowrap"><button class="btn btn-icon me-1" data-bs-target="#editPermissionModal" data-bs-toggle="modal" data-bs-dismiss="modal"><i class="bx bx-edit bx-md"></i></button>' +
-              '<a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded bx-md"></i></a>' +
-              '<div class="dropdown-menu dropdown-menu-end m-0">' +
-              '<a href="javascript:;" class="dropdown-item">Edit</a>' +
-              '<a href="javascript:;" class="dropdown-item">Suspend</a>' +
-              '</div>' +
+              '<button class="btn btn-sm btn-icon btn-text-secondary rounded-pill delete-record text-body waves-effect waves-light me-1"><i class="ri-delete-bin-7-line ri-22px"></i></button>' +
+              '<span class="text-nowrap"><button class="btn btn-sm btn-icon btn-text-secondary text-body rounded-pill waves-effect waves-light" data-bs-target="#editPermissionModal" data-bs-toggle="modal" data-bs-dismiss="modal"><i class="ri-edit-box-line ri-22px"></i></button></span>' +
               '</div>'
             );
           }
@@ -100,9 +104,9 @@ $(function () {
       ],
       order: [[1, 'asc']],
       dom:
-        '<"row"' +
-        '<"col-sm-12 col-md-3" l>' +
-        '<"col-sm-12 col-md-9"<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-md-end justify-content-center flex-wrap"<"me-4 mt-n6 mt-md-0"f>B>>' +
+        '<"row mx-1"' +
+        '<"col-sm-12 col-md-3 mb-n5" l>' +
+        '<"col-sm-12 col-md-9"<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-md-end justify-content-center flex-wrap me-1"<"me-4"f>B>>' +
         '>t' +
         '<"row mx-1"' +
         '<"col-sm-12 col-md-6"i>' +
@@ -113,15 +117,15 @@ $(function () {
         search: '',
         searchPlaceholder: 'Search Permissions',
         paginate: {
-          next: '<i class="bx bx-chevron-right bx-18px"></i>',
-          previous: '<i class="bx bx-chevron-left bx-18px"></i>'
+          next: '<i class="ri-arrow-right-s-line"></i>',
+          previous: '<i class="ri-arrow-left-s-line"></i>'
         }
       },
-      // Buttons with Dropdown
+      // Buttons for modal
       buttons: [
         {
-          text: '<i class="bx bx-plus bx-xs me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Add Permission</span>',
-          className: 'add-new btn btn-primary mb-6 mb-md-0',
+          text: '<i class="ri-add-line me-0 me-sm-1"></i><span class="d-none d-sm-inline-block">Add Permission</span>',
+          className: 'btn btn-primary mb-5 mb-md-0 waves-effect waves-light',
           attr: {
             'data-bs-toggle': 'modal',
             'data-bs-target': '#addPermissionModal'
@@ -191,10 +195,8 @@ $(function () {
     });
   }
 
-  // Filter form control to default size
-  // ? setTimeout used for multilingual table initialization
-  setTimeout(() => {
-    $('.dataTables_filter .form-control').removeClass('form-control-sm');
-    $('.dataTables_length .form-select').removeClass('form-select-sm');
-  }, 300);
+  // Delete Record
+  $('.datatables-permissions tbody').on('click', '.delete-record', function () {
+    dt_permission.row($(this).parents('tr')).remove().draw();
+  });
 });

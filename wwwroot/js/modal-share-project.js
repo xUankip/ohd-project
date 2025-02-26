@@ -20,7 +20,7 @@ $(function () {
           '<img src="' +
           assetsPath +
           $(option.element).data('image') +
-          '" class="rounded-circle">' +
+          '" class="rounded">' +
           '</div>' +
           '<div class="name">' +
           $(option.element).data('name') +
@@ -28,6 +28,7 @@ $(function () {
           '</div>';
         return optionEle;
       }
+      select2Focus(select2ShareProject);
       select2ShareProject.wrap('<div class="position-relative"></div>').select2({
         dropdownParent: shareProject,
         templateResult: renderAvatar,

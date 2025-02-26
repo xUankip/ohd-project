@@ -12,6 +12,7 @@ $(function () {
   if (select2.length) {
     select2.each(function () {
       var $this = $(this);
+      select2Focus($this);
       $this.wrap('<div class="position-relative"></div>').select2({
         dropdownParent: $this.parent(),
         placeholder: $this.data('placeholder'), // for dynamic placeholder
@@ -31,8 +32,8 @@ $(function () {
 
   const videoPlayer2 = new Plyr('#guitar-video-player-2');
 
-  document.getElementsByClassName('plyr')[0].style.borderRadius = '6px';
-  document.getElementsByClassName('plyr')[1].style.borderRadius = '6px';
+  document.getElementsByClassName('plyr')[0].style.borderRadius = '4px';
+  document.getElementsByClassName('plyr')[1].style.borderRadius = '4px';
   document.getElementsByClassName('plyr__poster')[0].style.display = 'none';
   document.getElementsByClassName('plyr__poster')[1].style.display = 'none';
 })();

@@ -29,18 +29,16 @@
       bg: '#f8d3ff'
     },
     donut: {
-      series1: '#fee802',
-      series2: '#F1F0F2',
-      series3: '#826bf8',
-      series4: '#3fd0bd'
+      series1: '#fdd835',
+      series2: '#32baff',
+      series3: '#ffa1a1',
+      series4: '#7367f0',
+      series5: '#29dac7'
     },
     area: {
-      series1: '#29dac7',
-      series2: '#60f2ca',
-      series3: '#a5f8cd'
-    },
-    bar: {
-      bg: '#1D9FF2'
+      series1: '#ab7efd',
+      series2: '#b992fe',
+      series3: '#e0cffe'
     }
   };
 
@@ -67,6 +65,7 @@
     areaChartConfig = {
       chart: {
         height: 400,
+        fontFamily: 'Inter',
         type: 'area',
         parentHeightOffset: 0,
         toolbar: {
@@ -84,6 +83,11 @@
         show: true,
         position: 'top',
         horizontalAlign: 'start',
+        fontSize: '13px',
+        markers: {
+          width: 10,
+          height: 10
+        },
         labels: {
           colors: legendColor,
           useSeriesColors: false
@@ -169,6 +173,7 @@
     barChartConfig = {
       chart: {
         height: 400,
+        fontFamily: 'Inter',
         type: 'bar',
         stacked: true,
         parentHeightOffset: 0,
@@ -198,6 +203,11 @@
         show: true,
         position: 'top',
         horizontalAlign: 'start',
+        fontSize: '13px',
+        markers: {
+          width: 10,
+          height: 10
+        },
         labels: {
           colors: legendColor,
           useSeriesColors: false
@@ -264,6 +274,7 @@
     scatterChartConfig = {
       chart: {
         height: 400,
+        fontFamily: 'Inter',
         type: 'scatter',
         zoom: {
           enabled: true,
@@ -286,6 +297,11 @@
         show: true,
         position: 'top',
         horizontalAlign: 'start',
+        fontSize: '13px',
+        markers: {
+          width: 10,
+          height: 10
+        },
         labels: {
           colors: legendColor,
           useSeriesColors: false
@@ -386,6 +402,7 @@
     lineChartConfig = {
       chart: {
         height: 400,
+        fontFamily: 'Inter',
         type: 'line',
         parentHeightOffset: 0,
         zoom: {
@@ -480,6 +497,7 @@
     horizontalBarChartConfig = {
       chart: {
         height: 400,
+        fontFamily: 'Inter',
         type: 'bar',
         toolbar: {
           show: false
@@ -505,7 +523,7 @@
           bottom: -12
         }
       },
-      colors: chartColors.bar.bg,
+      colors: config.colors.info,
       dataLabels: {
         enabled: false
       },
@@ -546,9 +564,14 @@
   // Candlestick Chart
   // --------------------------------------------------------------------
   const candlestickEl = document.querySelector('#candleStickChart'),
+    candlestickColors = {
+      series1: '#28c76f',
+      series2: '#ea5455'
+    },
     candlestickChartConfig = {
       chart: {
         height: 410,
+        fontFamily: 'Inter',
         type: 'candlestick',
         parentHeightOffset: 0,
         toolbar: {
@@ -657,8 +680,8 @@
       plotOptions: {
         candlestick: {
           colors: {
-            upward: config.colors.success,
-            downward: config.colors.danger
+            upward: candlestickColors.series1,
+            downward: candlestickColors.series2
           }
         },
         bar: {
@@ -677,6 +700,7 @@
     heatMapChartConfig = {
       chart: {
         height: 350,
+        fontFamily: 'Inter',
         type: 'heatmap',
         parentHeightOffset: 0,
         toolbar: {
@@ -693,37 +717,37 @@
                 from: 0,
                 to: 10,
                 name: '0-10',
-                color: '#90B3F3'
+                color: '#b9b3f8'
               },
               {
                 from: 11,
                 to: 20,
                 name: '10-20',
-                color: '#7EA6F1'
+                color: '#aba4f6'
               },
               {
                 from: 21,
                 to: 30,
                 name: '20-30',
-                color: '#6B9AEF'
+                color: '#9d95f5'
               },
               {
                 from: 31,
                 to: 40,
                 name: '30-40',
-                color: '#598DEE'
+                color: '#8f85f3'
               },
               {
                 from: 41,
                 to: 50,
                 name: '40-50',
-                color: '#4680EC'
+                color: '#8176f2'
               },
               {
                 from: 51,
                 to: 60,
                 name: '50-60',
-                color: '#3474EA'
+                color: '#7367f0'
               }
             ]
           }
@@ -737,15 +761,17 @@
       },
       legend: {
         show: true,
-        position: 'top',
-        horizontalAlign: 'start',
+        position: 'bottom',
+        fontSize: '13px',
         labels: {
           colors: legendColor,
           useSeriesColors: false
         },
         markers: {
           offsetY: 0,
-          offsetX: -3
+          offsetX: -3,
+          height: 10,
+          width: 10
         },
         itemMargin: {
           vertical: 3,
@@ -754,7 +780,7 @@
       },
       stroke: {
         curve: 'smooth',
-        width: 4,
+        width: 2,
         lineCap: 'round',
         colors: [cardColor]
       },
@@ -814,7 +840,7 @@
           show: false,
           style: {
             colors: labelColor,
-            fontSize: '13px'
+            fontSize: '11px'
           }
         },
         axisBorder: {
@@ -844,6 +870,7 @@
     radialBarChartConfig = {
       chart: {
         height: 380,
+        fontFamily: 'Inter',
         type: 'radialBar'
       },
       colors: [chartColors.donut.series1, chartColors.donut.series2, chartColors.donut.series4],
@@ -859,18 +886,16 @@
           },
           dataLabels: {
             name: {
-              fontSize: '2rem',
-              fontFamily: 'Public Sans'
+              fontSize: '2rem'
             },
             value: {
-              fontSize: '1.2rem',
-              color: legendColor,
-              fontFamily: 'Public Sans'
+              fontSize: '0.9375rem',
+              color: legendColor
             },
             total: {
               show: true,
-              fontWeight: 400,
-              fontSize: '1.3rem',
+              fontWeight: 500,
+              fontSize: '0.9375rem',
               color: headingColor,
               label: 'Comments',
               formatter: function (w) {
@@ -883,13 +908,18 @@
       grid: {
         borderColor: borderColor,
         padding: {
-          top: -25,
-          bottom: -20
+          top: -29,
+          bottom: -31
         }
       },
       legend: {
         show: true,
         position: 'bottom',
+        fontSize: '13px',
+        markers: {
+          width: 10,
+          height: 10
+        },
         labels: {
           colors: legendColor,
           useSeriesColors: false
@@ -912,6 +942,7 @@
     radarChartConfig = {
       chart: {
         height: 350,
+        fontFamily: 'Inter',
         type: 'radar',
         toolbar: {
           show: false
@@ -927,6 +958,11 @@
       legend: {
         show: true,
         position: 'bottom',
+        fontSize: '13px',
+        markers: {
+          width: 10,
+          height: 10
+        },
         labels: {
           colors: legendColor,
           useSeriesColors: false
@@ -953,15 +989,14 @@
           data: [65, 46, 42, 25, 58, 63, 76, 43]
         }
       ],
-      colors: [chartColors.donut.series1, chartColors.donut.series3],
+      colors: [chartColors.donut.series4, chartColors.donut.series3],
       xaxis: {
         categories: ['Battery', 'Brand', 'Camera', 'Memory', 'Storage', 'Display', 'OS', 'Price'],
         labels: {
           show: true,
           style: {
             colors: [labelColor, labelColor, labelColor, labelColor, labelColor, labelColor, labelColor, labelColor],
-            fontSize: '13px',
-            fontFamily: 'Public Sans'
+            fontSize: '13px'
           }
         }
       },
@@ -994,15 +1029,16 @@
     donutChartConfig = {
       chart: {
         height: 390,
+        fontFamily: 'Inter',
         type: 'donut'
       },
       labels: ['Operational', 'Networking', 'Hiring', 'R&D'],
       series: [42, 7, 25, 25],
       colors: [
         chartColors.donut.series1,
-        chartColors.donut.series4,
         chartColors.donut.series3,
-        chartColors.donut.series2
+        chartColors.donut.series4,
+        chartColors.donut.series5
       ],
       stroke: {
         show: false,
@@ -1012,12 +1048,20 @@
         enabled: true,
         formatter: function (val, opt) {
           return parseInt(val, 10) + '%';
+        },
+        style: {
+          fontSize: '15px',
+          fontWeight: 'normal'
+        },
+        dropShadow: {
+          enabled: false
         }
       },
       legend: {
         show: true,
         position: 'bottom',
-        markers: { offsetX: -3 },
+        fontSize: '13px',
+        markers: { offsetX: -3, width: 10, height: 10 },
         itemMargin: {
           vertical: 3,
           horizontal: 10
@@ -1033,20 +1077,20 @@
             labels: {
               show: true,
               name: {
-                fontSize: '2rem',
-                fontFamily: 'Public Sans'
+                fontSize: '2rem'
               },
               value: {
-                fontSize: '1.2rem',
+                fontSize: '0.9375rem',
+                fontWeight: 500,
                 color: legendColor,
-                fontFamily: 'Public Sans',
                 formatter: function (val) {
                   return parseInt(val, 10) + '%';
                 }
               },
               total: {
                 show: true,
-                fontSize: '1.5rem',
+                fontSize: '0.9375rem',
+                fontWeight: 500,
                 color: headingColor,
                 label: 'Operational',
                 formatter: function (w) {

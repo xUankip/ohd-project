@@ -100,19 +100,19 @@ $(function () {
       plugins: ['types'],
       types: {
         default: {
-          icon: 'bx bx-folder'
+          icon: 'ri-folder-3-line'
         },
         html: {
-          icon: 'bx bxl-html5 text-danger'
+          icon: 'ri-html5-fill text-danger'
         },
         css: {
-          icon: 'bx bxl-css3 text-info'
+          icon: 'ri-css3-fill text-info'
         },
         img: {
-          icon: 'bx bx-image text-success'
+          icon: 'ri-image-fill text-success'
         },
         js: {
-          icon: 'bx bxl-nodejs text-warning'
+          icon: 'ri-javascript-line text-warning'
         }
       }
     });
@@ -194,19 +194,19 @@ $(function () {
       plugins: ['types', 'contextmenu'],
       types: {
         default: {
-          icon: 'bx bx-folder'
+          icon: 'ri-folder-3-line'
         },
         html: {
-          icon: 'bx bxl-html5 text-danger'
+          icon: 'ri-html5-fill text-danger'
         },
         css: {
-          icon: 'bx bxl-css3 text-info'
+          icon: 'ri-css3-fill text-info'
         },
         img: {
-          icon: 'bx bx-image text-success'
+          icon: 'ri-image-fill text-success'
         },
         js: {
-          icon: 'bx bxl-nodejs text-warning'
+          icon: 'ri-javascript-line text-warning'
         }
       }
     });
@@ -288,19 +288,19 @@ $(function () {
       plugins: ['types', 'dnd'],
       types: {
         default: {
-          icon: 'bx bx-folder'
+          icon: 'ri-folder-3-line'
         },
         html: {
-          icon: 'bx bxl-html5 text-danger'
+          icon: 'ri-html5-fill text-danger'
         },
         css: {
-          icon: 'bx bxl-css3 text-info'
+          icon: 'ri-css3-fill text-info'
         },
         img: {
-          icon: 'bx bx-image text-success'
+          icon: 'ri-image-fill text-success'
         },
         js: {
-          icon: 'bx bxl-nodejs text-warning'
+          icon: 'ri-javascript-line text-warning'
         }
       }
     });
@@ -381,19 +381,19 @@ $(function () {
       plugins: ['types', 'checkbox', 'wholerow'],
       types: {
         default: {
-          icon: 'bx bx-folder'
+          icon: 'ri-folder-3-line'
         },
         html: {
-          icon: 'bx bxl-html5 text-danger'
+          icon: 'ri-html5-fill text-danger'
         },
         css: {
-          icon: 'bx bxl-css3 text-info'
+          icon: 'ri-css3-fill text-info'
         },
         img: {
-          icon: 'bx bx-image text-success'
+          icon: 'ri-image-fill text-success'
         },
         js: {
-          icon: 'bx bxl-nodejs text-warning'
+          icon: 'ri-javascript-line text-warning'
         }
       }
     });
@@ -420,19 +420,19 @@ $(function () {
       plugins: ['types', 'state'],
       types: {
         default: {
-          icon: 'bx bx-folder'
+          icon: 'ri-folder-3-line'
         },
         html: {
-          icon: 'bx bxl-html5 text-danger'
+          icon: 'ri-html5-fill text-danger'
         },
         css: {
-          icon: 'bx bxl-css3 text-info'
+          icon: 'ri-css3-fill text-info'
         },
         img: {
-          icon: 'bx bx-image text-success'
+          icon: 'ri-image-fill text-success'
         },
         js: {
-          icon: 'bx bxl-nodejs text-warning'
+          icon: 'ri-javascript-line text-warning'
         }
       }
     });

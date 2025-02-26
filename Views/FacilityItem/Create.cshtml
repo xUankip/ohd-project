@@ -1,0 +1,52 @@
+@model AspnetCoreMvcStarter.Models.FacilityItem
+
+@{
+    ViewData["Title"] = "Thêm thiết bị mới";
+    var facilityId = ViewBag.FacilityId;
+}
+
+<div class="container mt-4">
+    <h1>Thêm thiết bị mới</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" name="FacilityId" value="@facilityId" />
+
+                <div class="form-group">
+                    <label asp-for="ItemName" class="control-label">Tên thiết bị</label>
+                    <input asp-for="ItemName" class="form-control" />
+                    <span asp-validation-for="ItemName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ItemImage" class="control-label">URL hình ảnh</label>
+                    <input asp-for="ItemImage" class="form-control" />
+                    <span asp-validation-for="ItemImage" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Quantity" class="control-label">Số lượng</label>
+                    <input asp-for="Quantity" class="form-control" type="number" min="0" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label">Mô tả</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <a asp-controller="Facility" asp-action="Details" asp-route-id="@facilityId" class="btn btn-secondary">Quay lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

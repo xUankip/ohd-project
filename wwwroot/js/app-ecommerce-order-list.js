@@ -125,17 +125,17 @@ $(function () {
             }
             // Creates full output for row
             var $row_output =
-              '<div class="d-flex justify-content-start align-items-center order-name text-nowrap">' +
-              '<div class="avatar-wrapper">' +
-              '<div class="avatar avatar-sm me-3">' +
+              '<div class="d-flex justify-content-start align-items-center user-name">' +
+              '<div class="avatar-wrapper me-3">' +
+              '<div class="avatar avatar-sm">' +
               $output +
               '</div>' +
               '</div>' +
               '<div class="d-flex flex-column">' +
-              '<h6 class="m-0"><a href="/Pages/ProfileUser" class="text-heading">' +
+              '<a href="/Pages/ProfileUser" class="text-truncate text-heading"><span class="fw-medium">' +
               $name +
-              '</a></h6>' +
-              '<small>' +
+              '</span></a>' +
+              '<small class="text-truncate">' +
               $email +
               '</small>' +
               '</div>' +
@@ -150,10 +150,10 @@ $(function () {
               $paymentObj = paymentObj[$payment];
             if ($paymentObj) {
               return (
-                '<h6 class="mb-0 align-items-center d-flex w-px-100 ' +
+                '<h6 class="mb-0 w-px-100 d-flex align-items-center ' +
                 $paymentObj.class +
                 '">' +
-                '<i class="bx bxs-circle bx-8px me-1"></i>' +
+                '<i class="ri-circle-fill ri-10px me-1"></i>' +
                 $paymentObj.title +
                 '</h6>'
               );
@@ -168,7 +168,7 @@ $(function () {
             var $status = full['status'];
 
             return (
-              '<span class="badge px-2 ' +
+              '<span class="badge px-2 rounded-pill ' +
               statusObj[$status].class +
               '" text-capitalized>' +
               statusObj[$status].title +
@@ -194,8 +194,8 @@ $(function () {
               $method +
               '.png" alt="' +
               $method +
-              '" width="29">' +
-              '<span><i class="bx bx-dots-horizontal-rounded mt-1"></i>' +
+              '" class="me-2" width="29">' +
+              '<span><i class="ri-more-line"></i>' +
               $method_number +
               '</span>' +
               '</div>'
@@ -210,8 +210,8 @@ $(function () {
           orderable: false,
           render: function (data, type, full, meta) {
             return (
-              '<div class="d-flex justify-content-sm-start align-items-sm-center">' +
-              '<button class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded bx-md"></i></button>' +
+              '<div>' +
+              '<button class="btn btn-sm btn-icon btn-text-secondary text-body waves-effect rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ri-more-2-line"></i></button>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
               '<a href="/Ecommerce/OrderDetails" class="dropdown-item">View</a>' +
               '<a href="javascript:0;" class="dropdown-item delete-record">' +
@@ -225,9 +225,9 @@ $(function () {
       ],
       order: [3, 'asc'], //set any columns order asc/desc
       dom:
-        '<"card-header py-0 d-flex flex-column flex-md-row align-items-center"<f><"d-flex align-items-center justify-content-md-end gap-2 justify-content-center"l<"dt-action-buttons"B>>' +
+        '<"card-header d-flex flex-column flex-md-row align-items-start align-items-md-center py-0 pb-5 pb-md-0"<f><"d-flex align-items-md-baseline justify-content-md-end gap-4"l<"dt-action-buttons"B>>' +
         '>t' +
-        '<"row"' +
+        '<"row mx-1"' +
         '<"col-sm-12 col-md-6"i>' +
         '<"col-sm-12 col-md-6"p>' +
         '>',
@@ -238,30 +238,31 @@ $(function () {
         searchPlaceholder: 'Search Order',
         info: 'Displaying _START_ to _END_ of _TOTAL_ entries',
         paginate: {
-          next: '<i class="bx bx-chevron-right bx-18px"></i>',
-          previous: '<i class="bx bx-chevron-left bx-18px"></i>'
+          next: '<i class="ri-arrow-right-s-line"></i>',
+          previous: '<i class="ri-arrow-left-s-line"></i>'
         }
       },
       // Buttons with Dropdown
       buttons: [
         {
           extend: 'collection',
-          className: 'btn btn-label-secondary dropdown-toggle',
-          text: '<i class="bx bx-export bx-sm me-2"></i>Export',
+          className: 'btn btn-outline-secondary dropdown-toggle waves-effect waves-light',
+          text: '<i class="ri-download-line ri-16px me-2"></i> <span class="d-none d-sm-inline-block">Export</span>',
           buttons: [
             {
               extend: 'print',
-              text: '<i class="bx bx-printer me-2" ></i>Print',
+              text: '<i class="ri-printer-line me-1" ></i>Print',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [2, 3, 4, 5, 6, 7],
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be print
                 format: {
                   body: function (inner, coldex, rowdex) {
                     if (inner.length <= 0) return inner;
                     var el = $.parseHTML(inner);
                     var result = '';
                     $.each(el, function (index, item) {
-                      if (item.classList !== undefined && item.classList.contains('order-name')) {
+                      if (item.classList !== undefined && item.classList.contains('user-name')) {
                         result = result + item.lastChild.firstChild.textContent;
                       } else if (item.innerText === undefined) {
                         result = result + item.textContent;
@@ -272,7 +273,7 @@ $(function () {
                 }
               },
               customize: function (win) {
-                // Customize print view for dark
+                //customize print view for dark
                 $(win.document.body)
                   .css('color', headingColor)
                   .css('border-color', borderColor)
@@ -287,17 +288,18 @@ $(function () {
             },
             {
               extend: 'csv',
-              text: '<i class="bx bx-file me-2" ></i>Csv',
+              text: '<i class="ri-file-text-line me-1" ></i>Csv',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [2, 3, 4, 5, 6, 7],
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be display
                 format: {
                   body: function (inner, coldex, rowdex) {
                     if (inner.length <= 0) return inner;
                     var el = $.parseHTML(inner);
                     var result = '';
                     $.each(el, function (index, item) {
-                      if (item.classList !== undefined && item.classList.contains('order-name')) {
+                      if (item.classList !== undefined && item.classList.contains('user-name')) {
                         result = result + item.lastChild.firstChild.textContent;
                       } else if (item.innerText === undefined) {
                         result = result + item.textContent;
@@ -310,17 +312,18 @@ $(function () {
             },
             {
               extend: 'excel',
-              text: '<i class="bx bxs-file-export me-2"></i>Excel',
+              text: '<i class="ri-file-excel-line me-1"></i>Excel',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [2, 3, 4, 5, 6, 7],
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be display
                 format: {
                   body: function (inner, coldex, rowdex) {
                     if (inner.length <= 0) return inner;
                     var el = $.parseHTML(inner);
                     var result = '';
                     $.each(el, function (index, item) {
-                      if (item.classList !== undefined && item.classList.contains('order-name')) {
+                      if (item.classList !== undefined && item.classList.contains('user-name')) {
                         result = result + item.lastChild.firstChild.textContent;
                       } else if (item.innerText === undefined) {
                         result = result + item.textContent;
@@ -333,17 +336,18 @@ $(function () {
             },
             {
               extend: 'pdf',
-              text: '<i class="bx bxs-file-pdf me-2"></i>Pdf',
+              text: '<i class="ri-file-pdf-line me-1"></i>Pdf',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [2, 3, 4, 5, 6, 7],
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be display
                 format: {
                   body: function (inner, coldex, rowdex) {
                     if (inner.length <= 0) return inner;
                     var el = $.parseHTML(inner);
                     var result = '';
                     $.each(el, function (index, item) {
-                      if (item.classList !== undefined && item.classList.contains('order-name')) {
+                      if (item.classList !== undefined && item.classList.contains('user-name')) {
                         result = result + item.lastChild.firstChild.textContent;
                       } else if (item.innerText === undefined) {
                         result = result + item.textContent;
@@ -356,17 +360,18 @@ $(function () {
             },
             {
               extend: 'copy',
-              text: '<i class="bx bx-copy me-2" ></i>Copy',
+              text: '<i class="ri-file-copy-line me-1"></i>Copy',
               className: 'dropdown-item',
               exportOptions: {
-                columns: [2, 3, 4, 5, 6, 7],
+                columns: [1, 2, 3, 4, 5],
+                // prevent avatar to be display
                 format: {
                   body: function (inner, coldex, rowdex) {
                     if (inner.length <= 0) return inner;
                     var el = $.parseHTML(inner);
                     var result = '';
                     $.each(el, function (index, item) {
-                      if (item.classList !== undefined && item.classList.contains('order-name')) {
+                      if (item.classList !== undefined && item.classList.contains('user-name')) {
                         result = result + item.lastChild.firstChild.textContent;
                       } else if (item.innerText === undefined) {
                         result = result + item.textContent;
@@ -414,20 +419,13 @@ $(function () {
         }
       }
     });
-    $('.dataTables_length').addClass('ms-n2');
+    $('.dataTables_length').addClass('my-0');
     $('.dt-action-buttons').addClass('pt-0');
-    $('.dataTables_filter').addClass('ms-n3 mb-0 mb-md-6');
+    $('.dataTables_filter input').addClass('ms-0');
   }
 
   // Delete Record
   $('.datatables-order tbody').on('click', '.delete-record', function () {
     dt_products.row($(this).parents('tr')).remove().draw();
   });
-
-  // Filter form control to default size
-  // ? setTimeout used for multilingual table initialization
-  setTimeout(() => {
-    $('.dataTables_filter .form-control').removeClass('form-control-sm');
-    $('.dataTables_length .form-select').removeClass('form-select-sm');
-  }, 300);
 });

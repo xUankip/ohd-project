@@ -43,12 +43,13 @@
       if (!option.id) {
         return option.text;
       }
-      var $badge = "<div class='badge " + $(option.element).data('color') + "'> " + option.text + '</div>';
+      var $badge = "<div class='badge " + $(option.element).data('color') + " rounded-pill'> " + option.text + '</div>';
       return $badge;
     }
 
     select2.each(function () {
       var $this = $(this);
+      select2Focus($this);
       $this.wrap("<div class='position-relative'></div>").select2({
         placeholder: 'Select Label',
         dropdownParent: $this.parent(),
@@ -76,11 +77,11 @@
   function renderBoardDropdown() {
     return (
       "<div class='dropdown'>" +
-      "<i class='dropdown-toggle bx bx-dots-vertical-rounded cursor-pointer' id='board-dropdown' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></i>" +
+      "<i class='dropdown-toggle ri-more-2-line ri-20px cursor-pointer' id='board-dropdown' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></i>" +
       "<div class='dropdown-menu dropdown-menu-end' aria-labelledby='board-dropdown'>" +
-      "<a class='dropdown-item delete-board' href='javascript:void(0)'> <i class='bx bx-trash bx-xs' me-1></i> <span class='align-middle'>Delete</span></a>" +
-      "<a class='dropdown-item' href='javascript:void(0)'><i class='bx bx-rename bx-xs' me-1></i> <span class='align-middle'>Rename</span></a>" +
-      "<a class='dropdown-item' href='javascript:void(0)'><i class='bx bx-archive bx-xs' me-1></i> <span class='align-middle'>Archive</span></a>" +
+      "<a class='dropdown-item delete-board' href='javascript:void(0)'> <i class='ri-delete-bin-7-line'></i> <span class='align-middle'>Delete</span></a>" +
+      "<a class='dropdown-item' href='javascript:void(0)'><i class='ri-edit-2-line'></i> <span class='align-middle'>Rename</span></a>" +
+      "<a class='dropdown-item' href='javascript:void(0)'><i class='ri-archive-line'></i> <span class='align-middle'>Archive</span></a>" +
       '</div>' +
       '</div>'
     );
@@ -89,7 +90,7 @@
   function renderDropdown() {
     return (
       "<div class='dropdown kanban-tasks-item-dropdown'>" +
-      "<i class='dropdown-toggle bx bx-dots-vertical-rounded' id='kanban-tasks-item-dropdown' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></i>" +
+      "<i class='dropdown-toggle ri-more-2-line ri-20px text-muted' id='kanban-tasks-item-dropdown' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></i>" +
       "<div class='dropdown-menu dropdown-menu-end' aria-labelledby='kanban-tasks-item-dropdown'>" +
       "<a class='dropdown-item' href='javascript:void(0)'>Copy task link</a>" +
       "<a class='dropdown-item' href='javascript:void(0)'>Duplicate task</a>" +
@@ -102,8 +103,8 @@
   function renderHeader(color, text) {
     return (
       "<div class='d-flex justify-content-between flex-wrap align-items-center mb-2'>" +
-      "<div class='item-badges'> " +
-      "<div class='badge bg-label-" +
+      "<div class='item-badges d-flex'> " +
+      "<div class='badge rounded-pill bg-label-" +
       color +
       "'> " +
       text +
@@ -154,11 +155,11 @@
   function renderFooter(attachments, comments, assigned, members) {
     return (
       "<div class='d-flex justify-content-between align-items-center flex-wrap mt-2'>" +
-      "<div class='d-flex'> <span class='d-flex align-items-center me-2'><i class='bx bx-paperclip me-1'></i>" +
+      "<div> <span class='align-middle me-4'><i class='ri-attachment-2 ri-20px me-1'></i>" +
       "<span class='attachments'>" +
       attachments +
       '</span>' +
-      "</span> <span class='d-flex align-items-center ms-2'><i class='bx bx-chat me-1'></i>" +
+      "</span> <span class='align-middle'><i class='ri-wechat-line ri-20px me-1'></i>" +
       '<span> ' +
       comments +
       ' </span>' +
@@ -182,7 +183,7 @@
     itemAddOptions: {
       enabled: true, // add a button to board for easy item creation
       content: '+ Add New Item', // text or html content of the board button
-      class: 'kanban-title-button btn btn-default', // default class of the button
+      class: 'kanban-title-button btn btn-default text-heading fw-normal shadow-none text-capitalize', // default class of the button
       footer: false // position the button on footer
     },
     click: function (el) {
@@ -215,9 +216,9 @@
         .querySelector('.assigned')
         .insertAdjacentHTML(
           'afterbegin',
-          renderAvatar(avatars, false, 'xs', '1', el.getAttribute('data-members')) +
-            "<div class='avatar avatar-xs ms-1'>" +
-            "<span class='avatar-initial rounded-circle bg-label-secondary'><i class='bx bx-plus bx-xs text-heading'></i></span>" +
+          renderAvatar(avatars, false, 'sm', '2', el.getAttribute('data-members')) +
+            "<div class='avatar avatar-sm ms-2'>" +
+            "<span class='avatar-initial rounded-circle bg-label-secondary'><i class='ri-add-line'></i></span>" +
             '</div>'
         );
     },
@@ -231,7 +232,7 @@
         '</div>' +
         '<div class="mb-4">' +
         '<button type="submit" class="btn btn-primary btn-sm me-4">Add</button>' +
-        '<button type="button" class="btn btn-label-secondary btn-sm cancel-add-item">Cancel</button>' +
+        '<button type="button" class="btn btn-outline-secondary btn-sm cancel-add-item">Cancel</button>' +
         '</div>';
       kanban.addForm(boardId, addNew);
 
@@ -299,7 +300,7 @@
       let img = '';
       if (el.getAttribute('data-image') !== null) {
         img =
-          "<img class='img-fluid rounded mb-2' src='" +
+          "<img class='img-fluid mb-2 rounded-3' src='" +
           assetsPath +
           'img/elements/' +
           el.getAttribute('data-image') +
