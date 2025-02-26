@@ -5,9 +5,11 @@
 }
 
 <h2>Request List</h2>
+
 <p>
   <a asp-action="Create" class="btn btn-primary">Create New Request</a>
 </p>
+
 <table class="table">
   <thead>
   <tr>
@@ -32,6 +34,12 @@
         <a asp-action="Edit" asp-route-id="@item.RequestId" class="btn btn-warning">Edit</a>
         <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info">Details</a>
         <a asp-action="Delete" asp-route-id="@item.RequestId" class="btn btn-danger">Delete</a>
+
+        <!-- ✅ New Features -->
+        <a asp-action="Assign" asp-route-id="@item.RequestId" class="btn btn-primary">Assign</a>
+        <a asp-action="UpdateStatus" asp-route-id="@item.RequestId" class="btn btn-secondary">Update Status</a>
+        <a asp-action="Transfer" asp-route-id="@item.RequestId" class="btn btn-success">Transfer</a>
+        <a asp-action="Revoke" asp-route-id="@item.RequestId" class="btn btn-dark">Revoke</a>
       </td>
     </tr>
   }

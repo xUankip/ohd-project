@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Views\Request\" />
   </ItemGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Admin\Create.cshtml" />

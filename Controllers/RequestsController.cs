@@ -4,20 +4,21 @@ using Microsoft.EntityFrameworkCore;
 using AspnetCoreMvcStarter.Models;
 using AspnetCoreMvcStarter.Data;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AspnetCoreMvcStarter.Controllers
 {
-    public class RequestController : Controller
+    public class RequestsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public RequestController(ApplicationDbContext context)
+        public RequestsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Request
+        // ✅ Show Request List (GET: /Requests)
         public IActionResult Index()
         {
             var requests = _context.Requests
@@ -28,127 +29,74 @@ namespace AspnetCoreMvcStarter.Controllers
             return View(requests);
         }
 
-        // GET: Request/Create
+        // ✅ Show Create Request Form (GET: /Requests/Create)
         public IActionResult Create()
         {
-            ViewBag.Users = new SelectList(_context.Users, "UserId", "FullName");
-            ViewBag.Facilities = new SelectList(_context.Facilities, "FacilityId", "FacilityName");
-            ViewBag.Items = new SelectList(_context.FacilityItems, "ItemId", "ItemName");
+            LoadDropdowns();
             return View();
         }
 
-        [HttpPost]
-[ValidateAntiForgeryToken]
-public IActionResult Create(Request request, string commentText)
-{
-    if (ModelState.IsValid)
-    {
-        // Ensure all required fields are assigned
-        request.Status = "Open";  // Default status
-        request.RequestDate = DateTime.UtcNow;  // Set request date
-
-        // ✅ Check if the related entities exist before saving the request
-        var requestorExists = _context.Users.Any(u => u.UserId == request.RequestorId);
-        var facilityExists = _context.Facilities.Any(f => f.FacilityId == request.FacilityId);
-        var itemExists = _context.FacilityItems.Any(i => i.ItemId == request.ItemId);
-
-        if (!requestorExists)
-        {
-            ModelState.AddModelError("", "Invalid Requestor selected.");
-        }
-        if (!facilityExists)
-        {
-            ModelState.AddModelError("", "Invalid Facility selected.");
-        }
-        if (!itemExists)
-        {
-            ModelState.AddModelError("", "Invalid Item selected.");
-        }
-
-        // If there are validation errors, return the form with errors
-        if (!ModelState.IsValid)
-        {
-            ViewBag.Users = new SelectList(_context.Users, "UserId", "FullName", request.RequestorId);
-            ViewBag.Facilities = new SelectList(_context.Facilities, "FacilityId", "FacilityName", request.FacilityId);
-            ViewBag.Items = new SelectList(_context.FacilityItems, "ItemId", "ItemName", request.ItemId);
-
-            return View(request);
-        }
-
-        // ✅ Save the request
-        _context.Requests.Add(request);
-        _context.SaveChanges(); // Ensure RequestId is generated
-
-        // ✅ Save the comment if provided
-        if (!string.IsNullOrEmpty(commentText))
-        {
-            var comment = new Comment
-            {
-                RequestId = request.RequestId, // Now it has a valid ID
-                UserId = request.RequestorId,
-                CommentText = commentText,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _context.Comments.Add(comment);
-            _context.SaveChanges();
-        }
-
-        return RedirectToAction(nameof(Index));
-    }
-
-    // Repopulate dropdowns if validation fails
-    ViewBag.Users = new SelectList(_context.Users, "UserId", "FullName", request.RequestorId);
-    ViewBag.Facilities = new SelectList(_context.Facilities, "FacilityId", "FacilityName", request.FacilityId);
-    ViewBag.Items = new SelectList(_context.FacilityItems, "ItemId", "ItemName", request.ItemId);
-
-    return View(request);
-}
-
-
-        // GET: Request/Edit/{id}
-        public IActionResult Edit(int id)
-        {
-            var request = _context.Requests.Find(id);
-            if (request == null)
-            {
-                return NotFound();
-            }
-
-            ViewBag.Users = new SelectList(_context.Users, "UserId", "FullName", request.RequestorId);
-            ViewBag.Facilities = new SelectList(_context.Facilities, "FacilityId", "FacilityName", request.FacilityId);
-            ViewBag.Items = new SelectList(_context.FacilityItems, "ItemId", "ItemName", request.ItemId);
-
-            return View(request);
-        }
-
-        // POST: Request/Edit
+        // ✅ Handle Create Request Form Submission (POST: /Requests/Create)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Request request)
+        public IActionResult Create(Request request, string commentText)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Requests.Update(request);
+                LoadDropdowns();
+                return View(request);
+            }
+
+            try
+            {
+                // Validate Foreign Keys before saving
+                if (!_context.Users.Any(u => u.UserId == request.RequestorId) ||
+                    !_context.Facilities.Any(f => f.FacilityId == request.FacilityId) ||
+                    !_context.FacilityItems.Any(i => i.ItemId == request.ItemId))
+                {
+                    ModelState.AddModelError("", "Invalid selection for Requestor, Facility, or Item.");
+                    LoadDropdowns();
+                    return View(request);
+                }
+
+                // Assign default values for missing fields
+                request.Status = "Open";
+                request.RequestDate = DateTime.UtcNow;
+
+                _context.Requests.Add(request);
                 _context.SaveChanges();
+
+                // Save comment if provided
+                if (!string.IsNullOrEmpty(commentText))
+                {
+                    var comment = new Comment
+                    {
+                        RequestId = request.RequestId,
+                        UserId = request.RequestorId,
+                        CommentText = commentText,
+                        CreatedAt = DateTime.UtcNow
+                    };
+
+                    _context.Comments.Add(comment);
+                    _context.SaveChanges();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
-
-            // Repopulate dropdowns
-            ViewBag.Users = new SelectList(_context.Users, "UserId", "FullName", request.RequestorId);
-            ViewBag.Facilities = new SelectList(_context.Facilities, "FacilityId", "FacilityName", request.FacilityId);
-            ViewBag.Items = new SelectList(_context.FacilityItems, "ItemId", "ItemName", request.ItemId);
-
-            return View(request);
+            catch (Exception ex)
+            {
+                Console.WriteLine("❌ Error saving request: " + ex.Message);
+                ModelState.AddModelError("", "An error occurred while saving the request.");
+                LoadDropdowns();
+                return View(request);
+            }
         }
 
-        // GET: Request/Details/{id}
-        public IActionResult Details(int id)
+        // ✅ Assign a Request to a User
+        public IActionResult Assign(int id)
         {
             var request = _context.Requests
                 .Include(r => r.Requestor)
-                .Include(r => r.Facility)
-                .Include(r => r.FacilityItem)
                 .FirstOrDefault(r => r.RequestId == id);
 
             if (request == null)
@@ -156,38 +104,100 @@ public IActionResult Create(Request request, string commentText)
                 return NotFound();
             }
 
-            return View(request);
-        }
-
-        // GET: Request/Delete/{id}
-        public IActionResult Delete(int id)
-        {
-            var request = _context.Requests
-                .Include(r => r.Requestor)
-                .Include(r => r.Facility)
-                .Include(r => r.FacilityItem)
-                .FirstOrDefault(r => r.RequestId == id);
-
-            if (request == null)
-            {
-                return NotFound();
-            }
+            var assignees = _context.Users.Where(u => u.IsActive).ToList();
+            ViewBag.Assignees = new SelectList(assignees, "UserId", "FullName");
 
             return View(request);
         }
 
-        // POST: Request/Delete/{id}
-        [HttpPost, ActionName("DeleteConfirmed")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult Assign(int id, int RequestorId)
         {
             var request = _context.Requests.Find(id);
-            if (request != null)
+            if (request == null) return NotFound();
+
+            if (!_context.Users.Any(u => u.UserId == RequestorId))
             {
-                _context.Requests.Remove(request);
-                _context.SaveChanges();
+                ModelState.AddModelError("", "Invalid Requestor selected.");
+                LoadDropdowns();
+                return View(request);
             }
+
+            request.RequestorId = RequestorId;
+            request.Status = "Assigned";
+            _context.SaveChanges();
+
             return RedirectToAction(nameof(Index));
+        }
+
+        // ✅ Update Request Status
+        public IActionResult UpdateStatus(int id)
+        {
+            var request = _context.Requests.Find(id);
+            if (request == null) return NotFound();
+
+            ViewBag.StatusOptions = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "New", Value = "New" },
+                new SelectListItem { Text = "Pending", Value = "Pending" },
+                new SelectListItem { Text = "In Progress", Value = "InProgress" },
+                new SelectListItem { Text = "Completed", Value = "Completed" },
+                new SelectListItem { Text = "Closed", Value = "Closed" }
+            };
+
+            return View(request);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateStatus(int id, string status)
+        {
+            var request = _context.Requests.Find(id);
+            if (request == null) return NotFound();
+
+            request.Status = status;
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // ✅ Generate Report (GET: /Requests/Report)
+        public IActionResult Report()
+        {
+            var totalRequests = _context.Requests.Count();
+
+            var requestsByMonth = _context.Requests
+                .GroupBy(r => r.RequestDate.Month)
+                .Select(g => new { Month = g.Key, Count = g.Count() })
+                .ToDictionary(g => g.Month, g => g.Count);
+
+            var requestsByStatus = _context.Requests
+                .GroupBy(r => r.Status)
+                .Select(g => new { Status = g.Key, Count = g.Count() })
+                .ToDictionary(g => g.Status, g => g.Count);
+
+
+
+
+
+            var report = new ReportViewModel
+            {
+                TotalRequests = totalRequests,
+                RequestsByMonth = requestsByMonth,
+                RequestsByStatus = requestsByStatus,
+
+            };
+
+            return View(report);
+        }
+
+        // ✅ Load dropdown data
+        private void LoadDropdowns()
+        {
+            ViewBag.Users = new SelectList(_context.Users.Where(u => u.IsActive), "UserId", "FullName");
+            ViewBag.Facilities = new SelectList(_context.Facilities, "FacilityId", "FacilityName");
+            ViewBag.Items = new SelectList(_context.FacilityItems, "ItemId", "ItemName");
         }
     }
 }

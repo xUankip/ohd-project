@@ -1,0 +1,16 @@
+﻿@model AspnetCoreMvcStarter.Models.Request
+
+@{
+  ViewData["Title"] = "Revoke Request";
+}
+
+<h2>Revoke Request</h2>
+
+<p>Are you sure you want to revoke this request?</p>
+
+<form asp-action="RevokeConfirmed" asp-controller="Requests" method="post">
+  <input type="hidden" asp-for="RequestId" />
+
+  <button type="submit" class="btn btn-danger">Revoke</button>
+  <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
