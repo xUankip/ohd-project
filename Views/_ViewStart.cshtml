@@ -5,4 +5,6 @@
   // _HorizontalLayout : Horizontal Layout
   // _NavbarFullLayout : Full Navbar Layout
   Layout = "_ContentNavbarLayout";
+  var userName = Context.User.Identity.Name;
+  ViewData["UserName"] = userName;
 }
