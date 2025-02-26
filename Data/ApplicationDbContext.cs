@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using AspnetCoreMvcStarter.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace AspnetCoreMvcStarter.Data
 {

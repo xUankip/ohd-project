@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using AspnetCoreMvcStarter.Data;
+using AspnetCoreMvcStarter.Models;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,9 +9,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContext' not found.")));
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-  .AddEntityFrameworkStores<ApplicationDbContext>()
-  .AddDefaultTokenProviders();
+// builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+// Thêm dịch vụ Session
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+  options.IdleTimeout = TimeSpan.FromMinutes(3000); // Thời gian hết hạn session
+  options.Cookie.HttpOnly = true;
+  options.Cookie.IsEssential = true;
+});
+
+// builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+//   .AddEntityFrameworkStores<ApplicationDbContext>()
+//   .AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -28,25 +40,25 @@ var app = builder.Build();
 
 var scope = app.Services.CreateScope();
 // tạo mới role
-var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-// tạo mới user
-var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+// var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+// // tạo mới user
+// var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
 // if (!await roleManager.RoleExistsAsync("Admin"))
 // {
 //   await roleManager.CreateAsync(new IdentityRole("Admin"));
 // }
-//
+
 // var adminUser = new IdentityUser
 // {
 //   UserName = "luyendh@example.com",
 //   Email = "luyendh@example.com",
 //   EmailConfirmed = true
 // };
-
+//
 // if (await userManager.FindByEmailAsync(adminUser.Email) == null)
 // {
-//   var result = await userManager.CreateAsync(adminUser, "Admin@123");
+//    var result = await userManager.CreateAsync(adminUser, "Admin@123");
 //   if (result.Succeeded)
 //   {
 //     await userManager.AddToRoleAsync(adminUser, "Admin");
@@ -64,6 +76,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthentication();
