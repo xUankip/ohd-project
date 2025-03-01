@@ -41,6 +41,13 @@
             <div data-i18n="List">List</div>
           </a>
         </li>
+        <li class="menu-item @(currentPage == "/Auth/ChangePassword" ? " active" : "")">
+          <a asp-controller="Auth" asp-action="ChangePassword" class="menu-link">
+            <i class="menu-icon tf-icons ri-key-line px-1_5"></i>
+            <div data-i18n="ChangePassword">Change Password</div>
+          </a>
+        </li>
+
       </ul>
     </li>
 
@@ -62,7 +69,7 @@
       <li><a href="@Url.Action("Report", "Requests")">Report</a></li>
     </ul>
   </li>
-    
+
     <!-- Requests -->
     <li class='menu-item@(currentPage.StartsWith("/Request") ? " active" : "")'>
       <a href="javascript:void(0);" class="menu-link menu-toggle">

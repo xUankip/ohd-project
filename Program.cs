@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using AspnetCoreMvcStarter.Data;
+using AspnetCoreMvcStarter.Middlewares;
 using AspnetCoreMvcStarter.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -15,9 +16,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-  options.IdleTimeout = TimeSpan.FromMinutes(3000); // Thời gian hết hạn session
+  options.IdleTimeout = TimeSpan.FromMinutes(3000);
   options.Cookie.HttpOnly = true;
   options.Cookie.IsEssential = true;
+  options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Đảm bảo cookie chỉ truyền qua HTTPS
+  options.Cookie.SameSite = SameSiteMode.Strict; // Hạn chế bị xóa do policy trình duyệt
 });
 
 // builder.Services.AddIdentity<IdentityUser, IdentityRole>()
@@ -77,6 +80,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseSession();
+app.UseMiddleware<AuthMiddleware>(); // Đăng ký middleware
 app.UseRouting();
 
 app.UseAuthentication();
