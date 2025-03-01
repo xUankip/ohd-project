@@ -22,6 +22,9 @@ namespace AspnetCoreMvcStarter.Models
         public string Status { get; set; } = "Open";
         public string Remarks { get; set; }
         public DateTime? ClosedDate { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public int CreatedBy { get; set; }  // This should store the UserId of the creator
         public string ClosureReason { get; set; }
         public virtual Comment? Comments { get; set; }
     }
