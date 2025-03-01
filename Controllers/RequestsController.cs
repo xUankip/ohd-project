@@ -53,44 +53,80 @@ namespace AspnetCoreMvcStarter.Controllers
             return View();
         }
 
-        // ✅ Handle Request Creation (POST: /Requests/Create)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Request request)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    request.RequestDate = DateTime.UtcNow; // Set request date
-                    request.CreatedAt = DateTime.UtcNow;   // Set creation timestamp
-                    request.CreatedBy = 1; // Placeholder for actual user
-                    request.Status = "Open"; // Default status
-
-                    _context.Requests.Add(request);
-                    await _context.SaveChangesAsync();
-
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (Exception ex)
-                {
-                    // Log exception
-                    Console.WriteLine($"Exception: {ex.Message}");
-                    ModelState.AddModelError("", "Error saving request. " + ex.Message);
-                }
-            }
-            else
-            {
-                var errors = string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage));
-
-                Console.WriteLine($"Validation errors: {errors}");
-            }
-
+    try
+    {
+        // Kiểm tra các trường bắt buộc
+        if (request.FacilityId == null)
+        {
+            ModelState.AddModelError("FacilityId", "Vui lòng chọn cơ sở");
             LoadDropdowns();
             return View(request);
         }
+
+        if (request.ItemId == null)
+        {
+            ModelState.AddModelError("ItemId", "Vui lòng chọn vật dụng");
+            LoadDropdowns();
+            return View(request);
+        }
+
+        if (request.QuantityRequested <= 0)
+        {
+            ModelState.AddModelError("QuantityRequested", "Số lượng phải lớn hơn 0");
+            LoadDropdowns();
+            return View(request);
+        }
+
+        if (string.IsNullOrEmpty(request.SeverityLevel))
+        {
+            ModelState.AddModelError("SeverityLevel", "Vui lòng chọn mức độ ưu tiên");
+            LoadDropdowns();
+            return View(request);
+        }
+
+        // Đặt các giá trị mặc định
+        request.RequestDate = DateTime.UtcNow;
+        request.RequestorId = 1; // Mặc định là user có id = 1
+        request.Status = "Open";
+
+        // Mặc định description nếu không có
+        if (string.IsNullOrEmpty(request.Description))
+        {
+            request.Description = "No description provided";
+        }
+
+        // Mặc định remarks nếu không có
+        if (string.IsNullOrEmpty(request.Remarks))
+        {
+            request.Remarks = "";
+        }
+
+        _context.Requests.Add(request);
+        await _context.SaveChangesAsync();
+
+        TempData["Success"] = "Tạo request thành công!";
+        return RedirectToAction(nameof(Index));
+    }
+    catch (Exception ex)
+    {
+        // Log chi tiết lỗi
+        Console.WriteLine($"Exception when creating request: {ex.Message}");
+        Console.WriteLine($"Stack trace: {ex.StackTrace}");
+
+        if (ex.InnerException != null)
+        {
+            Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+        }
+
+        ModelState.AddModelError("", "Lỗi khi lưu request: " + ex.Message);
+        LoadDropdowns();
+        return View(request);
+    }
+}
 
         // ✅ Assign or Transfer a Request (GET: /Requests/Assign/{id})
         public IActionResult Assign(int id)
@@ -246,6 +282,16 @@ namespace AspnetCoreMvcStarter.Controllers
 
             var items = _context.FacilityItems.ToList();
             ViewBag.Items = items.Any() ? new SelectList(items, "ItemId", "ItemName") : null;
+        }
+        [HttpGet]
+        public IActionResult GetItemsByFacility(int facilityId)
+        {
+          var items = _context.FacilityItems
+            .Where(i => i.FacilityId == facilityId)
+            .Select(i => new { itemId = i.ItemId, itemName = i.ItemName })
+            .ToList();
+
+          return Json(items);
         }
     }
 }
