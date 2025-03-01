@@ -29,69 +29,70 @@ namespace AspnetCoreMvcStarter.Controllers
             return View(requests);
         }
 
-        // ✅ Show Create Request Form (GET: /Requests/Create)
+        // ✅ Show Request Details (GET: /Requests/Details/{id})
+        public IActionResult Details(int id)
+        {
+            var request = _context.Requests
+                .Include(r => r.Requestor)
+                .Include(r => r.Facility)
+                .Include(r => r.FacilityItem)
+                .FirstOrDefault(r => r.RequestId == id);
+
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            return View(request);
+        }
+
+        // ✅ Create Request (GET: /Requests/Create)
         public IActionResult Create()
         {
             LoadDropdowns();
             return View();
         }
 
-        // ✅ Handle Create Request Form Submission (POST: /Requests/Create)
+        // ✅ Handle Request Creation (POST: /Requests/Create)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Request request, string commentText)
+        public async Task<IActionResult> Create(Request request)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                LoadDropdowns();
-                return View(request);
-            }
-
-            try
-            {
-                var requestorExists = _context.Users.Any(u => u.UserId == request.RequestorId);
-                var facilityExists = _context.Facilities.Any(f => f.FacilityId == request.FacilityId);
-                var itemExists = _context.FacilityItems.Any(i => i.ItemId == request.ItemId);
-
-                if (!requestorExists || !facilityExists || !itemExists)
+                try
                 {
-                    ModelState.AddModelError("", "Invalid selections made.");
-                    LoadDropdowns();
-                    return View(request);
+                    request.RequestDate = DateTime.UtcNow; // Set request date
+                    request.CreatedAt = DateTime.UtcNow;   // Set creation timestamp
+                    request.CreatedBy = 1; // Placeholder for actual user
+                    request.Status = "Open"; // Default status
+
+                    _context.Requests.Add(request);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
                 }
-
-                request.Status = "Open";
-                request.RequestDate = DateTime.UtcNow;
-
-                _context.Requests.Add(request);
-                _context.SaveChanges();
-
-                if (!string.IsNullOrEmpty(commentText))
+                catch (Exception ex)
                 {
-                    var comment = new Comment
-                    {
-                        RequestId = request.RequestId,
-                        UserId = request.RequestorId,
-                        CommentText = commentText,
-                        CreatedAt = DateTime.UtcNow
-                    };
-
-                    _context.Comments.Add(comment);
-                    _context.SaveChanges();
+                    // Log exception
+                    Console.WriteLine($"Exception: {ex.Message}");
+                    ModelState.AddModelError("", "Error saving request. " + ex.Message);
                 }
-
-                return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine("❌ Error saving request: " + ex.Message);
-                ModelState.AddModelError("", "An error occurred while saving the request.");
-                LoadDropdowns();
-                return View(request);
+                var errors = string.Join("; ", ModelState.Values
+                    .SelectMany(x => x.Errors)
+                    .Select(x => x.ErrorMessage));
+
+                Console.WriteLine($"Validation errors: {errors}");
             }
+
+            LoadDropdowns();
+            return View(request);
         }
 
-        // ✅ Assign a Request to a User (GET: /Requests/Assign/{id})
+        // ✅ Assign or Transfer a Request (GET: /Requests/Assign/{id})
         public IActionResult Assign(int id)
         {
             var request = _context.Requests
@@ -103,35 +104,50 @@ namespace AspnetCoreMvcStarter.Controllers
                 return NotFound();
             }
 
-            var assignees = _context.Users.Where(u => u.IsActive).ToList();
-            ViewBag.Assignees = assignees.Any() ? new SelectList(assignees, "UserId", "FullName") : null;
+            // Fetch only active users with RoleId = 3 (Assignees)
+            var availableUsers = _context.Users
+                .Where(u => u.IsActive && u.RoleId == 3)
+                .ToList();
+
+            // Store the currently assigned user separately
+            var currentAssignee = request.Requestor;
+
+            // Remove the currently assigned user from the dropdown list
+            if (request.RequestorId.HasValue)
+            {
+                availableUsers = availableUsers
+                    .Where(u => u.UserId != request.RequestorId.Value)
+                    .ToList();
+            }
+
+            ViewBag.Assignees = availableUsers.Any() ? new SelectList(availableUsers, "UserId", "FullName") : null;
+            ViewBag.CurrentAssignee = currentAssignee;
 
             return View(request);
         }
 
-        // ✅ Handle Request Assignment (POST: /Requests/Assign/{id})
+        // ✅ Handle Request Assignment or Transfer (POST: /Requests/Assign/{id})
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Assign(int id, int RequestorId)
+        public IActionResult Assign(int requestId, int? RequestorId)
         {
-            var request = _context.Requests.Find(id);
+            var request = _context.Requests.FirstOrDefault(r => r.RequestId == requestId);
+
             if (request == null)
             {
                 return NotFound();
             }
 
-            if (!_context.Users.Any(u => u.UserId == RequestorId))
+            if (!RequestorId.HasValue)
             {
-                ModelState.AddModelError("", "Invalid Requestor selected.");
-                LoadDropdowns();
-                return View(request);
+                TempData["Error"] = "Please select a valid user for assignment.";
+                return RedirectToAction("Assign", new { id = requestId });
             }
 
-            request.RequestorId = RequestorId;
-            request.Status = "Assigned";
+            request.RequestorId = RequestorId.Value;
             _context.SaveChanges();
 
-            return RedirectToAction(nameof(Index));
+            TempData["Success"] = "Request successfully assigned!";
+            return RedirectToAction("Index");
         }
 
         // ✅ Update Request Status (GET: /Requests/UpdateStatus/{id})
@@ -172,6 +188,36 @@ namespace AspnetCoreMvcStarter.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // ✅ Revoke a Request (GET: /Requests/Revoke/{id})
+        public IActionResult Revoke(int id)
+        {
+            var request = _context.Requests.Find(id);
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            return View(request);
+        }
+
+        // ✅ Handle Request Revocation (POST: /Requests/RevokeConfirmed/{id})
+        [HttpPost, ActionName("RevokeConfirmed")]
+        [ValidateAntiForgeryToken]
+        public IActionResult RevokeConfirmed(int id)
+        {
+            var request = _context.Requests.Find(id);
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            request.RequestorId = null;
+            request.Status = "Revoked";
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+        }
+
         // ✅ Report Page (GET: /Requests/Report)
         public IActionResult Report()
         {
@@ -192,7 +238,7 @@ namespace AspnetCoreMvcStarter.Controllers
         // ✅ Load dropdown data
         private void LoadDropdowns()
         {
-            var users = _context.Users.Where(u => u.IsActive).ToList();
+            var users = _context.Users.Where(u => u.IsActive && u.RoleId == 3).ToList();
             ViewBag.Users = users.Any() ? new SelectList(users, "UserId", "FullName") : null;
 
             var facilities = _context.Facilities.ToList();

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspnetCoreMvcStarter.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250217171716_Initial")]
+    [Migration("20250228124018_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -27,19 +27,19 @@ namespace AspnetCoreMvcStarter.Migrations
 
             modelBuilder.Entity("AspnetCoreMvcStarter.Models.BorrowedItem", b =>
                 {
-                    b.Property<int>("BorrowID")
+                    b.Property<int>("BorrowId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BorrowID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BorrowId"));
 
                     b.Property<DateTime>("BorrowDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FacilityID")
+                    b.Property<int?>("FacilityId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ItemID")
+                    b.Property<int?>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<int>("QuantityBorrowed")
@@ -52,32 +52,69 @@ namespace AspnetCoreMvcStarter.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserID")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("BorrowID");
+                    b.HasKey("BorrowId");
 
-                    b.HasIndex("FacilityID");
+                    b.HasIndex("FacilityId");
 
-                    b.HasIndex("ItemID");
+                    b.HasIndex("ItemId");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserId");
 
                     b.ToTable("BorrowedItems");
                 });
 
-            modelBuilder.Entity("AspnetCoreMvcStarter.Models.Facility", b =>
+            modelBuilder.Entity("AspnetCoreMvcStarter.Models.Comment", b =>
                 {
-                    b.Property<int>("FacilityID")
+                    b.Property<int>("CommentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FacilityID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentId"));
+
+                    b.Property<string>("CommentText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CreatedBy")
+                    b.Property<int?>("RequestId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RequestId1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CommentId");
+
+                    b.HasIndex("RequestId");
+
+                    b.HasIndex("RequestId1")
+                        .IsUnique()
+                        .HasFilter("[RequestId1] IS NOT NULL");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("AspnetCoreMvcStarter.Models.Facility", b =>
+                {
+                    b.Property<int>("FacilityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FacilityId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
@@ -90,7 +127,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FacilityHeadID")
+                    b.Property<int?>("FacilityHeadId")
                         .HasColumnType("int");
 
                     b.Property<string>("FacilityName")
@@ -104,28 +141,25 @@ namespace AspnetCoreMvcStarter.Migrations
                     b.Property<int?>("UpdatedBy")
                         .HasColumnType("int");
 
-                    b.HasKey("FacilityID");
+                    b.HasKey("FacilityId");
 
-                    b.HasIndex("FacilityHeadID");
-
-                    b.HasIndex("FacilityName")
-                        .IsUnique();
+                    b.HasIndex("FacilityHeadId");
 
                     b.ToTable("Facilities");
                 });
 
-            modelBuilder.Entity("AspnetCoreMvcStarter.Models.Item", b =>
+            modelBuilder.Entity("AspnetCoreMvcStarter.Models.FacilityItem", b =>
                 {
-                    b.Property<int>("ItemID")
+                    b.Property<int>("ItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ItemID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ItemId"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CreatedBy")
+                    b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
@@ -138,7 +172,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FacilityID")
+                    b.Property<int?>("FacilityId")
                         .HasColumnType("int");
 
                     b.Property<string>("ItemImage")
@@ -159,63 +193,43 @@ namespace AspnetCoreMvcStarter.Migrations
                     b.Property<int?>("UpdatedBy")
                         .HasColumnType("int");
 
-                    b.HasKey("ItemID");
+                    b.HasKey("ItemId");
 
-                    b.HasIndex("FacilityID");
-
-                    b.ToTable("Items");
+                    b.ToTable("FacilityItems");
                 });
 
             modelBuilder.Entity("AspnetCoreMvcStarter.Models.Notification", b =>
                 {
-                    b.Property<int>("NotificationID")
+                    b.Property<int>("NotificationId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeletedBy")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("UpdatedBy")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
+                    b.HasKey("NotificationId");
 
-                    b.HasKey("NotificationID");
-
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("AspnetCoreMvcStarter.Models.Request", b =>
                 {
-                    b.Property<int>("RequestID")
+                    b.Property<int>("RequestId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RequestID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RequestId"));
 
                     b.Property<DateTime?>("ClosedDate")
                         .HasColumnType("datetime2");
@@ -224,29 +238,17 @@ namespace AspnetCoreMvcStarter.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeletedBy")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FacilityID")
+                    b.Property<int?>("FacilityId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ItemID")
+                    b.Property<int?>("ItemId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("QuantityRequested")
+                    b.Property<int>("QuantityRequested")
                         .HasColumnType("int");
 
                     b.Property<string>("Remarks")
@@ -256,7 +258,7 @@ namespace AspnetCoreMvcStarter.Migrations
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("RequestorID")
+                    b.Property<int?>("RequestorId")
                         .HasColumnType("int");
 
                     b.Property<string>("SeverityLevel")
@@ -267,30 +269,24 @@ namespace AspnetCoreMvcStarter.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                    b.HasKey("RequestId");
 
-                    b.Property<int?>("UpdatedBy")
-                        .HasColumnType("int");
+                    b.HasIndex("FacilityId");
 
-                    b.HasKey("RequestID");
+                    b.HasIndex("ItemId");
 
-                    b.HasIndex("FacilityID");
-
-                    b.HasIndex("ItemID");
-
-                    b.HasIndex("RequestorID");
+                    b.HasIndex("RequestorId");
 
                     b.ToTable("Requests");
                 });
 
             modelBuilder.Entity("AspnetCoreMvcStarter.Models.User", b =>
                 {
-                    b.Property<int>("UserID")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -313,15 +309,14 @@ namespace AspnetCoreMvcStarter.Migrations
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.Property<int>("RoleID")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -332,55 +327,86 @@ namespace AspnetCoreMvcStarter.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("UserID");
+                    b.HasKey("UserId");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("Username")
-                        .IsUnique();
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("AspnetCoreMvcStarter.Models.User_Facility", b =>
+            modelBuilder.Entity("AspnetCoreMvcStarter.Models.UserFacility", b =>
                 {
-                    b.Property<int>("UserID")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FacilityID")
+                    b.Property<int?>("FacilityId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserID", "FacilityID");
+                    b.HasKey("UserId", "FacilityId");
 
-                    b.HasIndex("FacilityID");
+                    b.HasIndex("FacilityId");
 
-                    b.ToTable("User_Facilities");
+                    b.ToTable("UserFacilities");
+                });
+
+            modelBuilder.Entity("AspnetCoreMvcStarter.Models.UserRole", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"));
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RoleId");
+
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("AspnetCoreMvcStarter.Models.BorrowedItem", b =>
                 {
                     b.HasOne("AspnetCoreMvcStarter.Models.Facility", "Facility")
                         .WithMany()
-                        .HasForeignKey("FacilityID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FacilityId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("AspnetCoreMvcStarter.Models.Item", "Item")
-                        .WithMany("BorrowedItems")
-                        .HasForeignKey("ItemID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("AspnetCoreMvcStarter.Models.FacilityItem", "FacilityItem")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("AspnetCoreMvcStarter.Models.User", "User")
-                        .WithMany("BorrowedItems")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Facility");
 
-                    b.Navigation("Item");
+                    b.Navigation("FacilityItem");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AspnetCoreMvcStarter.Models.Comment", b =>
+                {
+                    b.HasOne("AspnetCoreMvcStarter.Models.Request", "Request")
+                        .WithMany()
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AspnetCoreMvcStarter.Models.Request", null)
+                        .WithOne("Comments")
+                        .HasForeignKey("AspnetCoreMvcStarter.Models.Comment", "RequestId1");
+
+                    b.HasOne("AspnetCoreMvcStarter.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Request");
 
                     b.Navigation("User");
                 });
@@ -388,30 +414,17 @@ namespace AspnetCoreMvcStarter.Migrations
             modelBuilder.Entity("AspnetCoreMvcStarter.Models.Facility", b =>
                 {
                     b.HasOne("AspnetCoreMvcStarter.Models.User", "FacilityHead")
-                        .WithMany("ManagedFacilities")
-                        .HasForeignKey("FacilityHeadID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("FacilityHeadId");
 
                     b.Navigation("FacilityHead");
-                });
-
-            modelBuilder.Entity("AspnetCoreMvcStarter.Models.Item", b =>
-                {
-                    b.HasOne("AspnetCoreMvcStarter.Models.Facility", "Facility")
-                        .WithMany("Items")
-                        .HasForeignKey("FacilityID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Facility");
                 });
 
             modelBuilder.Entity("AspnetCoreMvcStarter.Models.Notification", b =>
                 {
                     b.HasOne("AspnetCoreMvcStarter.Models.User", "User")
-                        .WithMany("Notifications")
-                        .HasForeignKey("UserID")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -421,40 +434,50 @@ namespace AspnetCoreMvcStarter.Migrations
             modelBuilder.Entity("AspnetCoreMvcStarter.Models.Request", b =>
                 {
                     b.HasOne("AspnetCoreMvcStarter.Models.Facility", "Facility")
-                        .WithMany("Requests")
-                        .HasForeignKey("FacilityID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("FacilityId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("AspnetCoreMvcStarter.Models.Item", "Item")
-                        .WithMany("Requests")
-                        .HasForeignKey("ItemID");
+                    b.HasOne("AspnetCoreMvcStarter.Models.FacilityItem", "FacilityItem")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("AspnetCoreMvcStarter.Models.User", "Requestor")
-                        .WithMany("Requests")
-                        .HasForeignKey("RequestorID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("RequestorId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Facility");
 
-                    b.Navigation("Item");
+                    b.Navigation("FacilityItem");
 
                     b.Navigation("Requestor");
                 });
 
-            modelBuilder.Entity("AspnetCoreMvcStarter.Models.User_Facility", b =>
+            modelBuilder.Entity("AspnetCoreMvcStarter.Models.User", b =>
                 {
-                    b.HasOne("AspnetCoreMvcStarter.Models.Facility", "Facility")
-                        .WithMany("UserFacilities")
-                        .HasForeignKey("FacilityID")
+                    b.HasOne("AspnetCoreMvcStarter.Models.UserRole", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("AspnetCoreMvcStarter.Models.UserFacility", b =>
+                {
+                    b.HasOne("AspnetCoreMvcStarter.Models.Facility", "Facility")
+                        .WithMany()
+                        .HasForeignKey("FacilityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("AspnetCoreMvcStarter.Models.User", "User")
-                        .WithMany("UserFacilities")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Facility");
@@ -462,33 +485,9 @@ namespace AspnetCoreMvcStarter.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AspnetCoreMvcStarter.Models.Facility", b =>
+            modelBuilder.Entity("AspnetCoreMvcStarter.Models.Request", b =>
                 {
-                    b.Navigation("Items");
-
-                    b.Navigation("Requests");
-
-                    b.Navigation("UserFacilities");
-                });
-
-            modelBuilder.Entity("AspnetCoreMvcStarter.Models.Item", b =>
-                {
-                    b.Navigation("BorrowedItems");
-
-                    b.Navigation("Requests");
-                });
-
-            modelBuilder.Entity("AspnetCoreMvcStarter.Models.User", b =>
-                {
-                    b.Navigation("BorrowedItems");
-
-                    b.Navigation("ManagedFacilities");
-
-                    b.Navigation("Notifications");
-
-                    b.Navigation("Requests");
-
-                    b.Navigation("UserFacilities");
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }
