@@ -29,69 +29,106 @@ namespace AspnetCoreMvcStarter.Controllers
             return View(requests);
         }
 
-        // ✅ Show Create Request Form (GET: /Requests/Create)
+        // ✅ Show Request Details (GET: /Requests/Details/{id})
+        public IActionResult Details(int id)
+        {
+            var request = _context.Requests
+                .Include(r => r.Requestor)
+                .Include(r => r.Facility)
+                .Include(r => r.FacilityItem)
+                .FirstOrDefault(r => r.RequestId == id);
+
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            return View(request);
+        }
+
+        // ✅ Create Request (GET: /Requests/Create)
         public IActionResult Create()
         {
             LoadDropdowns();
             return View();
         }
 
-        // ✅ Handle Create Request Form Submission (POST: /Requests/Create)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Request request, string commentText)
+        public async Task<IActionResult> Create(Request request)
         {
-            if (!ModelState.IsValid)
-            {
-                LoadDropdowns();
-                return View(request);
-            }
-
-            try
-            {
-                var requestorExists = _context.Users.Any(u => u.UserId == request.RequestorId);
-                var facilityExists = _context.Facilities.Any(f => f.FacilityId == request.FacilityId);
-                var itemExists = _context.FacilityItems.Any(i => i.ItemId == request.ItemId);
-
-                if (!requestorExists || !facilityExists || !itemExists)
-                {
-                    ModelState.AddModelError("", "Invalid selections made.");
-                    LoadDropdowns();
-                    return View(request);
-                }
-
-                request.Status = "Open";
-                request.RequestDate = DateTime.UtcNow;
-
-                _context.Requests.Add(request);
-                _context.SaveChanges();
-
-                if (!string.IsNullOrEmpty(commentText))
-                {
-                    var comment = new Comment
-                    {
-                        RequestId = request.RequestId,
-                        UserId = request.RequestorId,
-                        CommentText = commentText,
-                        CreatedAt = DateTime.UtcNow
-                    };
-
-                    _context.Comments.Add(comment);
-                    _context.SaveChanges();
-                }
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("❌ Error saving request: " + ex.Message);
-                ModelState.AddModelError("", "An error occurred while saving the request.");
-                LoadDropdowns();
-                return View(request);
-            }
+    try
+    {
+        // Kiểm tra các trường bắt buộc
+        if (request.FacilityId == null)
+        {
+            ModelState.AddModelError("FacilityId", "Vui lòng chọn cơ sở");
+            LoadDropdowns();
+            return View(request);
         }
 
-        // ✅ Assign a Request to a User (GET: /Requests/Assign/{id})
+        if (request.ItemId == null)
+        {
+            ModelState.AddModelError("ItemId", "Vui lòng chọn vật dụng");
+            LoadDropdowns();
+            return View(request);
+        }
+
+        if (request.QuantityRequested <= 0)
+        {
+            ModelState.AddModelError("QuantityRequested", "Số lượng phải lớn hơn 0");
+            LoadDropdowns();
+            return View(request);
+        }
+
+        if (string.IsNullOrEmpty(request.SeverityLevel))
+        {
+            ModelState.AddModelError("SeverityLevel", "Vui lòng chọn mức độ ưu tiên");
+            LoadDropdowns();
+            return View(request);
+        }
+
+        // Đặt các giá trị mặc định
+        request.RequestDate = DateTime.UtcNow;
+        request.RequestorId = 1; // Mặc định là user có id = 1
+        request.Status = "Open";
+
+        // Mặc định description nếu không có
+        if (string.IsNullOrEmpty(request.Description))
+        {
+            request.Description = "No description provided";
+        }
+
+        // Mặc định remarks nếu không có
+        if (string.IsNullOrEmpty(request.Remarks))
+        {
+            request.Remarks = "";
+        }
+
+        _context.Requests.Add(request);
+        await _context.SaveChangesAsync();
+
+        TempData["Success"] = "Tạo request thành công!";
+        return RedirectToAction(nameof(Index));
+    }
+    catch (Exception ex)
+    {
+        // Log chi tiết lỗi
+        Console.WriteLine($"Exception when creating request: {ex.Message}");
+        Console.WriteLine($"Stack trace: {ex.StackTrace}");
+
+        if (ex.InnerException != null)
+        {
+            Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+        }
+
+        ModelState.AddModelError("", "Lỗi khi lưu request: " + ex.Message);
+        LoadDropdowns();
+        return View(request);
+    }
+}
+
+        // ✅ Assign or Transfer a Request (GET: /Requests/Assign/{id})
         public IActionResult Assign(int id)
         {
             var request = _context.Requests
@@ -103,35 +140,50 @@ namespace AspnetCoreMvcStarter.Controllers
                 return NotFound();
             }
 
-            var assignees = _context.Users.Where(u => u.IsActive).ToList();
-            ViewBag.Assignees = assignees.Any() ? new SelectList(assignees, "UserId", "FullName") : null;
+            // Fetch only active users with RoleId = 3 (Assignees)
+            var availableUsers = _context.Users
+                .Where(u => u.IsActive && u.RoleId == 3)
+                .ToList();
+
+            // Store the currently assigned user separately
+            var currentAssignee = request.Requestor;
+
+            // Remove the currently assigned user from the dropdown list
+            if (request.RequestorId.HasValue)
+            {
+                availableUsers = availableUsers
+                    .Where(u => u.UserId != request.RequestorId.Value)
+                    .ToList();
+            }
+
+            ViewBag.Assignees = availableUsers.Any() ? new SelectList(availableUsers, "UserId", "FullName") : null;
+            ViewBag.CurrentAssignee = currentAssignee;
 
             return View(request);
         }
 
-        // ✅ Handle Request Assignment (POST: /Requests/Assign/{id})
+        // ✅ Handle Request Assignment or Transfer (POST: /Requests/Assign/{id})
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Assign(int id, int RequestorId)
+        public IActionResult Assign(int requestId, int? RequestorId)
         {
-            var request = _context.Requests.Find(id);
+            var request = _context.Requests.FirstOrDefault(r => r.RequestId == requestId);
+
             if (request == null)
             {
                 return NotFound();
             }
 
-            if (!_context.Users.Any(u => u.UserId == RequestorId))
+            if (!RequestorId.HasValue)
             {
-                ModelState.AddModelError("", "Invalid Requestor selected.");
-                LoadDropdowns();
-                return View(request);
+                TempData["Error"] = "Please select a valid user for assignment.";
+                return RedirectToAction("Assign", new { id = requestId });
             }
 
-            request.RequestorId = RequestorId;
-            request.Status = "Assigned";
+            request.RequestorId = RequestorId.Value;
             _context.SaveChanges();
 
-            return RedirectToAction(nameof(Index));
+            TempData["Success"] = "Request successfully assigned!";
+            return RedirectToAction("Index");
         }
 
         // ✅ Update Request Status (GET: /Requests/UpdateStatus/{id})
@@ -172,6 +224,36 @@ namespace AspnetCoreMvcStarter.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // ✅ Revoke a Request (GET: /Requests/Revoke/{id})
+        public IActionResult Revoke(int id)
+        {
+            var request = _context.Requests.Find(id);
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            return View(request);
+        }
+
+        // ✅ Handle Request Revocation (POST: /Requests/RevokeConfirmed/{id})
+        [HttpPost, ActionName("RevokeConfirmed")]
+        [ValidateAntiForgeryToken]
+        public IActionResult RevokeConfirmed(int id)
+        {
+            var request = _context.Requests.Find(id);
+            if (request == null)
+            {
+                return NotFound();
+            }
+
+            request.RequestorId = null;
+            request.Status = "Revoked";
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+        }
+
         // ✅ Report Page (GET: /Requests/Report)
         public IActionResult Report()
         {
@@ -192,7 +274,7 @@ namespace AspnetCoreMvcStarter.Controllers
         // ✅ Load dropdown data
         private void LoadDropdowns()
         {
-            var users = _context.Users.Where(u => u.IsActive).ToList();
+            var users = _context.Users.Where(u => u.IsActive && u.RoleId == 3).ToList();
             ViewBag.Users = users.Any() ? new SelectList(users, "UserId", "FullName") : null;
 
             var facilities = _context.Facilities.ToList();
@@ -200,6 +282,16 @@ namespace AspnetCoreMvcStarter.Controllers
 
             var items = _context.FacilityItems.ToList();
             ViewBag.Items = items.Any() ? new SelectList(items, "ItemId", "ItemName") : null;
+        }
+        [HttpGet]
+        public IActionResult GetItemsByFacility(int facilityId)
+        {
+          var items = _context.FacilityItems
+            .Where(i => i.FacilityId == facilityId)
+            .Select(i => new { itemId = i.ItemId, itemName = i.ItemName })
+            .ToList();
+
+          return Json(items);
         }
     }
 }

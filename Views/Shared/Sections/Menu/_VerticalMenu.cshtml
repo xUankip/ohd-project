@@ -52,24 +52,6 @@
     </li>
 
 
-
-  <!-- Requests -->
-  <li class='menu-item@(currentPage.StartsWith("/Request") ? " active" : "")'>
-    <a href="javascript:void(0);" class="menu-link menu-toggle">
-      <i class='menu-icon tf-icons ri-file-list-line'></i>
-      <div data-i18n="Requests">Requests</div>
-    </a>
-    <ul class="menu-sub">
-      <li class='menu-item@(currentPage == "/Request" ? " active" : "")'>
-        <a asp-controller="Requests" asp-action="Index" class="menu-link">
-          <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
-          <div data-i18n="List">List</div>
-        </a>
-      </li>
-      <li><a href="@Url.Action("Report", "Requests")">Report</a></li>
-    </ul>
-  </li>
-
     <!-- Requests -->
     <li class='menu-item@(currentPage.StartsWith("/Request") ? " active" : "")'>
       <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -78,16 +60,19 @@
       </a>
       <ul class="menu-sub">
         <li class='menu-item@(currentPage == "/Request" ? " active" : "")'>
-          <a asp-controller="Request" asp-action="Index" class="menu-link">
+          <a asp-controller="Requests" asp-action="Index" class="menu-link">
             <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
             <div data-i18n="List">List</div>
           </a>
         </li>
+        <li class='menu-item@(currentPage == "/Requests/Report" ? " active" : "")'>
+          <a asp-controller="Requests" asp-action="Report" class="menu-link">
+            <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
+            <div data-i18n="Report">Report</div>
+          </a>
+        </li>
       </ul>
     </li>
-
-
-
 
     <!-- Facility -->
     <li class='menu-item@(currentPage.StartsWith("/Facility") ? " active" : "")'>
