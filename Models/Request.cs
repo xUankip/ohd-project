@@ -13,7 +13,7 @@ namespace AspnetCoreMvcStarter.Models
         public User? Requestor { get; set; }
         public int? FacilityId { get; set; }
         public Facility? Facility { get; set; }
-        public int? ItemId { get; set; }
+        public int? FacilityItemId { get; set; }
         public FacilityItem? FacilityItem { get; set; }
         public int QuantityRequested { get; set; }
         public DateTime RequestDate { get; set; } = DateTime.UtcNow;

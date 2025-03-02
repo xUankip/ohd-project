@@ -34,13 +34,13 @@ namespace AspnetCoreMvcStarter.Controllers
             {
                 facilityItem.CreatedAt = DateTime.UtcNow;
                 facilityItem.CreatedBy = 1; // Placeholder: thay bằng userId thực tế
-                
+
                 _context.FacilityItems.Add(facilityItem);
                 await _context.SaveChangesAsync();
-                
+
                 return RedirectToAction("Details", "Facility", new { id = facilityItem.FacilityId });
             }
-            
+
             ViewBag.FacilityId = facilityItem.FacilityId;
             return View(facilityItem);
         }
@@ -49,8 +49,8 @@ namespace AspnetCoreMvcStarter.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var facilityItem = await _context.FacilityItems
-                .FirstOrDefaultAsync(i => i.ItemId == id && i.DeletedAt == null);
-                
+                .FirstOrDefaultAsync(i => i.FacilityItemId == id && i.DeletedAt == null);
+
             if (facilityItem == null)
             {
                 return NotFound();
@@ -65,7 +65,7 @@ namespace AspnetCoreMvcStarter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, FacilityItem facilityItem)
         {
-            if (id != facilityItem.ItemId)
+            if (id != facilityItem.FacilityItemId)
             {
                 return NotFound();
             }
@@ -75,13 +75,13 @@ namespace AspnetCoreMvcStarter.Controllers
                 try
                 {
                     var existingItem = await _context.FacilityItems
-                        .FirstOrDefaultAsync(i => i.ItemId == id && i.DeletedAt == null);
-                        
+                        .FirstOrDefaultAsync(i => i.FacilityItemId == id && i.DeletedAt == null);
+
                     if (existingItem == null)
                     {
                         return NotFound();
                     }
-                    
+
                     // Cập nhật các thuộc tính
                     existingItem.ItemName = facilityItem.ItemName;
                     existingItem.ItemImage = facilityItem.ItemImage;
@@ -89,12 +89,12 @@ namespace AspnetCoreMvcStarter.Controllers
                     existingItem.Description = facilityItem.Description;
                     existingItem.UpdatedAt = DateTime.UtcNow;
                     existingItem.UpdatedBy = 1; // Placeholder: thay bằng userId thực tế
-                    
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FacilityItemExists(facilityItem.ItemId))
+                    if (!FacilityItemExists(facilityItem.FacilityItemId))
                     {
                         return NotFound();
                     }
@@ -103,10 +103,10 @@ namespace AspnetCoreMvcStarter.Controllers
                         throw;
                     }
                 }
-                
+
                 return RedirectToAction("Details", "Facility", new { id = facilityItem.FacilityId });
             }
-            
+
             ViewBag.FacilityId = facilityItem.FacilityId;
             return View(facilityItem);
         }
@@ -115,8 +115,8 @@ namespace AspnetCoreMvcStarter.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var facilityItem = await _context.FacilityItems
-                .FirstOrDefaultAsync(i => i.ItemId == id && i.DeletedAt == null);
-                
+                .FirstOrDefaultAsync(i => i.FacilityItemId == id && i.DeletedAt == null);
+
             if (facilityItem == null)
             {
                 return NotFound();
@@ -131,18 +131,18 @@ namespace AspnetCoreMvcStarter.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var facilityItem = await _context.FacilityItems
-                .FirstOrDefaultAsync(i => i.ItemId == id && i.DeletedAt == null);
-                
+                .FirstOrDefaultAsync(i => i.FacilityItemId == id && i.DeletedAt == null);
+
             if (facilityItem == null)
             {
                 return NotFound();
             }
 
             var facilityId = facilityItem.FacilityId;
-            
+
             facilityItem.DeletedAt = DateTime.UtcNow;
             facilityItem.DeletedBy = 1; // Placeholder: thay bằng userId thực tế
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction("Details", "Facility", new { id = facilityId });
         }
@@ -151,8 +151,8 @@ namespace AspnetCoreMvcStarter.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var facilityItem = await _context.FacilityItems
-                .FirstOrDefaultAsync(i => i.ItemId == id && i.DeletedAt == null);
-                
+                .FirstOrDefaultAsync(i => i.FacilityItemId == id && i.DeletedAt == null);
+
             if (facilityItem == null)
             {
                 return NotFound();
@@ -164,7 +164,7 @@ namespace AspnetCoreMvcStarter.Controllers
         private bool FacilityItemExists(int id)
         {
             return _context.FacilityItems
-                .Any(i => i.ItemId == id && i.DeletedAt == null);
+                .Any(i => i.FacilityItemId == id && i.DeletedAt == null);
         }
     }
 }

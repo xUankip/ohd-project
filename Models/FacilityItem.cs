@@ -7,7 +7,7 @@ namespace AspnetCoreMvcStarter.Models
     public class FacilityItem
     {
         [Key]
-        public int ItemId { get; set; }
+        public int FacilityItemId { get; set; }
 
         [Required, MaxLength(100)]
         public string ItemName { get; set; }

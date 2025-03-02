@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace AspnetCoreMvcStarter.Migrations
 {
     /// <inheritdoc />
@@ -15,7 +17,7 @@ namespace AspnetCoreMvcStarter.Migrations
                 name: "FacilityItems",
                 columns: table => new
                 {
-                    ItemId = table.Column<int>(type: "int", nullable: false)
+                    FacilityItemId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ItemName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ItemImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -31,7 +33,7 @@ namespace AspnetCoreMvcStarter.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FacilityItems", x => x.ItemId);
+                    table.PrimaryKey("PK_FacilityItems", x => x.FacilityItemId);
                 });
 
             migrationBuilder.CreateTable(
@@ -129,7 +131,7 @@ namespace AspnetCoreMvcStarter.Migrations
                     BorrowId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: true),
-                    ItemId = table.Column<int>(type: "int", nullable: true),
+                    FacilityItemId = table.Column<int>(type: "int", nullable: true),
                     FacilityId = table.Column<int>(type: "int", nullable: true),
                     QuantityBorrowed = table.Column<int>(type: "int", nullable: false),
                     BorrowDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -143,20 +145,17 @@ namespace AspnetCoreMvcStarter.Migrations
                         name: "FK_BorrowedItems_Facilities_FacilityId",
                         column: x => x.FacilityId,
                         principalTable: "Facilities",
-                        principalColumn: "FacilityId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "FacilityId");
                     table.ForeignKey(
-                        name: "FK_BorrowedItems_FacilityItems_ItemId",
-                        column: x => x.ItemId,
+                        name: "FK_BorrowedItems_FacilityItems_FacilityItemId",
+                        column: x => x.FacilityItemId,
                         principalTable: "FacilityItems",
-                        principalColumn: "ItemId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "FacilityItemId");
                     table.ForeignKey(
                         name: "FK_BorrowedItems_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -167,15 +166,15 @@ namespace AspnetCoreMvcStarter.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RequestorId = table.Column<int>(type: "int", nullable: true),
                     FacilityId = table.Column<int>(type: "int", nullable: true),
-                    ItemId = table.Column<int>(type: "int", nullable: true),
+                    FacilityItemId = table.Column<int>(type: "int", nullable: true),
                     QuantityRequested = table.Column<int>(type: "int", nullable: false),
                     RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SeverityLevel = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SeverityLevel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Remarks = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClosedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ClosureReason = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ClosureReason = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -184,20 +183,18 @@ namespace AspnetCoreMvcStarter.Migrations
                         name: "FK_Requests_Facilities_FacilityId",
                         column: x => x.FacilityId,
                         principalTable: "Facilities",
-                        principalColumn: "FacilityId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "FacilityId");
                     table.ForeignKey(
-                        name: "FK_Requests_FacilityItems_ItemId",
-                        column: x => x.ItemId,
+                        name: "FK_Requests_FacilityItems_FacilityItemId",
+                        column: x => x.FacilityItemId,
                         principalTable: "FacilityItems",
-                        principalColumn: "ItemId",
+                        principalColumn: "FacilityItemId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Requests_Users_RequestorId",
                         column: x => x.RequestorId,
                         principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -205,23 +202,22 @@ namespace AspnetCoreMvcStarter.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    FacilityId = table.Column<int>(type: "int", nullable: false)
+                    FacilityId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserFacilities", x => new { x.UserId, x.FacilityId });
+                    table.PrimaryKey("PK_UserFacilities", x => x.UserId);
                     table.ForeignKey(
                         name: "FK_UserFacilities_Facilities_FacilityId",
                         column: x => x.FacilityId,
                         principalTable: "Facilities",
-                        principalColumn: "FacilityId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "FacilityId");
                     table.ForeignKey(
                         name: "FK_UserFacilities_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -233,8 +229,7 @@ namespace AspnetCoreMvcStarter.Migrations
                     RequestId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: true),
                     CommentText = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RequestId1 = table.Column<int>(type: "int", nullable: true)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -243,19 +238,85 @@ namespace AspnetCoreMvcStarter.Migrations
                         name: "FK_Comments_Requests_RequestId",
                         column: x => x.RequestId,
                         principalTable: "Requests",
-                        principalColumn: "RequestId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Comments_Requests_RequestId1",
-                        column: x => x.RequestId1,
-                        principalTable: "Requests",
                         principalColumn: "RequestId");
                     table.ForeignKey(
                         name: "FK_Comments_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserId");
+                });
+
+            migrationBuilder.InsertData(
+                table: "Facilities",
+                columns: new[] { "FacilityId", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "Description", "FacilityHeadId", "FacilityName", "UpdatedAt", "UpdatedBy" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1776), 0, null, null, "Provides books and resources for students.", null, "Library", null, null },
+                    { 2, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1778), 0, null, null, "Equipped for physics and chemistry experiments.", null, "Science Lab", null, null },
+                    { 3, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1779), 0, null, null, "Contains computers for student use.", null, "Computer Lab", null, null },
+                    { 4, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1780), 0, null, null, "Indoor sports and fitness activities.", null, "Gymnasium", null, null },
+                    { 5, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1780), 0, null, null, "Used for school events and presentations.", null, "Auditorium", null, null },
+                    { 6, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1781), 0, null, null, "Outdoor sports facility for football training.", null, "Football Field", null, null },
+                    { 7, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1782), 0, null, null, "Used for basketball games and training.", null, "Basketball Court", null, null },
+                    { 8, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1782), 0, null, null, "Food and beverages for students and staff.", null, "Cafeteria", null, null },
+                    { 9, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1783), 0, null, null, "Parking space for staff and students.", null, "Parking Lot", null, null },
+                    { 10, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1784), 0, null, null, "Monitors campus security operations.", null, "Security Room", null, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "FacilityItems",
+                columns: new[] { "FacilityItemId", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "Description", "FacilityId", "ItemImage", "ItemName", "Quantity", "UpdatedAt", "UpdatedBy" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1803), 0, null, null, "Kit for physics experiments.", 2, "physics_kit.png", "Physics Kit", 5, null, null },
+                    { 2, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1805), 0, null, null, "Includes beakers and test tubes.", 2, "chemistry_set.png", "Chemistry Set", 10, null, null },
+                    { 3, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1806), 0, null, null, "Computers for student use.", 3, "computer.png", "Computer", 15, null, null },
+                    { 4, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1807), 0, null, null, "Official size basketballs.", 7, "basketball.png", "Basketball", 10, null, null },
+                    { 5, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1808), 0, null, null, "For presentations and seminars.", 5, "projector.png", "Projector", 3, null, null },
+                    { 6, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1809), 0, null, null, "For gym workouts.", 4, "treadmill.png", "Treadmill", 2, null, null },
+                    { 7, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1810), 0, null, null, "Academic and reference books.", 1, "books.png", "Library Books", 500, null, null },
+                    { 8, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1811), 0, null, null, "Monitors school security.", 10, "security_camera.png", "Security Camera", 8, null, null },
+                    { 9, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1812), 0, null, null, "Used in science experiments.", 2, "microscope.png", "Microscope", 6, null, null },
+                    { 10, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1813), 0, null, null, "Used for training and matches.", 6, "football.png", "Football", 12, null, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "UserRoles",
+                columns: new[] { "RoleId", "RoleName" },
+                values: new object[,]
+                {
+                    { 1, "Admin" },
+                    { 2, "FacilityHead" },
+                    { 3, "Assignee" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "UserId", "CreatedAt", "DeletedAt", "Email", "FullName", "IsActive", "PasswordHash", "Phone", "RoleId", "UpdatedAt", "Username" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1730), null, "admin@school.com", "Admin User", true, "hashedpassword", "555-1001", 1, null, "admin" },
+                    { 2, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1734), null, "library@school.com", "Library Manager", true, "hashedpassword", "555-1002", 2, null, "library" },
+                    { 3, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1736), null, "lab@school.com", "Lab Manager", true, "hashedpassword", "555-1003", 2, null, "lab" },
+                    { 4, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1737), null, "gym@school.com", "Gym Supervisor", true, "hashedpassword", "555-1004", 2, null, "gym" },
+                    { 5, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1738), null, "sports@school.com", "Sports Coordinator", true, "hashedpassword", "555-1005", 2, null, "sports" },
+                    { 6, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1739), null, "it@school.com", "IT Support", true, "hashedpassword", "555-1006", 2, null, "it" },
+                    { 7, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1741), null, "assistant1@school.com", "Student Assistant", true, "hashedpassword", "555-1007", 3, null, "assistant1" },
+                    { 8, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1742), null, "tech@school.com", "Lab Technician", true, "hashedpassword", "555-1008", 3, null, "tech" },
+                    { 9, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1743), null, "security@school.com", "Security Staff", true, "hashedpassword", "555-1009", 3, null, "security" },
+                    { 10, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1744), null, "maintenance@school.com", "Maintenance Staff", true, "hashedpassword", "555-1010", 3, null, "maintenance" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Requests",
+                columns: new[] { "RequestId", "ClosedDate", "ClosureReason", "Description", "FacilityId", "FacilityItemId", "QuantityRequested", "Remarks", "RequestDate", "RequestorId", "SeverityLevel", "Status" },
+                values: new object[,]
+                {
+                    { 1, null, "", "Request for library books.", 1, 7, 2, "", new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1837), 7, "Medium", "Approved" },
+                    { 2, null, "", "Physics experiment kit required.", 2, 1, 1, "", new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1843), 8, "High", "Pending" },
+                    { 3, null, "", "Chemistry lab items.", 2, 2, 1, "", new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1845), 8, "Medium", "Approved" },
+                    { 4, null, "", "Need footballs for practice.", 6, 10, 2, "", new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1847), 10, "Low", "Pending" },
+                    { 5, null, "", "Security cameras required.", 10, 8, 3, "", new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1848), 9, "High", "Rejected" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -264,9 +325,9 @@ namespace AspnetCoreMvcStarter.Migrations
                 column: "FacilityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BorrowedItems_ItemId",
+                name: "IX_BorrowedItems_FacilityItemId",
                 table: "BorrowedItems",
-                column: "ItemId");
+                column: "FacilityItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BorrowedItems_UserId",
@@ -276,14 +337,9 @@ namespace AspnetCoreMvcStarter.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_RequestId",
                 table: "Comments",
-                column: "RequestId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comments_RequestId1",
-                table: "Comments",
-                column: "RequestId1",
+                column: "RequestId",
                 unique: true,
-                filter: "[RequestId1] IS NOT NULL");
+                filter: "[RequestId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserId",
@@ -306,9 +362,9 @@ namespace AspnetCoreMvcStarter.Migrations
                 column: "FacilityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Requests_ItemId",
+                name: "IX_Requests_FacilityItemId",
                 table: "Requests",
-                column: "ItemId");
+                column: "FacilityItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Requests_RequestorId",

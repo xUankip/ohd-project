@@ -67,9 +67,9 @@ namespace AspnetCoreMvcStarter.Controllers
             return View(request);
         }
 
-        if (request.ItemId == null)
+        if (request.FacilityItemId == null)
         {
-            ModelState.AddModelError("ItemId", "Vui lòng chọn vật dụng");
+            ModelState.AddModelError("FacilityItemId", "Vui lòng chọn vật dụng");
             LoadDropdowns();
             return View(request);
         }
@@ -281,14 +281,14 @@ namespace AspnetCoreMvcStarter.Controllers
             ViewBag.Facilities = facilities.Any() ? new SelectList(facilities, "FacilityId", "FacilityName") : null;
 
             var items = _context.FacilityItems.ToList();
-            ViewBag.Items = items.Any() ? new SelectList(items, "ItemId", "ItemName") : null;
+            ViewBag.Items = items.Any() ? new SelectList(items, "FacilityItemId", "ItemName") : null;
         }
         [HttpGet]
         public IActionResult GetItemsByFacility(int facilityId)
         {
           var items = _context.FacilityItems
             .Where(i => i.FacilityId == facilityId)
-            .Select(i => new { itemId = i.ItemId, itemName = i.ItemName })
+            .Select(i => new { itemId = i.FacilityItemId, itemName = i.ItemName })
             .ToList();
 
           return Json(items);

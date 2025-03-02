@@ -10,7 +10,8 @@ namespace AspnetCoreMvcStarter.Models
         public int BorrowId { get; set; }
         public int? UserId { get; set; }
         public User User { get; set; }
-        public int? ItemId { get; set; }
+        [ForeignKey("FacilityItemId")]
+        public int? FacilityItemId { get; set; }
         public FacilityItem FacilityItem { get; set; }
         public int? FacilityId { get; set; }
         public Facility Facility { get; set; }

@@ -26,7 +26,7 @@ namespace AspnetCoreMvcStarter.Data
             modelBuilder.Entity<Request>()
                 .HasOne(r => r.FacilityItem)
                 .WithMany()
-                .HasForeignKey(r => r.ItemId)
+                .HasForeignKey(r => r.FacilityItemId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // ✅ Seed User Roles
@@ -66,25 +66,25 @@ namespace AspnetCoreMvcStarter.Data
 
             // ✅ Seed Facility Items
             modelBuilder.Entity<FacilityItem>().HasData(
-                new FacilityItem { ItemId = 1, ItemName = "Physics Kit", FacilityId = 2, Quantity = 5, ItemImage = "physics_kit.png", Description = "Kit for physics experiments." },
-                new FacilityItem { ItemId = 2, ItemName = "Chemistry Set", FacilityId = 2, Quantity = 10, ItemImage = "chemistry_set.png", Description = "Includes beakers and test tubes." },
-                new FacilityItem { ItemId = 3, ItemName = "Computer", FacilityId = 3, Quantity = 15, ItemImage = "computer.png", Description = "Computers for student use." },
-                new FacilityItem { ItemId = 4, ItemName = "Basketball", FacilityId = 7, Quantity = 10, ItemImage = "basketball.png", Description = "Official size basketballs." },
-                new FacilityItem { ItemId = 5, ItemName = "Projector", FacilityId = 5, Quantity = 3, ItemImage = "projector.png", Description = "For presentations and seminars." },
-                new FacilityItem { ItemId = 6, ItemName = "Treadmill", FacilityId = 4, Quantity = 2, ItemImage = "treadmill.png", Description = "For gym workouts." },
-                new FacilityItem { ItemId = 7, ItemName = "Library Books", FacilityId = 1, Quantity = 500, ItemImage = "books.png", Description = "Academic and reference books." },
-                new FacilityItem { ItemId = 8, ItemName = "Security Camera", FacilityId = 10, Quantity = 8, ItemImage = "security_camera.png", Description = "Monitors school security." },
-                new FacilityItem { ItemId = 9, ItemName = "Microscope", FacilityId = 2, Quantity = 6, ItemImage = "microscope.png", Description = "Used in science experiments." },
-                new FacilityItem { ItemId = 10, ItemName = "Football", FacilityId = 6, Quantity = 12, ItemImage = "football.png", Description = "Used for training and matches." }
+                new FacilityItem { FacilityItemId = 1, ItemName = "Physics Kit", FacilityId = 2, Quantity = 5, ItemImage = "physics_kit.png", Description = "Kit for physics experiments." },
+                new FacilityItem { FacilityItemId = 2, ItemName = "Chemistry Set", FacilityId = 2, Quantity = 10, ItemImage = "chemistry_set.png", Description = "Includes beakers and test tubes." },
+                new FacilityItem { FacilityItemId = 3, ItemName = "Computer", FacilityId = 3, Quantity = 15, ItemImage = "computer.png", Description = "Computers for student use." },
+                new FacilityItem { FacilityItemId = 4, ItemName = "Basketball", FacilityId = 7, Quantity = 10, ItemImage = "basketball.png", Description = "Official size basketballs." },
+                new FacilityItem { FacilityItemId = 5, ItemName = "Projector", FacilityId = 5, Quantity = 3, ItemImage = "projector.png", Description = "For presentations and seminars." },
+                new FacilityItem { FacilityItemId = 6, ItemName = "Treadmill", FacilityId = 4, Quantity = 2, ItemImage = "treadmill.png", Description = "For gym workouts." },
+                new FacilityItem { FacilityItemId = 7, ItemName = "Library Books", FacilityId = 1, Quantity = 500, ItemImage = "books.png", Description = "Academic and reference books." },
+                new FacilityItem { FacilityItemId = 8, ItemName = "Security Camera", FacilityId = 10, Quantity = 8, ItemImage = "security_camera.png", Description = "Monitors school security." },
+                new FacilityItem { FacilityItemId = 9, ItemName = "Microscope", FacilityId = 2, Quantity = 6, ItemImage = "microscope.png", Description = "Used in science experiments." },
+                new FacilityItem { FacilityItemId = 10, ItemName = "Football", FacilityId = 6, Quantity = 12, ItemImage = "football.png", Description = "Used for training and matches." }
             );
 
             // ✅ Seed Requests (Fixed `ItemId` issue)
             modelBuilder.Entity<Request>().HasData(
-                new Request { RequestId = 1, RequestorId = 7, FacilityId = 1, ItemId = 7, QuantityRequested = 2, Status = "Approved", Description = "Request for library books.", ClosureReason = "", Remarks = "", SeverityLevel = "Medium" },
-                new Request { RequestId = 2, RequestorId = 8, FacilityId = 2, ItemId = 1, QuantityRequested = 1, Status = "Pending", Description = "Physics experiment kit required.", ClosureReason = "", Remarks = "", SeverityLevel = "High" },
-                new Request { RequestId = 3, RequestorId = 8, FacilityId = 2, ItemId = 2, QuantityRequested = 1, Status = "Approved", Description = "Chemistry lab items.", ClosureReason = "", Remarks = "", SeverityLevel = "Medium" },
-                new Request { RequestId = 4, RequestorId = 10, FacilityId = 6, ItemId = 10, QuantityRequested = 2, Status = "Pending", Description = "Need footballs for practice.", ClosureReason = "", Remarks = "", SeverityLevel = "Low" },
-                new Request { RequestId = 5, RequestorId = 9, FacilityId = 10, ItemId = 8, QuantityRequested = 3, Status = "Rejected", Description = "Security cameras required.", ClosureReason = "", Remarks = "", SeverityLevel = "High" }
+                new Request { RequestId = 1, RequestorId = 7, FacilityId = 1, FacilityItemId = 7, QuantityRequested = 2, Status = "Approved", Description = "Request for library books.", ClosureReason = "", Remarks = "", SeverityLevel = "Medium" },
+                new Request { RequestId = 2, RequestorId = 8, FacilityId = 2, FacilityItemId = 1, QuantityRequested = 1, Status = "Pending", Description = "Physics experiment kit required.", ClosureReason = "", Remarks = "", SeverityLevel = "High" },
+                new Request { RequestId = 3, RequestorId = 8, FacilityId = 2, FacilityItemId = 2, QuantityRequested = 1, Status = "Approved", Description = "Chemistry lab items.", ClosureReason = "", Remarks = "", SeverityLevel = "Medium" },
+                new Request { RequestId = 4, RequestorId = 10, FacilityId = 6, FacilityItemId = 10, QuantityRequested = 2, Status = "Pending", Description = "Need footballs for practice.", ClosureReason = "", Remarks = "", SeverityLevel = "Low" },
+                new Request { RequestId = 5, RequestorId = 9, FacilityId = 10, FacilityItemId = 8, QuantityRequested = 3, Status = "Rejected", Description = "Security cameras required.", ClosureReason = "", Remarks = "", SeverityLevel = "High" }
             );
         }
     }

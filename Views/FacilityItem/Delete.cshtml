@@ -26,7 +26,7 @@
                 <div class="col-md-8">
                     <dl class="row">
                         <dt class="col-sm-3">ID:</dt>
-                        <dd class="col-sm-9">@Model.ItemId</dd>
+                        <dd class="col-sm-9">@Model.FacilityItemId</dd>
 
                         <dt class="col-sm-3">Tên thiết bị:</dt>
                         <dd class="col-sm-9">@Model.ItemName</dd>
@@ -42,7 +42,7 @@
         </div>
         <div class="card-footer">
             <form asp-action="Delete" method="post">
-                <input type="hidden" asp-for="ItemId" />
+                <input type="hidden" asp-for="FacilityItemId" />
                 <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
                 <a asp-controller="Facility" asp-action="Details" asp-route-id="@Model.FacilityId" class="btn btn-secondary">Quay lại</a>
             </form>

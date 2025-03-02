@@ -55,4 +55,7 @@
     <_ContentIncludedByDefault Remove="Views\Admin\Edit.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Admin\Index.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
 </Project>

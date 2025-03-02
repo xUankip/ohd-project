@@ -28,7 +28,7 @@
                 <div class="col-md-8">
                     <dl class="row">
                         <dt class="col-sm-3">ID:</dt>
-                        <dd class="col-sm-9">@Model.ItemId</dd>
+                        <dd class="col-sm-9">@Model.FacilityItemId</dd>
 
                         <dt class="col-sm-3">Tên thiết bị:</dt>
                         <dd class="col-sm-9">@Model.ItemName</dd>
@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="card-footer">
-            <a asp-action="Edit" asp-route-id="@Model.ItemId" class="btn btn-warning">Chỉnh sửa</a>
+            <a asp-action="Edit" asp-route-id="@Model.FacilityItemId" class="btn btn-warning">Chỉnh sửa</a>
             <a asp-controller="Facility" asp-action="Details" asp-route-id="@Model.FacilityId" class="btn btn-secondary">Quay lại</a>
         </div>
     </div>
