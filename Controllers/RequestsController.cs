@@ -32,19 +32,22 @@ namespace AspnetCoreMvcStarter.Controllers
         // ✅ Show Request Details (GET: /Requests/Details/{id})
         public IActionResult Details(int id)
         {
-            var request = _context.Requests
-                .Include(r => r.Requestor)
-                .Include(r => r.Facility)
-                .Include(r => r.FacilityItem)
-                .FirstOrDefault(r => r.RequestId == id);
+          var request = _context.Requests
+            .Include(r => r.Requestor)
+            .Include(r => r.Facility)
+            .Include(r => r.FacilityItem)
+            .Include(r => r.Comments) // ✅ Include Comments
+            .ThenInclude(c => c.User)
+            .FirstOrDefault(r => r.RequestId == id);
 
-            if (request == null)
-            {
-                return NotFound();
-            }
+          if (request == null)
+          {
+            return NotFound();
+          }
 
-            return View(request);
+          return View(request);
         }
+
 
         // ✅ Create Request (GET: /Requests/Create)
         public IActionResult Create()
@@ -186,42 +189,53 @@ namespace AspnetCoreMvcStarter.Controllers
             return RedirectToAction("Index");
         }
 
-        // ✅ Update Request Status (GET: /Requests/UpdateStatus/{id})
-        public IActionResult UpdateStatus(int id)
+// ✅ Edit Request (GET)
+        public async Task<IActionResult> Edit(int id)
         {
-            var request = _context.Requests.Find(id);
-            if (request == null)
-            {
-                return NotFound();
-            }
+          var request = await _context.Requests.FindAsync(id);
+          if (request == null)
+          {
+            return NotFound();
+          }
 
-            ViewBag.StatusOptions = new List<SelectListItem>
-            {
-                new SelectListItem { Text = "New", Value = "New" },
-                new SelectListItem { Text = "Pending", Value = "Pending" },
-                new SelectListItem { Text = "In Progress", Value = "InProgress" },
-                new SelectListItem { Text = "Completed", Value = "Completed" },
-                new SelectListItem { Text = "Closed", Value = "Closed" }
-            };
-
-            return View(request);
+          LoadDropdowns();
+          return View(request);
         }
 
-        // ✅ Handle Status Update (POST: /Requests/UpdateStatus/{id})
+        // ✅ Handle Request Edit (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdateStatus(int id, string status)
+        public async Task<IActionResult> Edit(int id, Request request)
         {
-            var request = _context.Requests.Find(id);
-            if (request == null)
-            {
-                return NotFound();
-            }
+          if (id != request.RequestId)
+          {
+            return NotFound();
+          }
 
-            request.Status = status;
-            _context.SaveChanges();
+          if (!ModelState.IsValid)
+          {
+            LoadDropdowns();
+            return View(request);
+          }
 
+          try
+          {
+            _context.Update(request);
+            await _context.SaveChangesAsync();
+            TempData["Success"] = "Request updated successfully!";
             return RedirectToAction(nameof(Index));
+          }
+          catch (DbUpdateConcurrencyException)
+          {
+            if (!_context.Requests.Any(r => r.RequestId == id))
+            {
+              return NotFound();
+            }
+            else
+            {
+              throw;
+            }
+          }
         }
 
         // ✅ Revoke a Request (GET: /Requests/Revoke/{id})
@@ -293,5 +307,37 @@ namespace AspnetCoreMvcStarter.Controllers
 
           return Json(items);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddComment(int requestId, string commentText)
+        {
+          if (string.IsNullOrWhiteSpace(commentText))
+          {
+            TempData["Error"] = "Comment cannot be empty.";
+            return RedirectToAction("Details", new { id = requestId });
+          }
+
+          var request = await _context.Requests.FindAsync(requestId);
+          if (request == null)
+          {
+            return NotFound();
+          }
+
+          var comment = new Comment
+          {
+            RequestId = requestId,
+            UserId = 1, // Replace with the actual logged-in user ID
+            CommentText = commentText,
+            CreatedAt = DateTime.UtcNow
+          };
+
+          _context.Comments.Add(comment);
+          await _context.SaveChangesAsync();
+
+          TempData["Success"] = "Comment added successfully!";
+          return RedirectToAction("Details", new { id = requestId });
+        }
+
     }
 }

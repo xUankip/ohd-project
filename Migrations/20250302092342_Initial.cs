@@ -251,16 +251,16 @@ namespace AspnetCoreMvcStarter.Migrations
                 columns: new[] { "FacilityId", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "Description", "FacilityHeadId", "FacilityName", "UpdatedAt", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1776), 0, null, null, "Provides books and resources for students.", null, "Library", null, null },
-                    { 2, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1778), 0, null, null, "Equipped for physics and chemistry experiments.", null, "Science Lab", null, null },
-                    { 3, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1779), 0, null, null, "Contains computers for student use.", null, "Computer Lab", null, null },
-                    { 4, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1780), 0, null, null, "Indoor sports and fitness activities.", null, "Gymnasium", null, null },
-                    { 5, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1780), 0, null, null, "Used for school events and presentations.", null, "Auditorium", null, null },
-                    { 6, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1781), 0, null, null, "Outdoor sports facility for football training.", null, "Football Field", null, null },
-                    { 7, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1782), 0, null, null, "Used for basketball games and training.", null, "Basketball Court", null, null },
-                    { 8, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1782), 0, null, null, "Food and beverages for students and staff.", null, "Cafeteria", null, null },
-                    { 9, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1783), 0, null, null, "Parking space for staff and students.", null, "Parking Lot", null, null },
-                    { 10, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1784), 0, null, null, "Monitors campus security operations.", null, "Security Room", null, null }
+                    { 1, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9635), 0, null, null, "Provides books and resources for students.", null, "Library", null, null },
+                    { 2, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9639), 0, null, null, "Equipped for physics and chemistry experiments.", null, "Science Lab", null, null },
+                    { 3, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9641), 0, null, null, "Contains computers for student use.", null, "Computer Lab", null, null },
+                    { 4, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9642), 0, null, null, "Indoor sports and fitness activities.", null, "Gymnasium", null, null },
+                    { 5, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9643), 0, null, null, "Used for school events and presentations.", null, "Auditorium", null, null },
+                    { 6, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9643), 0, null, null, "Outdoor sports facility for football training.", null, "Football Field", null, null },
+                    { 7, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9644), 0, null, null, "Used for basketball games and training.", null, "Basketball Court", null, null },
+                    { 8, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9645), 0, null, null, "Food and beverages for students and staff.", null, "Cafeteria", null, null },
+                    { 9, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9646), 0, null, null, "Parking space for staff and students.", null, "Parking Lot", null, null },
+                    { 10, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9647), 0, null, null, "Monitors campus security operations.", null, "Security Room", null, null }
                 });
 
             migrationBuilder.InsertData(
@@ -268,16 +268,16 @@ namespace AspnetCoreMvcStarter.Migrations
                 columns: new[] { "FacilityItemId", "CreatedAt", "CreatedBy", "DeletedAt", "DeletedBy", "Description", "FacilityId", "ItemImage", "ItemName", "Quantity", "UpdatedAt", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1803), 0, null, null, "Kit for physics experiments.", 2, "physics_kit.png", "Physics Kit", 5, null, null },
-                    { 2, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1805), 0, null, null, "Includes beakers and test tubes.", 2, "chemistry_set.png", "Chemistry Set", 10, null, null },
-                    { 3, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1806), 0, null, null, "Computers for student use.", 3, "computer.png", "Computer", 15, null, null },
-                    { 4, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1807), 0, null, null, "Official size basketballs.", 7, "basketball.png", "Basketball", 10, null, null },
-                    { 5, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1808), 0, null, null, "For presentations and seminars.", 5, "projector.png", "Projector", 3, null, null },
-                    { 6, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1809), 0, null, null, "For gym workouts.", 4, "treadmill.png", "Treadmill", 2, null, null },
-                    { 7, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1810), 0, null, null, "Academic and reference books.", 1, "books.png", "Library Books", 500, null, null },
-                    { 8, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1811), 0, null, null, "Monitors school security.", 10, "security_camera.png", "Security Camera", 8, null, null },
-                    { 9, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1812), 0, null, null, "Used in science experiments.", 2, "microscope.png", "Microscope", 6, null, null },
-                    { 10, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1813), 0, null, null, "Used for training and matches.", 6, "football.png", "Football", 12, null, null }
+                    { 1, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9670), 0, null, null, "Kit for physics experiments.", 2, "physics_kit.png", "Physics Kit", 5, null, null },
+                    { 2, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9674), 0, null, null, "Includes beakers and test tubes.", 2, "chemistry_set.png", "Chemistry Set", 10, null, null },
+                    { 3, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9676), 0, null, null, "Computers for student use.", 3, "computer.png", "Computer", 15, null, null },
+                    { 4, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9678), 0, null, null, "Official size basketballs.", 7, "basketball.png", "Basketball", 10, null, null },
+                    { 5, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9679), 0, null, null, "For presentations and seminars.", 5, "projector.png", "Projector", 3, null, null },
+                    { 6, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9681), 0, null, null, "For gym workouts.", 4, "treadmill.png", "Treadmill", 2, null, null },
+                    { 7, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9682), 0, null, null, "Academic and reference books.", 1, "books.png", "Library Books", 500, null, null },
+                    { 8, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9684), 0, null, null, "Monitors school security.", 10, "security_camera.png", "Security Camera", 8, null, null },
+                    { 9, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9685), 0, null, null, "Used in science experiments.", 2, "microscope.png", "Microscope", 6, null, null },
+                    { 10, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9686), 0, null, null, "Used for training and matches.", 6, "football.png", "Football", 12, null, null }
                 });
 
             migrationBuilder.InsertData(
@@ -287,7 +287,8 @@ namespace AspnetCoreMvcStarter.Migrations
                 {
                     { 1, "Admin" },
                     { 2, "FacilityHead" },
-                    { 3, "Assignee" }
+                    { 3, "Assignee" },
+                    { 4, "User" }
                 });
 
             migrationBuilder.InsertData(
@@ -295,16 +296,16 @@ namespace AspnetCoreMvcStarter.Migrations
                 columns: new[] { "UserId", "CreatedAt", "DeletedAt", "Email", "FullName", "IsActive", "PasswordHash", "Phone", "RoleId", "UpdatedAt", "Username" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1730), null, "admin@school.com", "Admin User", true, "hashedpassword", "555-1001", 1, null, "admin" },
-                    { 2, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1734), null, "library@school.com", "Library Manager", true, "hashedpassword", "555-1002", 2, null, "library" },
-                    { 3, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1736), null, "lab@school.com", "Lab Manager", true, "hashedpassword", "555-1003", 2, null, "lab" },
-                    { 4, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1737), null, "gym@school.com", "Gym Supervisor", true, "hashedpassword", "555-1004", 2, null, "gym" },
-                    { 5, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1738), null, "sports@school.com", "Sports Coordinator", true, "hashedpassword", "555-1005", 2, null, "sports" },
-                    { 6, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1739), null, "it@school.com", "IT Support", true, "hashedpassword", "555-1006", 2, null, "it" },
-                    { 7, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1741), null, "assistant1@school.com", "Student Assistant", true, "hashedpassword", "555-1007", 3, null, "assistant1" },
-                    { 8, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1742), null, "tech@school.com", "Lab Technician", true, "hashedpassword", "555-1008", 3, null, "tech" },
-                    { 9, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1743), null, "security@school.com", "Security Staff", true, "hashedpassword", "555-1009", 3, null, "security" },
-                    { 10, new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1744), null, "maintenance@school.com", "Maintenance Staff", true, "hashedpassword", "555-1010", 3, null, "maintenance" }
+                    { 1, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9540), null, "admin@school.com", "Admin User", true, "hashedpassword", "555-1001", 1, null, "admin" },
+                    { 2, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9546), null, "library@school.com", "Library Manager", true, "hashedpassword", "555-1002", 2, null, "library" },
+                    { 3, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9548), null, "lab@school.com", "Lab Manager", true, "hashedpassword", "555-1003", 2, null, "lab" },
+                    { 4, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9550), null, "gym@school.com", "Gym Supervisor", true, "hashedpassword", "555-1004", 2, null, "gym" },
+                    { 5, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9552), null, "sports@school.com", "Sports Coordinator", true, "hashedpassword", "555-1005", 2, null, "sports" },
+                    { 6, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9553), null, "it@school.com", "IT Support", true, "hashedpassword", "555-1006", 2, null, "it" },
+                    { 7, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9555), null, "assistant1@school.com", "Student Assistant", true, "hashedpassword", "555-1007", 3, null, "assistant1" },
+                    { 8, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9556), null, "tech@school.com", "Lab Technician", true, "hashedpassword", "555-1008", 3, null, "tech" },
+                    { 9, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9558), null, "security@school.com", "Security Staff", true, "hashedpassword", "555-1009", 3, null, "security" },
+                    { 10, new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9606), null, "maintenance@school.com", "Maintenance Staff", true, "hashedpassword", "555-1010", 3, null, "maintenance" }
                 });
 
             migrationBuilder.InsertData(
@@ -312,11 +313,11 @@ namespace AspnetCoreMvcStarter.Migrations
                 columns: new[] { "RequestId", "ClosedDate", "ClosureReason", "Description", "FacilityId", "FacilityItemId", "QuantityRequested", "Remarks", "RequestDate", "RequestorId", "SeverityLevel", "Status" },
                 values: new object[,]
                 {
-                    { 1, null, "", "Request for library books.", 1, 7, 2, "", new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1837), 7, "Medium", "Approved" },
-                    { 2, null, "", "Physics experiment kit required.", 2, 1, 1, "", new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1843), 8, "High", "Pending" },
-                    { 3, null, "", "Chemistry lab items.", 2, 2, 1, "", new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1845), 8, "Medium", "Approved" },
-                    { 4, null, "", "Need footballs for practice.", 6, 10, 2, "", new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1847), 10, "Low", "Pending" },
-                    { 5, null, "", "Security cameras required.", 10, 8, 3, "", new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1848), 9, "High", "Rejected" }
+                    { 1, null, "", "Request for library books.", 1, 7, 2, "", new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9708), 7, "Medium", "Approved" },
+                    { 2, null, "", "Physics experiment kit required.", 2, 1, 1, "", new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9716), 8, "High", "Pending" },
+                    { 3, null, "", "Chemistry lab items.", 2, 2, 1, "", new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9719), 8, "Medium", "Approved" },
+                    { 4, null, "", "Need footballs for practice.", 6, 10, 2, "", new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9722), 10, "Low", "Pending" },
+                    { 5, null, "", "Security cameras required.", 10, 8, 3, "", new DateTime(2025, 3, 2, 9, 23, 41, 950, DateTimeKind.Utc).AddTicks(9724), 9, "High", "Rejected" }
                 });
 
             migrationBuilder.CreateIndex(

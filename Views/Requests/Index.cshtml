@@ -5,42 +5,64 @@
 }
 
 <h2>Request List</h2>
+<a asp-action="Create" class="btn btn-success btn-sm mb-3">Create New Request</a>
 
-<p>
-  <a asp-action="Create" class="btn btn-primary btn-sm">Create New Request</a>
-</p>
-
-<table class="table table-borderless">
+<table class="table table-bordered">
   <thead>
   <tr>
-    <th>Requestor</th>
-    <th>Facility</th>
-    <th>Item</th>
-    <th>Quantity</th>
-    <th>Status</th>
-    <th>Actions</th>
+    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Requestor.Username)</th>
+    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Facility.FacilityName)</th>
+    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().FacilityItem.ItemName)</th>
+    <th>Total</th> <!-- Đổi tên cột -->
+    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Status)</th>
+    <th>Action</th>
   </tr>
   </thead>
   <tbody>
   @foreach (var item in Model)
   {
-    <tr class="request-row">
-      <td>@item.Requestor?.FullName</td>
+    <tr>
+      <td>@item.Requestor?.Username</td>
       <td>@item.Facility?.FacilityName</td>
       <td>@item.FacilityItem?.ItemName</td>
-      <td>@item.QuantityRequested</td>
+      <td>@item.QuantityRequested</td> <!-- Hiển thị Total -->
       <td>@item.Status</td>
       <td>
-        <div class="btn-group" role="group">
-          <a asp-action="Edit" asp-route-id="@item.RequestId" class="btn btn-warning btn-md">Edit</a>
-          <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-md">Details</a>
-          <a asp-action="Delete" asp-route-id="@item.RequestId" class="btn btn-danger btn-md">Delete</a>
-          <a asp-action="Assign" asp-route-id="@item.RequestId" class="btn btn-primary btn-md">Assign</a>
-          <a asp-action="UpdateStatus" asp-route-id="@item.RequestId" class="btn btn-secondary btn-md">Update Status</a>
-          <a asp-action="Revoke" asp-route-id="@item.RequestId" class="btn btn-dark btn-md">Revoke</a>
+        <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+          <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">Details</a>
+          <a asp-action="Assign" asp-route-id="@item.RequestId" class="btn btn-warning btn-sm">Assign</a>
+          <a asp-action="Delete" asp-route-id="@item.RequestId" class="btn btn-danger btn-sm">Delete</a>
+          <a asp-action="UpdateStatus" asp-route-id="@item.RequestId" class="btn btn-secondary btn-sm">Update Status</a>
+          <a asp-action="Revoke" asp-route-id="@item.RequestId" class="btn btn-dark btn-sm">Revoke</a>
         </div>
       </td>
     </tr>
   }
   </tbody>
 </table>
+
+<!-- Phân trang -->
+@if (ViewBag.TotalPages > 1)
+{
+  <nav>
+    <ul class="pagination pagination-sm"> <!-- Thu nhỏ phân trang -->
+      <!-- Nút Previous -->
+      <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+        <a class="page-link btn-sm" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Previous</a>
+      </li>
+
+      <!-- Số trang -->
+      @for (int i = 1; i <= ViewBag.TotalPages; i++)
+      {
+        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+          <a class="page-link btn-sm" asp-action="Index" asp-route-page="@i">@i</a>
+        </li>
+      }
+
+      <!-- Nút Next -->
+      <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+        <a class="page-link btn-sm" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Next</a>
+      </li>
+    </ul>
+  </nav>
+}

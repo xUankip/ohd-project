@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspnetCoreMvcStarter.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250302083124_Initial")]
-    partial class Initial
+    [Migration("20250302101123_updateRequest")]
+    partial class updateRequest
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,9 +89,7 @@ namespace AspnetCoreMvcStarter.Migrations
 
                     b.HasKey("CommentId");
 
-                    b.HasIndex("RequestId")
-                        .IsUnique()
-                        .HasFilter("[RequestId] IS NOT NULL");
+                    b.HasIndex("RequestId");
 
                     b.HasIndex("UserId");
 
@@ -146,7 +144,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 1,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1776),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7013),
                             CreatedBy = 0,
                             Description = "Provides books and resources for students.",
                             FacilityName = "Library"
@@ -154,7 +152,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 2,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1778),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7015),
                             CreatedBy = 0,
                             Description = "Equipped for physics and chemistry experiments.",
                             FacilityName = "Science Lab"
@@ -162,7 +160,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 3,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1779),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7016),
                             CreatedBy = 0,
                             Description = "Contains computers for student use.",
                             FacilityName = "Computer Lab"
@@ -170,7 +168,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 4,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1780),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7017),
                             CreatedBy = 0,
                             Description = "Indoor sports and fitness activities.",
                             FacilityName = "Gymnasium"
@@ -178,7 +176,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 5,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1780),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7018),
                             CreatedBy = 0,
                             Description = "Used for school events and presentations.",
                             FacilityName = "Auditorium"
@@ -186,7 +184,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 6,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1781),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7019),
                             CreatedBy = 0,
                             Description = "Outdoor sports facility for football training.",
                             FacilityName = "Football Field"
@@ -194,7 +192,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 7,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1782),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7019),
                             CreatedBy = 0,
                             Description = "Used for basketball games and training.",
                             FacilityName = "Basketball Court"
@@ -202,7 +200,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 8,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1782),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7020),
                             CreatedBy = 0,
                             Description = "Food and beverages for students and staff.",
                             FacilityName = "Cafeteria"
@@ -210,7 +208,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 9,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1783),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7021),
                             CreatedBy = 0,
                             Description = "Parking space for staff and students.",
                             FacilityName = "Parking Lot"
@@ -218,7 +216,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 10,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1784),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7022),
                             CreatedBy = 0,
                             Description = "Monitors campus security operations.",
                             FacilityName = "Security Room"
@@ -278,7 +276,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 1,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1803),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7066),
                             CreatedBy = 0,
                             Description = "Kit for physics experiments.",
                             FacilityId = 2,
@@ -289,7 +287,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 2,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1805),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7070),
                             CreatedBy = 0,
                             Description = "Includes beakers and test tubes.",
                             FacilityId = 2,
@@ -300,7 +298,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 3,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1806),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7071),
                             CreatedBy = 0,
                             Description = "Computers for student use.",
                             FacilityId = 3,
@@ -311,7 +309,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 4,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1807),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7073),
                             CreatedBy = 0,
                             Description = "Official size basketballs.",
                             FacilityId = 7,
@@ -322,7 +320,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 5,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1808),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7074),
                             CreatedBy = 0,
                             Description = "For presentations and seminars.",
                             FacilityId = 5,
@@ -333,7 +331,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 6,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1809),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7076),
                             CreatedBy = 0,
                             Description = "For gym workouts.",
                             FacilityId = 4,
@@ -344,7 +342,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 7,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1810),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7077),
                             CreatedBy = 0,
                             Description = "Academic and reference books.",
                             FacilityId = 1,
@@ -355,7 +353,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 8,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1811),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7079),
                             CreatedBy = 0,
                             Description = "Monitors school security.",
                             FacilityId = 10,
@@ -366,7 +364,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 9,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1812),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7080),
                             CreatedBy = 0,
                             Description = "Used in science experiments.",
                             FacilityId = 2,
@@ -377,7 +375,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 10,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1813),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7082),
                             CreatedBy = 0,
                             Description = "Used for training and matches.",
                             FacilityId = 6,
@@ -474,7 +472,7 @@ namespace AspnetCoreMvcStarter.Migrations
                             FacilityItemId = 7,
                             QuantityRequested = 2,
                             Remarks = "",
-                            RequestDate = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1837),
+                            RequestDate = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7124),
                             RequestorId = 7,
                             SeverityLevel = "Medium",
                             Status = "Approved"
@@ -488,7 +486,7 @@ namespace AspnetCoreMvcStarter.Migrations
                             FacilityItemId = 1,
                             QuantityRequested = 1,
                             Remarks = "",
-                            RequestDate = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1843),
+                            RequestDate = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7129),
                             RequestorId = 8,
                             SeverityLevel = "High",
                             Status = "Pending"
@@ -502,7 +500,7 @@ namespace AspnetCoreMvcStarter.Migrations
                             FacilityItemId = 2,
                             QuantityRequested = 1,
                             Remarks = "",
-                            RequestDate = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1845),
+                            RequestDate = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7131),
                             RequestorId = 8,
                             SeverityLevel = "Medium",
                             Status = "Approved"
@@ -516,7 +514,7 @@ namespace AspnetCoreMvcStarter.Migrations
                             FacilityItemId = 10,
                             QuantityRequested = 2,
                             Remarks = "",
-                            RequestDate = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1847),
+                            RequestDate = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7134),
                             RequestorId = 10,
                             SeverityLevel = "Low",
                             Status = "Pending"
@@ -530,7 +528,7 @@ namespace AspnetCoreMvcStarter.Migrations
                             FacilityItemId = 8,
                             QuantityRequested = 3,
                             Remarks = "",
-                            RequestDate = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1848),
+                            RequestDate = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7136),
                             RequestorId = 9,
                             SeverityLevel = "High",
                             Status = "Rejected"
@@ -594,7 +592,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1730),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6940),
                             Email = "admin@school.com",
                             FullName = "Admin User",
                             IsActive = true,
@@ -606,7 +604,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 2,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1734),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6944),
                             Email = "library@school.com",
                             FullName = "Library Manager",
                             IsActive = true,
@@ -618,7 +616,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 3,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1736),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6946),
                             Email = "lab@school.com",
                             FullName = "Lab Manager",
                             IsActive = true,
@@ -630,7 +628,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 4,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1737),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6947),
                             Email = "gym@school.com",
                             FullName = "Gym Supervisor",
                             IsActive = true,
@@ -642,7 +640,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 5,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1738),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6949),
                             Email = "sports@school.com",
                             FullName = "Sports Coordinator",
                             IsActive = true,
@@ -654,7 +652,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 6,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1739),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6950),
                             Email = "it@school.com",
                             FullName = "IT Support",
                             IsActive = true,
@@ -666,7 +664,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 7,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1741),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6952),
                             Email = "assistant1@school.com",
                             FullName = "Student Assistant",
                             IsActive = true,
@@ -678,7 +676,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 8,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1742),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6954),
                             Email = "tech@school.com",
                             FullName = "Lab Technician",
                             IsActive = true,
@@ -690,7 +688,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 9,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1743),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6955),
                             Email = "security@school.com",
                             FullName = "Security Staff",
                             IsActive = true,
@@ -702,7 +700,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 10,
-                            CreatedAt = new DateTime(2025, 3, 2, 8, 31, 23, 886, DateTimeKind.Utc).AddTicks(1744),
+                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6957),
                             Email = "maintenance@school.com",
                             FullName = "Maintenance Staff",
                             IsActive = true,
@@ -759,6 +757,11 @@ namespace AspnetCoreMvcStarter.Migrations
                         {
                             RoleId = 3,
                             RoleName = "Assignee"
+                        },
+                        new
+                        {
+                            RoleId = 4,
+                            RoleName = "User"
                         });
                 });
 
@@ -786,8 +789,8 @@ namespace AspnetCoreMvcStarter.Migrations
             modelBuilder.Entity("AspnetCoreMvcStarter.Models.Comment", b =>
                 {
                     b.HasOne("AspnetCoreMvcStarter.Models.Request", "Request")
-                        .WithOne("Comments")
-                        .HasForeignKey("AspnetCoreMvcStarter.Models.Comment", "RequestId");
+                        .WithMany("Comments")
+                        .HasForeignKey("RequestId");
 
                     b.HasOne("AspnetCoreMvcStarter.Models.User", "User")
                         .WithMany()
