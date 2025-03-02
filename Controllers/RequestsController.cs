@@ -167,27 +167,31 @@ namespace AspnetCoreMvcStarter.Controllers
 
         // ✅ Handle Request Assignment or Transfer (POST: /Requests/Assign/{id})
         [HttpPost]
+        [HttpPost]
         public IActionResult Assign(int requestId, int? RequestorId)
         {
-            var request = _context.Requests.FirstOrDefault(r => r.RequestId == requestId);
+          var request = _context.Requests.FirstOrDefault(r => r.RequestId == requestId);
 
-            if (request == null)
-            {
-                return NotFound();
-            }
+          if (request == null)
+          {
+            return NotFound();
+          }
 
-            if (!RequestorId.HasValue)
-            {
-                TempData["Error"] = "Please select a valid user for assignment.";
-                return RedirectToAction("Assign", new { id = requestId });
-            }
+          if (!RequestorId.HasValue)
+          {
+            TempData["Error"] = "Please select a valid user for assignment.";
+            return RedirectToAction("Assign", new { id = requestId });
+          }
 
-            request.RequestorId = RequestorId.Value;
-            _context.SaveChanges();
+          request.RequestorId = RequestorId.Value;
+          _context.SaveChanges();
 
-            TempData["Success"] = "Request successfully assigned!";
-            return RedirectToAction("Index");
+          // ✅ Removed success message
+          TempData["Success"] = "Request successfully assigned!";
+          return RedirectToAction("Index");
         }
+
+
 
 // ✅ Edit Request (GET)
         public async Task<IActionResult> Edit(int id)
@@ -306,6 +310,32 @@ namespace AspnetCoreMvcStarter.Controllers
             .ToList();
 
           return Json(items);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateStatus([FromBody] StatusUpdateRequest request)
+        {
+          if (request == null || request.RequestId <= 0 || string.IsNullOrEmpty(request.Status))
+          {
+            return Json(new { success = false, message = "Invalid data" });
+          }
+
+          var existingRequest = await _context.Requests.FindAsync(request.RequestId);
+          if (existingRequest == null)
+          {
+            return Json(new { success = false, message = "Request not found" });
+          }
+
+          existingRequest.Status = request.Status;
+          await _context.SaveChangesAsync();
+
+          return Json(new { success = true, message = "Status updated successfully" });
+        }
+
+        public class StatusUpdateRequest
+        {
+          public int RequestId { get; set; }
+          public string Status { get; set; }
         }
 
         [HttpPost]

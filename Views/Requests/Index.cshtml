@@ -10,11 +10,11 @@
 <table class="table table-bordered">
   <thead>
   <tr>
-    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Requestor.Username)</th>
-    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Facility.FacilityName)</th>
-    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().FacilityItem.ItemName)</th>
-    <th>Total</th> <!-- Đổi tên cột -->
-    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Status)</th>
+    <th>Requestor</th>
+    <th>Facility</th>
+    <th>Item</th>
+    <th>Quantity</th>
+    <th>Status</th>
     <th>Action</th>
   </tr>
   </thead>
@@ -25,15 +25,19 @@
       <td>@item.Requestor?.Username</td>
       <td>@item.Facility?.FacilityName</td>
       <td>@item.FacilityItem?.ItemName</td>
-      <td>@item.QuantityRequested</td> <!-- Hiển thị Total -->
-      <td>@item.Status</td>
+      <td>@item.QuantityRequested</td>
+      <td>
+        <select class="form-control form-control-sm status-dropdown" data-request-id="@item.RequestId" data-original-status="@item.Status">
+          @foreach (var status in new[] { "Open", "In Progress", "Rejected", "Closed" })
+          {
+            <option value="@status" selected="@(item.Status == status)">@status</option>
+          }
+        </select>
+      </td>
       <td>
         <div style="display: flex; gap: 5px; flex-wrap: wrap;">
           <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">Details</a>
           <a asp-action="Assign" asp-route-id="@item.RequestId" class="btn btn-warning btn-sm">Assign</a>
-          <a asp-action="Delete" asp-route-id="@item.RequestId" class="btn btn-danger btn-sm">Delete</a>
-          <a asp-action="UpdateStatus" asp-route-id="@item.RequestId" class="btn btn-secondary btn-sm">Update Status</a>
-          <a asp-action="Revoke" asp-route-id="@item.RequestId" class="btn btn-dark btn-sm">Revoke</a>
         </div>
       </td>
     </tr>
@@ -41,28 +45,40 @@
   </tbody>
 </table>
 
-<!-- Phân trang -->
-@if (ViewBag.TotalPages > 1)
-{
-  <nav>
-    <ul class="pagination pagination-sm"> <!-- Thu nhỏ phân trang -->
-      <!-- Nút Previous -->
-      <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-        <a class="page-link btn-sm" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Previous</a>
-      </li>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".status-dropdown").forEach(dropdown => {
+      dropdown.addEventListener("change", function () {
+        let requestId = this.getAttribute("data-request-id");
+        let newStatus = this.value;
+        let originalStatus = this.getAttribute("data-original-status");
 
-      <!-- Số trang -->
-      @for (int i = 1; i <= ViewBag.TotalPages; i++)
-      {
-        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
-          <a class="page-link btn-sm" asp-action="Index" asp-route-page="@i">@i</a>
-        </li>
-      }
-
-      <!-- Nút Next -->
-      <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-        <a class="page-link btn-sm" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Next</a>
-      </li>
-    </ul>
-  </nav>
-}
+        if (confirm("Are you sure you want to update the status?")) {
+          fetch('/Requests/UpdateStatus', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ requestId: requestId, status: newStatus })
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                alert("Status updated successfully!");
+                this.setAttribute("data-original-status", newStatus);
+              } else {
+                alert("Error updating status: " + data.message);
+                this.value = originalStatus;
+              }
+            })
+            .catch(error => {
+              alert("Request failed: " + error);
+              this.value = originalStatus;
+            });
+        } else {
+          this.value = originalStatus;
+        }
+      });
+    });
+  });
+</script>
