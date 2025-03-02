@@ -73,6 +73,18 @@ namespace AspnetCoreMvcStarter.Controllers
         public async Task<IActionResult> Create([Bind("UserId,Username,PasswordHash,Email,RoleId,FullName,Phone,IsActive")] User user, int[] selectedFacilities)
           {
               Console.WriteLine("____"+user.RoleId);
+              // 🔍 Kiểm tra Username hoặc Email đã tồn tại chưa
+              bool isUsernameTaken = await _context.Users.AnyAsync(u => u.Username == user.Username);
+              bool isEmailTaken = await _context.Users.AnyAsync(u => u.Email == user.Email);
+
+              if (isUsernameTaken)
+              {
+                ModelState.AddModelError("Username", "Tên người dùng đã tồn tại. Vui lòng chọn tên khác.");
+              }
+              if (isEmailTaken)
+              {
+                ModelState.AddModelError("Email", "Email đã được sử dụng. Vui lòng chọn email khác.");
+              }
               // Log ModelState errors
               if (!ModelState.IsValid)
               {
