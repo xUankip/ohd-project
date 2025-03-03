@@ -1,10 +1,29 @@
 @{
   TempData.Keep();
-  string? currentPage =  ViewContext.HttpContext.Request.Path;
+  string? currentPage = ViewContext.HttpContext.Request.Path;
+
+  // Lấy thông tin người dùng từ session hoặc claims
+  // Kiểm tra xem người dùng hiện tại có RoleId = 1 (Admin) không
+  var userRoleId = 0;
+
+  // Cách 1: Kiểm tra từ session (nếu bạn lưu RoleId vào session khi đăng nhập)
+  if (Context.Session.GetInt32("RoleId") != null) {
+    userRoleId = Context.Session.GetInt32("RoleId").Value;
+  }
+  // Cách 2: Kiểm tra từ claims (nếu bạn lưu RoleId vào claims khi đăng nhập)
+  else if (User.Identity.IsAuthenticated && User.HasClaim(c => c.Type == "RoleId")) {
+    int.TryParse(User.FindFirst("RoleId")?.Value, out userRoleId);
+  }
+
+  bool isAdmin = userRoleId == 1;
+  bool isAssignee = userRoleId == 3;
+  bool isFacilityHead = userRoleId == 2;
+
+  // Debug - hiển thị giá trị RoleId trong console log hoặc comment để dễ debug
+  // ViewData["UserRoleId"] = userRoleId;
 }
 
 <!-- Menu -->
-@* ! Do this simple *@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
 
   @* ! Hide app brand if navbar-full *@
@@ -21,71 +40,95 @@
 
   <div class="menu-inner-shadow"></div>
 
-  @* ! Starter Kit menu-items *@
   <ul class="menu-inner py-1">
+    <!-- Menu cơ bản cho tất cả người dùng -->
     <li class='menu-item@(currentPage == "/" ? " active" : "")'>
       <a asp-controller="Home" asp-action="Index" class="menu-link">
         <i class="menu-icon tf-icons ri-home-smile-line"></i>
         <div data-i18n=" Dashboard"> Dashboard</div>
       </a>
     </li>
-    <li class='menu-item@(currentPage.StartsWith("/User") ? " active" : "")'>
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
-        <i class='menu-icon tf-icons ri-user-line'></i>
-        <div data-i18n="Users">Users</div>
-      </a>
-      <ul class="menu-sub">
-        <li class='menu-item@(currentPage == "/User" ? " active" : "")'>
-          <a asp-controller="User" asp-action="Index" class="menu-link">
-            <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
-            <div data-i18n="List">List</div>
-          </a>
-        </li>
-      </ul>
-    </li>
 
+    @* Hiển thị RoleId để debug *@
+    @* <li><span>RoleId: @userRoleId</span></li> *@
 
+    <!-- Menu Users chỉ hiển thị cho người dùng thông thường -->
+    @if (isFacilityHead)
+    {
+      <!-- Facility -->
+      <li class='menu-item@(currentPage.StartsWith("/Facility") ? " active" : "")'>
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <i class='menu-icon tf-icons ri-file-list-line'></i>
+          <div data-i18n="Facility">Facility</div>
+        </a>
+        <ul class="menu-sub">
+          <li class='menu-item@(currentPage == "/Facility" ? " active" : "")'>
+            <a asp-controller="Facility" asp-action="Index" class="menu-link">
+              <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
+              <div data-i18n="List">List</div>
+            </a>
+          </li>
+        </ul>
+      </li>
+    }
 
-    <!-- Requests -->
-    <li class='menu-item@(currentPage.StartsWith("/Request") ? " active" : "")'>
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
-        <i class='menu-icon tf-icons ri-file-list-line'></i>
-        <div data-i18n="Requests">Requests</div>
-      </a>
-      <ul class="menu-sub">
-        <li class='menu-item@(currentPage == "/Request" ? " active" : "")'>
-          <a asp-controller="Requests" asp-action="Index" class="menu-link">
-            <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
-            <div data-i18n="List">List</div>
-          </a>
-        </li>
-        <li class='menu-item@(currentPage == "/Requests/Report" ? " active" : "")'>
-          <a asp-controller="Requests" asp-action="Report" class="menu-link">
-            <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
-            <div data-i18n="Report">Report</div>
-          </a>
-        </li>
-      </ul>
-    </li>
+    <!-- Các menu chỉ dành cho Admin -->
+    @if (isAdmin)
+    {
+      <!-- Menu Users cho Admin -->
+      <li class='menu-item@(currentPage.StartsWith("/User") ? " active" : "")'>
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <i class='menu-icon tf-icons ri-user-line'></i>
+          <div data-i18n="Users">Users</div>
+        </a>
+        <ul class="menu-sub">
+          <li class='menu-item@(currentPage == "/User" ? " active" : "")'>
+            <a asp-controller="User" asp-action="Index" class="menu-link">
+              <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
+              <div data-i18n="List">List</div>
+            </a>
+          </li>
+        </ul>
+      </li>
 
-    <!-- Facility -->
-    <li class='menu-item@(currentPage.StartsWith("/Facility") ? " active" : "")'>
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
-        <i class='menu-icon tf-icons ri-file-list-line'></i>
-        <div data-i18n="Facility">Facility</div>
-      </a>
-      <ul class="menu-sub">
-        <li class='menu-item@(currentPage == "/Facility" ? " active" : "")'>
-          <a asp-controller="Facility" asp-action="Index" class="menu-link">
-            <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
-            <div data-i18n="List">List</div>
-          </a>
-        </li>
-      </ul>
-    </li>
+      <!-- Requests -->
+      <li class='menu-item@(currentPage.StartsWith("/Request") ? " active" : "")'>
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <i class='menu-icon tf-icons ri-file-list-line'></i>
+          <div data-i18n="Requests">Requests</div>
+        </a>
+        <ul class="menu-sub">
+          <li class='menu-item@(currentPage == "/Request" ? " active" : "")'>
+            <a asp-controller="Requests" asp-action="Index" class="menu-link">
+              <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
+              <div data-i18n="List">List</div>
+            </a>
+          </li>
+          <li class='menu-item@(currentPage == "/Requests/Report" ? " active" : "")'>
+            <a asp-controller="Requests" asp-action="Report" class="menu-link">
+              <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
+              <div data-i18n="Report">Report</div>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Facility -->
+      <li class='menu-item@(currentPage.StartsWith("/Facility") ? " active" : "")'>
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <i class='menu-icon tf-icons ri-file-list-line'></i>
+          <div data-i18n="Facility">Facility</div>
+        </a>
+        <ul class="menu-sub">
+          <li class='menu-item@(currentPage == "/Facility" ? " active" : "")'>
+            <a asp-controller="Facility" asp-action="Index" class="menu-link">
+              <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
+              <div data-i18n="List">List</div>
+            </a>
+          </li>
+        </ul>
+      </li>
+    }
   </ul>
-
-
-
 </aside>
 <!-- / Menu -->
