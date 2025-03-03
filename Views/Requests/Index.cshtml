@@ -2,10 +2,37 @@
 
 @{
   ViewData["Title"] = "Requests";
+  int currentPage = ViewBag.CurrentPage;
+  int totalPages = ViewBag.TotalPages;
+  string currentSearch = ViewBag.Search ?? "";
 }
 
 <h2>Request List</h2>
-<a asp-action="Create" class="btn btn-success btn-sm mb-3">Create New Request</a>
+
+<div class="row mb-3">
+  <div class="col-md-6">
+    <a asp-action="Create" class="btn btn-success">Create New Request</a>
+  </div>
+  <div class="col-md-6">
+    <form asp-action="Index" method="get" class="d-flex justify-content-end">
+      <div class="input-group">
+        <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Search...">
+        <button type="submit" class="btn btn-primary h-100">
+          Search
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+@if(!string.IsNullOrEmpty(currentSearch))
+{
+  <div class="alert alert-info">
+    <p class="mb-0">Showing results for: <strong>@currentSearch</strong>
+      <a asp-action="Index" class="btn btn-sm btn-outline-dark ms-2">Clear</a>
+    </p>
+  </div>
+}
 
 <table class="table table-bordered">
   <thead>
@@ -35,7 +62,7 @@
         </select>
       </td>
       <td>
-        <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+        <div class="d-flex gap-2">
           <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">Details</a>
           <a asp-action="Assign" asp-route-id="@item.RequestId" class="btn btn-warning btn-sm">Assign</a>
         </div>
@@ -44,6 +71,35 @@
   }
   </tbody>
 </table>
+
+<!-- Pagination Controls with Search parameter -->
+@if (totalPages > 1)
+{
+  <nav>
+    <ul class="pagination">
+      @if (currentPage > 1)
+      {
+        <li class="page-item">
+          <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch">Previous</a>
+        </li>
+      }
+
+      @for (int i = 1; i <= totalPages; i++)
+      {
+        <li class="page-item @(i == currentPage ? "active" : "")">
+          <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
+        </li>
+      }
+
+      @if (currentPage < totalPages)
+      {
+        <li class="page-item">
+          <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch">Next</a>
+        </li>
+      }
+    </ul>
+  </nav>
+}
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

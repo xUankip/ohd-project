@@ -6,6 +6,7 @@ using AspnetCoreMvcStarter.Data;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace AspnetCoreMvcStarter.Controllers
 {
@@ -19,15 +20,46 @@ namespace AspnetCoreMvcStarter.Controllers
         }
 
         // ✅ Show Request List (GET: /Requests)
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string search = "", int page = 1, int pageSize = 5)
         {
-            var requests = _context.Requests
-                .Include(r => r.Requestor)
-                .Include(r => r.Facility)
-                .Include(r => r.FacilityItem)
-                .ToList();
-            return View(requests);
+          // Start with base query
+          var query = _context.Requests
+            .Include(r => r.Requestor)
+            .Include(r => r.Facility)
+            .Include(r => r.FacilityItem)
+            .AsQueryable();
+
+          // Apply search filter if search term provided
+          if (!string.IsNullOrWhiteSpace(search))
+          {
+            search = search.ToLower();
+            query = query.Where(r =>
+              (r.Requestor.Username != null && r.Requestor.Username.ToLower().Contains(search)) ||
+              (r.Facility.FacilityName != null && r.Facility.FacilityName.ToLower().Contains(search)) ||
+              (r.FacilityItem.ItemName != null && r.FacilityItem.ItemName.ToLower().Contains(search)) ||
+              (r.Status != null && r.Status.ToLower().Contains(search)) ||
+              r.QuantityRequested.ToString().Contains(search)
+            );
+          }
+
+          // Get total count for pagination
+          var totalRequests = await query.CountAsync();
+
+          // Apply ordering and pagination
+          var requests = await query
+            .OrderByDescending(r => r.RequestDate)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+          // Set pagination data
+          ViewBag.CurrentPage = page;
+          ViewBag.TotalPages = (int)Math.Ceiling((double)totalRequests / pageSize);
+          ViewBag.Search = search; // Pass the search term to the view
+
+          return View(requests);
         }
+
 
         // ✅ Show Request Details (GET: /Requests/Details/{id})
         public IActionResult Details(int id)
@@ -62,6 +94,7 @@ namespace AspnetCoreMvcStarter.Controllers
         {
     try
     {
+
         // Kiểm tra các trường bắt buộc
         if (request.FacilityId == null)
         {
