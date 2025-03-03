@@ -2,10 +2,14 @@
 
 @{
   ViewData["Title"] = "Requests";
+  int currentPage = ViewBag.CurrentPage;
+  int totalPages = ViewBag.TotalPages;
+  string currentSearch = ViewBag.Search ?? "";
 }
 
 <h2>Request List</h2>
 
+<!-- <<<<<<< Tri/HoanThienGiaoDien
 <p>
   <a asp-action="Create" class="btn btn-primary btn-sm">Create New Request</a>
 </p>
@@ -70,3 +74,133 @@
     </ul>
   </nav>
 }
+======= -->
+<div class="row mb-3">
+  <div class="col-md-6">
+    <a asp-action="Create" class="btn btn-success">Create New Request</a>
+  </div>
+  <div class="col-md-6">
+    <form asp-action="Index" method="get" class="d-flex justify-content-end">
+      <div class="input-group">
+        <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Search...">
+        <button type="submit" class="btn btn-primary h-100">
+          Search
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+@if(!string.IsNullOrEmpty(currentSearch))
+{
+  <div class="alert alert-info">
+    <p class="mb-0">Showing results for: <strong>@currentSearch</strong>
+      <a asp-action="Index" class="btn btn-sm btn-outline-dark ms-2">Clear</a>
+    </p>
+  </div>
+}
+
+<table class="table table-bordered">
+  <thead>
+  <tr>
+    <th>Requestor</th>
+    <th>Facility</th>
+    <th>Item</th>
+    <th>Quantity</th>
+    <th>Status</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  @foreach (var item in Model)
+  {
+    <tr>
+      <td>@item.Requestor?.Username</td>
+      <td>@item.Facility?.FacilityName</td>
+      <td>@item.FacilityItem?.ItemName</td>
+      <td>@item.QuantityRequested</td>
+      <td>
+        <select class="form-control form-control-sm status-dropdown" data-request-id="@item.RequestId" data-original-status="@item.Status">
+          @foreach (var status in new[] { "Open", "In Progress", "Rejected", "Closed" })
+          {
+            <option value="@status" selected="@(item.Status == status)">@status</option>
+          }
+        </select>
+      </td>
+      <td>
+        <div class="d-flex gap-2">
+          <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">Details</a>
+          <a asp-action="Assign" asp-route-id="@item.RequestId" class="btn btn-warning btn-sm">Assign</a>
+        </div>
+      </td>
+    </tr>
+  }
+  </tbody>
+</table>
+
+<!-- Pagination Controls with Search parameter -->
+@if (totalPages > 1)
+{
+  <nav>
+    <ul class="pagination">
+      @if (currentPage > 1)
+      {
+        <li class="page-item">
+          <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch">Previous</a>
+        </li>
+      }
+
+      @for (int i = 1; i <= totalPages; i++)
+      {
+        <li class="page-item @(i == currentPage ? "active" : "")">
+          <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
+        </li>
+      }
+
+      @if (currentPage < totalPages)
+      {
+        <li class="page-item">
+          <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch">Next</a>
+        </li>
+      }
+    </ul>
+  </nav>
+}
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".status-dropdown").forEach(dropdown => {
+      dropdown.addEventListener("change", function () {
+        let requestId = this.getAttribute("data-request-id");
+        let newStatus = this.value;
+        let originalStatus = this.getAttribute("data-original-status");
+
+        if (confirm("Are you sure you want to update the status?")) {
+          fetch('/Requests/UpdateStatus', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ requestId: requestId, status: newStatus })
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                alert("Status updated successfully!");
+                this.setAttribute("data-original-status", newStatus);
+              } else {
+                alert("Error updating status: " + data.message);
+                this.value = originalStatus;
+              }
+            })
+            .catch(error => {
+              alert("Request failed: " + error);
+              this.value = originalStatus;
+            });
+        } else {
+          this.value = originalStatus;
+        }
+      });
+    });
+  });
+</script>

@@ -33,7 +33,8 @@ namespace AspnetCoreMvcStarter.Data
             modelBuilder.Entity<UserRole>().HasData(
                 new UserRole { RoleId = 1, RoleName = "Admin" },
                 new UserRole { RoleId = 2, RoleName = "FacilityHead" },
-                new UserRole { RoleId = 3, RoleName = "Assignee" }
+                new UserRole { RoleId = 3, RoleName = "Assignee" },
+                new UserRole { RoleId = 4, RoleName = "User" }
             );
 
             // ✅ Seed Users

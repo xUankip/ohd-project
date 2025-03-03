@@ -6,9 +6,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AspnetCoreMvcStarter.Data;
+using AspnetCoreMvcStarter.Filters;
 
 namespace AspnetCoreMvcStarter.Controllers
+
 {
+  [AllowRoles(1,2)]
     public class FacilityItemController : Controller
     {
         private readonly ApplicationDbContext _context;
