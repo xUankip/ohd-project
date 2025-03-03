@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using AspnetCoreMvcStarter.Data;
 using AspnetCoreMvcStarter.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,13 +13,25 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
-// Thêm dịch vụ Session
+// Thêm dịch vụ Session với cấu hình nâng cao
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-  options.IdleTimeout = TimeSpan.FromMinutes(3000); // Thời gian hết hạn session
-  options.Cookie.HttpOnly = true;
-  options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromMinutes(3000); // Thời gian hết hạn session
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.SameSite = SameSiteMode.Strict; // Bảo vệ CSRF
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Yêu cầu HTTPS
+});
+
+// Cấu hình cache để ngăn chặn nút back của trình duyệt sau khi logout
+builder.Services.AddMvc(options =>
+{
+    options.Filters.Add(new ResponseCacheAttribute
+    {
+        NoStore = true,
+        Location = ResponseCacheLocation.None
+    });
 });
 
 // builder.Services.AddIdentity<IdentityUser, IdentityRole>()
@@ -26,15 +40,21 @@ builder.Services.AddSession(options =>
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-  options.LoginPath = "/Auth/Login"; // Account/Login <- default
-  options.AccessDeniedPath = "/Auth/AccessDenied"; // Trang 403, đăng nhập rồi nhưng không phải admin hoặc ...
-  options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.LoginPath = "/Auth/Login"; // Account/Login <- default
+    options.AccessDeniedPath = "/Auth/AccessDenied"; // Trang 403, đăng nhập rồi nhưng không phải admin hoặc ...
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
 });
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Đăng ký AuthenticationFilter dưới dạng global filter
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<AspnetCoreMvcStarter.Filters.AuthenticationFilter>();
+});
 
 var app = builder.Build();
 
@@ -73,9 +93,19 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// Middleware để thêm header ngăn cache vào tất cả các response
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+    context.Response.Headers["Pragma"] = "no-cache";
+    context.Response.Headers["Expires"] = "0";
+    await next();
+});
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+// Đặt Session middleware trước Routing để đảm bảo nó có sẵn trong toàn bộ pipeline
 app.UseSession();
 app.UseRouting();
 
@@ -89,5 +119,8 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Tạo class AuthenticationFilter trong namespace này nếu chưa có
+
 
 app.Run();
