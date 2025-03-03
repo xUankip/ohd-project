@@ -14,6 +14,7 @@ namespace AspnetCoreMvcStarter.Models
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Mật khẩu là bắt buộc")]
+        [Display(Name = "Password")]
         public string PasswordHash { get; set; }
 
         [Required(ErrorMessage = "Email là bắt buộc")]
