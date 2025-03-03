@@ -21,11 +21,26 @@ namespace AspnetCoreMvcStarter.Controllers
         // GET: Users
         [HttpGet]
         [Route("User")]
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string search = "", int page = 1, int pageSize = 5)
         {
-          var totalUsers = await _context.Users.CountAsync();
-          var users = await _context.Users
+          var query = _context.Users
             .Include(u => u.Role)
+            .AsQueryable();
+
+          // Apply search filter if a search term is provided
+          if (!string.IsNullOrWhiteSpace(search))
+          {
+            search = search.ToLower();
+            query = query.Where(u =>
+              (u.Username != null && u.Username.ToLower().Contains(search)) ||
+              (u.Email != null && u.Email.ToLower().Contains(search)) ||
+              (u.Role != null && u.Role.RoleName.ToLower().Contains(search)) ||
+              (u.Phone != null && u.Phone.Contains(search))
+            );
+          }
+
+          var totalUsers = await query.CountAsync();
+          var users = await query
             .OrderByDescending(u => u.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
@@ -33,8 +48,11 @@ namespace AspnetCoreMvcStarter.Controllers
 
           ViewBag.CurrentPage = page;
           ViewBag.TotalPages = (int)Math.Ceiling((double)totalUsers / pageSize);
+          ViewBag.Search = search;
+
           return View(users);
         }
+
 
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)

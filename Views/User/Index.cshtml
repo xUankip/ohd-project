@@ -2,10 +2,35 @@
 
 @{
   ViewData["Title"] = "Users";
+  string currentSearch = ViewBag.Search ?? "";
 }
 
 <h2>List Users</h2>
-<a asp-action="Create" class="btn btn-success mb-3">Create New User</a>
+
+<!-- 🔍 Search Bar -->
+<div class="row mb-3">
+    <div class="col-md-6">
+        <a asp-action="Create" class="btn btn-success">Create New User</a>
+    </div>
+    <div class="col-md-6">
+        <form asp-action="Index" method="get" class="d-flex justify-content-end">
+            <div class="input-group">
+                <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Search users...">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 🛑 Show search results message -->
+@if (!string.IsNullOrEmpty(currentSearch))
+{
+    <div class="alert alert-info">
+        <p class="mb-0">Showing results for: <strong>@currentSearch</strong>
+            <a asp-action="Index" class="btn btn-sm btn-outline-dark ms-2">Clear</a>
+        </p>
+    </div>
+}
 
 <table class="table table-bordered">
   <thead>
@@ -28,7 +53,7 @@
       <td>@item.Role?.RoleName</td>
       <td>@item.Phone</td>
       <td>@(item.IsActive ? "Active" : "Inactive")</td>
-      <td>@item.CreatedAt</td>
+      <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
       <td>
         <div style="display: flex; gap: 5px;">
           <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-primary btn-sm">Edit</a>
@@ -41,27 +66,27 @@
   </tbody>
 </table>
 
-<!-- Phân trang -->
+<!-- Pagination Controls with Search parameter -->
 @if (ViewBag.TotalPages > 1)
 {
   <nav>
     <ul class="pagination">
-      <!-- Nút Previous -->
+      <!-- Previous Button -->
       <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Previous</a>
+        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)" asp-route-search="@currentSearch">Previous</a>
       </li>
 
-      <!-- Số trang -->
+      <!-- Page Numbers -->
       @for (int i = 1; i <= ViewBag.TotalPages; i++)
       {
-        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
-          <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+          <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
         </li>
       }
 
-      <!-- Nút Next -->
+      <!-- Next Button -->
       <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Next</a>
+        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)" asp-route-search="@currentSearch">Next</a>
       </li>
     </ul>
   </nav>
