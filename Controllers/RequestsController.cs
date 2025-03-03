@@ -20,16 +20,14 @@ namespace AspnetCoreMvcStarter.Controllers
         }
 
         // ✅ Show Request List (GET: /Requests)
+        [Route("Requests/Index")]
         public async Task<IActionResult> Index(string search = "", int page = 1, int pageSize = 5)
         {
-          // Start with base query
           var query = _context.Requests
             .Include(r => r.Requestor)
             .Include(r => r.Facility)
             .Include(r => r.FacilityItem)
             .AsQueryable();
-
-          // Apply search filter if search term provided
           if (!string.IsNullOrWhiteSpace(search))
           {
             search = search.ToLower();
@@ -55,7 +53,7 @@ namespace AspnetCoreMvcStarter.Controllers
           // Set pagination data
           ViewBag.CurrentPage = page;
           ViewBag.TotalPages = (int)Math.Ceiling((double)totalRequests / pageSize);
-          ViewBag.Search = search; // Pass the search term to the view
+          ViewBag.Search = search; 
 
           return View(requests);
         }
