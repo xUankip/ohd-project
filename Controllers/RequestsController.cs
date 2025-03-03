@@ -19,13 +19,20 @@ namespace AspnetCoreMvcStarter.Controllers
         }
 
         // ✅ Show Request List (GET: /Requests)
-        public IActionResult Index()
+        [Route("Requests/Index")]
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 5)
         {
-            var requests = _context.Requests
+          var totalRequests = await _context.Requests.CountAsync();
+          var requests = await _context.Requests
                 .Include(r => r.Requestor)
                 .Include(r => r.Facility)
                 .Include(r => r.FacilityItem)
-                .ToList();
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling(totalRequests / (double)pageSize);
             return View(requests);
         }
 
