@@ -23,20 +23,29 @@ namespace AspnetCoreMvcStarter.Controllers
         }
 
         // Danh sách Facility
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string search = "")
         {
-          var totalFacilities = await _context.Facilities.CountAsync();
-          var facilities = await _context.Facilities
-                .Include(f => f.FacilityHead)
-                .Where(f => f.DeletedAt == null)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+          var query = _context.Facilities
+            .Include(f => f.FacilityHead)
+            .Where(f => f.DeletedAt == null);
 
-          ViewBag.CurrentPage = page;
-          ViewBag.TotalPages = (int)Math.Ceiling((double)totalFacilities / pageSize);
+          // Apply search filter if search term is provided
+          if (!string.IsNullOrWhiteSpace(search))
+          {
+            search = search.ToLower();
+            query = query.Where(f =>
+              (f.FacilityName != null && f.FacilityName.ToLower().Contains(search)) ||
+              (f.FacilityHead != null && f.FacilityHead.FullName.ToLower().Contains(search))
+            );
+          }
+
+          var facilities = await query.ToListAsync();
+
+          // Pass the search term to the ViewBag for the UI
+          ViewBag.Search = search;
           return View(facilities);
         }
+
 
         // Xem chi tiết Facility
         public async Task<IActionResult> Details(int id)
