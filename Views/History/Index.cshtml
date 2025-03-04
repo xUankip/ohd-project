@@ -1,5 +1,4 @@
-﻿@model IEnumerable<AspnetCoreMvcStarter.Models.Request>
-
+@model IEnumerable<AspnetCoreMvcStarter.Models.Request>
 @{
   ViewData["Title"] = "Requests";
   int currentPage = ViewBag.CurrentPage;
@@ -23,8 +22,7 @@
   </div>
 </div>
 
-@if (!string.IsNullOrEmpty(currentSearch))
-{
+@if (!string.IsNullOrEmpty(currentSearch)) {
   <div class="alert alert-info">
     <p class="mb-0">Showing results for: <strong>@currentSearch</strong>
       <a asp-action="Index" class="btn btn-sm btn-outline-dark ms-2">Clear</a>
@@ -32,50 +30,42 @@
   </div>
 }
 
+
 <div class="table-responsive">
   <table class="table table-bordered">
     <thead>
     <tr>
-      <th>Requestor</th>
+      <th>CreateBy</th>
+      <th>Implementer</th>
       <th>Facility</th>
       <th>Item</th>
       <th>Quantity</th>
       <th>Status</th>
-      <th>Actions</th>
+      <th>time</th>
+
+
     </tr>
     </thead>
     <tbody>
     @foreach (var item in Model)
     {
       <tr>
+        <td>@item.createby</td>
         <td>@item.Requestor?.FullName</td>
         <td>@item.Facility?.FacilityName</td>
         <td>@item.FacilityItem?.ItemName</td>
         <td>@item.QuantityRequested</td>
-        <td>
-          <select class="form-control form-control-sm status-dropdown" data-request-id="@item.RequestId" data-original-status="@item.Status">
-            @foreach (var status in new[] { "Open", "In Progress", "Rejected", "Closed" })
-            {
-              <option value="@status" selected="@(item.Status == status)">@status</option>
-            }
-          </select>
-        </td>
-        <td>
-          <div class="d-flex gap-2">
-            <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">Details</a>
-            <a asp-action="Assign" asp-route-id="@item.RequestId" class="btn btn-warning btn-sm">Assign</a>
-            <a asp-action="Edit" asp-route-id="@item.RequestId" class="btn btn-primary btn-sm">Edit</a>
-            <a asp-action="Delete" asp-route-id="@item.RequestId" class="btn btn-danger btn-sm">Delete</a>
-          </div>
-        </td>
+        <td>@item.Status</td>
+        <td>@item.RequestDate</td>
+
+
       </tr>
     }
     </tbody>
   </table>
 </div>
 
-@if (totalPages > 1)
-{
+@if (totalPages > 1) {
   <nav>
     <ul class="pagination">
       <li class="page-item @(currentPage == 1 ? "disabled" : "")">

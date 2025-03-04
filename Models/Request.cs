@@ -32,6 +32,7 @@ namespace AspnetCoreMvcStarter.Models
     public string? SeverityLevel { get; set; }
     public string? Description { get; set; }
     public string Status { get; set; } = "Open";
+    public string? createby { get; set; }
 
     // ✅ Additional remarks
     public string? Remarks { get; set; }
