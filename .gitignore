@@ -10,7 +10,8 @@ autom4te.cache/
 *.tar.gz
 tarballs/
 test-results/
-
+appsettings.json
+appsettings.*.json
 # Mac bundle stuff
 *.dmg
 *.app
@@ -106,6 +107,7 @@ wwwroot/vendor/**/*.css
 !wwwroot/vendor/fonts/*.css
 wwwroot/vendor/**/*.js
 wwwroot/vendor/css
+wwwroot/
 
 
 
