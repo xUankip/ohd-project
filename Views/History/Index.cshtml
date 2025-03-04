@@ -35,30 +35,36 @@
   <table class="table table-bordered">
     <thead>
     <tr>
-      <th>CreateBy</th>
-      <th>Implementer</th>
+      <th>Requestor</th>
+      <th>Implementer ID</th>
       <th>Facility</th>
       <th>Item</th>
       <th>Quantity</th>
+      <th>Level</th>
       <th>Status</th>
-      <th>time</th>
-
-
+      <th>Time</th>
+      <th>Action</th>
     </tr>
     </thead>
     <tbody>
     @foreach (var item in Model)
     {
       <tr>
-        <td>@item.createby</td>
         <td>@item.Requestor?.FullName</td>
+        <td>@item.AssigneeId</td>
         <td>@item.Facility?.FacilityName</td>
         <td>@item.FacilityItem?.ItemName</td>
         <td>@item.QuantityRequested</td>
+        <td>@item.SeverityLevel</td>
         <td>@item.Status</td>
         <td>@item.RequestDate</td>
-
-
+        <td>
+          <div class="d-flex gap-2">
+            <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">Details</a>
+            <a asp-action="Edit" asp-route-id="@item.RequestId" class="btn btn-primary btn-sm">Edit</a>
+            <a asp-action="Delete" asp-route-id="@item.RequestId" class="btn btn-danger btn-sm">Delete</a>
+          </div>
+        </td>
       </tr>
     }
     </tbody>

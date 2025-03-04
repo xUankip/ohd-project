@@ -22,7 +22,7 @@ namespace AspnetCoreMvcStarter.Controllers
         }
 
         [Route("History/Index")]
-        public async Task<IActionResult> Index(string search = "", int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string search = "", int page = 1, int pageSize = 10)
         {
             string userIdStr = HttpContext.Session.GetString("UserId");
             int? currentUserId = !string.IsNullOrEmpty(userIdStr) ? int.Parse(userIdStr) : null;
@@ -37,7 +37,7 @@ namespace AspnetCoreMvcStarter.Controllers
                 .Include(r => r.FacilityItem)
                 .AsQueryable();
 
-            query = query.Where(r => r.createby == currentUserId.Value.ToString());
+            query = query.Where(r => r.RequestorId == currentUserId.Value);
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -124,29 +124,34 @@ namespace AspnetCoreMvcStarter.Controllers
                 }
 
                 request.RequestDate = DateTime.UtcNow;
-                request.Status = "Open";
-
-                if (string.IsNullOrEmpty(request.Description))
-                {
-                    request.Description = "No description provided";
-                }
-
-                if (string.IsNullOrEmpty(request.Remarks))
-                {
-                    request.Remarks = "";
-                }
 
                 string userIdStr = HttpContext.Session.GetString("UserId");
                 int? userId = !string.IsNullOrEmpty(userIdStr) ? int.Parse(userIdStr) : null;
                 if (userId.HasValue)
                 {
-                    request.RequestorId = userId.Value;
-                    request.createby = userId.Value.ToString();
+                  request.RequestorId = userId.Value;
+                  request.AssigneeId = userId.Value;
                 }
                 else
                 {
-                    request.RequestorId = 14;
-                    request.createby = "14";
+                  request.RequestorId = 1;
+                  request.AssigneeId = 1;
+                }
+
+                request.AssigneeId = null;
+
+                request.Status = "Open";
+
+                // Mặc định description nếu không có
+                if (string.IsNullOrEmpty(request.Description))
+                {
+                    request.Description = "No description provided";
+                }
+
+                // Mặc định remarks nếu không có
+                if (string.IsNullOrEmpty(request.Remarks))
+                {
+                    request.Remarks = "";
                 }
 
                 _context.Requests.Add(request);
@@ -181,7 +186,39 @@ namespace AspnetCoreMvcStarter.Controllers
                 return View(request);
             }
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddComment(int requestId, string commentText)
+        {
+          if (string.IsNullOrWhiteSpace(commentText))
+          {
+            TempData["Error"] = "Comment cannot be empty.";
+            return RedirectToAction("Details", new { id = requestId });
+          }
 
+          var request = await _context.Requests.FindAsync(requestId);
+          if (request == null)
+          {
+            return NotFound();
+          }
+
+          string userIdStr = HttpContext.Session.GetString("UserId");
+          int? userId = !string.IsNullOrEmpty(userIdStr) ? int.Parse(userIdStr) : null;
+
+          var comment = new Comment
+          {
+            RequestId = requestId,
+            UserId = userId,
+            CommentText = commentText,
+            CreatedAt = DateTime.UtcNow
+          };
+
+          _context.Comments.Add(comment);
+          await _context.SaveChangesAsync();
+
+          TempData["Success"] = "Comment added successfully!";
+          return RedirectToAction("Details", new { id = requestId });
+        }
         private void LoadDropdowns()
         {
             var users = _context.Users.Where(u => u.IsActive && u.RoleId == 3).ToList();

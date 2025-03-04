@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspnetCoreMvcStarter.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250302101123_updateRequest")]
-    partial class updateRequest
+    [Migration("20250304112503_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -144,7 +144,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 1,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7013),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7333),
                             CreatedBy = 0,
                             Description = "Provides books and resources for students.",
                             FacilityName = "Library"
@@ -152,7 +152,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 2,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7015),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7335),
                             CreatedBy = 0,
                             Description = "Equipped for physics and chemistry experiments.",
                             FacilityName = "Science Lab"
@@ -160,7 +160,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 3,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7016),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7335),
                             CreatedBy = 0,
                             Description = "Contains computers for student use.",
                             FacilityName = "Computer Lab"
@@ -168,7 +168,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 4,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7017),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7358),
                             CreatedBy = 0,
                             Description = "Indoor sports and fitness activities.",
                             FacilityName = "Gymnasium"
@@ -176,7 +176,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 5,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7018),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7359),
                             CreatedBy = 0,
                             Description = "Used for school events and presentations.",
                             FacilityName = "Auditorium"
@@ -184,7 +184,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 6,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7019),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7359),
                             CreatedBy = 0,
                             Description = "Outdoor sports facility for football training.",
                             FacilityName = "Football Field"
@@ -192,7 +192,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 7,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7019),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7360),
                             CreatedBy = 0,
                             Description = "Used for basketball games and training.",
                             FacilityName = "Basketball Court"
@@ -200,7 +200,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 8,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7020),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7360),
                             CreatedBy = 0,
                             Description = "Food and beverages for students and staff.",
                             FacilityName = "Cafeteria"
@@ -208,7 +208,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 9,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7021),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7361),
                             CreatedBy = 0,
                             Description = "Parking space for staff and students.",
                             FacilityName = "Parking Lot"
@@ -216,7 +216,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityId = 10,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7022),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7362),
                             CreatedBy = 0,
                             Description = "Monitors campus security operations.",
                             FacilityName = "Security Room"
@@ -276,7 +276,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 1,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7066),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7380),
                             CreatedBy = 0,
                             Description = "Kit for physics experiments.",
                             FacilityId = 2,
@@ -287,7 +287,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 2,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7070),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7383),
                             CreatedBy = 0,
                             Description = "Includes beakers and test tubes.",
                             FacilityId = 2,
@@ -298,7 +298,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 3,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7071),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7384),
                             CreatedBy = 0,
                             Description = "Computers for student use.",
                             FacilityId = 3,
@@ -309,7 +309,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 4,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7073),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7385),
                             CreatedBy = 0,
                             Description = "Official size basketballs.",
                             FacilityId = 7,
@@ -320,7 +320,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 5,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7074),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7386),
                             CreatedBy = 0,
                             Description = "For presentations and seminars.",
                             FacilityId = 5,
@@ -331,7 +331,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 6,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7076),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7387),
                             CreatedBy = 0,
                             Description = "For gym workouts.",
                             FacilityId = 4,
@@ -342,7 +342,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 7,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7077),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7388),
                             CreatedBy = 0,
                             Description = "Academic and reference books.",
                             FacilityId = 1,
@@ -353,7 +353,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 8,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7079),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7389),
                             CreatedBy = 0,
                             Description = "Monitors school security.",
                             FacilityId = 10,
@@ -364,7 +364,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 9,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7080),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7389),
                             CreatedBy = 0,
                             Description = "Used in science experiments.",
                             FacilityId = 2,
@@ -375,7 +375,7 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             FacilityItemId = 10,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7082),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7390),
                             CreatedBy = 0,
                             Description = "Used for training and matches.",
                             FacilityId = 6,
@@ -417,6 +417,9 @@ namespace AspnetCoreMvcStarter.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RequestId"));
+
+                    b.Property<int?>("AssigneeId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ClosedDate")
                         .HasColumnType("datetime2");
@@ -466,13 +469,14 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             RequestId = 1,
+                            AssigneeId = 7,
                             ClosureReason = "",
                             Description = "Request for library books.",
                             FacilityId = 1,
                             FacilityItemId = 7,
                             QuantityRequested = 2,
                             Remarks = "",
-                            RequestDate = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7124),
+                            RequestDate = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7408),
                             RequestorId = 7,
                             SeverityLevel = "Medium",
                             Status = "Approved"
@@ -480,13 +484,14 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             RequestId = 2,
+                            AssigneeId = 7,
                             ClosureReason = "",
                             Description = "Physics experiment kit required.",
                             FacilityId = 2,
                             FacilityItemId = 1,
                             QuantityRequested = 1,
                             Remarks = "",
-                            RequestDate = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7129),
+                            RequestDate = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7414),
                             RequestorId = 8,
                             SeverityLevel = "High",
                             Status = "Pending"
@@ -494,13 +499,14 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             RequestId = 3,
+                            AssigneeId = 7,
                             ClosureReason = "",
                             Description = "Chemistry lab items.",
                             FacilityId = 2,
                             FacilityItemId = 2,
                             QuantityRequested = 1,
                             Remarks = "",
-                            RequestDate = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7131),
+                            RequestDate = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7417),
                             RequestorId = 8,
                             SeverityLevel = "Medium",
                             Status = "Approved"
@@ -508,13 +514,14 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             RequestId = 4,
+                            AssigneeId = 7,
                             ClosureReason = "",
                             Description = "Need footballs for practice.",
                             FacilityId = 6,
                             FacilityItemId = 10,
                             QuantityRequested = 2,
                             Remarks = "",
-                            RequestDate = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7134),
+                            RequestDate = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7422),
                             RequestorId = 10,
                             SeverityLevel = "Low",
                             Status = "Pending"
@@ -522,13 +529,14 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             RequestId = 5,
+                            AssigneeId = 7,
                             ClosureReason = "",
                             Description = "Security cameras required.",
                             FacilityId = 10,
                             FacilityItemId = 8,
                             QuantityRequested = 3,
                             Remarks = "",
-                            RequestDate = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(7136),
+                            RequestDate = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7423),
                             RequestorId = 9,
                             SeverityLevel = "High",
                             Status = "Rejected"
@@ -592,11 +600,11 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6940),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(6674),
                             Email = "admin@school.com",
                             FullName = "Admin User",
                             IsActive = true,
-                            PasswordHash = "hashedpassword",
+                            PasswordHash = "3eb3fe66b31e3b4d10fa70b5cad49c7112294af6ae4e476a1c405155d45aa121",
                             Phone = "555-1001",
                             RoleId = 1,
                             Username = "admin"
@@ -604,11 +612,11 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 2,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6944),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(6902),
                             Email = "library@school.com",
                             FullName = "Library Manager",
                             IsActive = true,
-                            PasswordHash = "hashedpassword",
+                            PasswordHash = "7cb4dbb8075170db54428e835e52d460e62ab87b69e0d2be839720dd9021e283",
                             Phone = "555-1002",
                             RoleId = 2,
                             Username = "library"
@@ -616,11 +624,11 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 3,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6946),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(6969),
                             Email = "lab@school.com",
                             FullName = "Lab Manager",
                             IsActive = true,
-                            PasswordHash = "hashedpassword",
+                            PasswordHash = "8e52e0a33866d5aa80d1f14dffcbc464f412514a3511efe1d064ec16b5ad019e",
                             Phone = "555-1003",
                             RoleId = 2,
                             Username = "lab"
@@ -628,11 +636,11 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 4,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6947),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(6987),
                             Email = "gym@school.com",
                             FullName = "Gym Supervisor",
                             IsActive = true,
-                            PasswordHash = "hashedpassword",
+                            PasswordHash = "a0133dab4d7cba9eab132cb7685226637a7160133801f4f6128ce9e2d02c1818",
                             Phone = "555-1004",
                             RoleId = 2,
                             Username = "gym"
@@ -640,11 +648,11 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 5,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6949),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7004),
                             Email = "sports@school.com",
                             FullName = "Sports Coordinator",
                             IsActive = true,
-                            PasswordHash = "hashedpassword",
+                            PasswordHash = "fdf720d8c79befe8b10d34198a0ba4ab648112919ce605a6ed02b6a4ffb9103d",
                             Phone = "555-1005",
                             RoleId = 2,
                             Username = "sports"
@@ -652,11 +660,11 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 6,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6950),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7021),
                             Email = "it@school.com",
                             FullName = "IT Support",
                             IsActive = true,
-                            PasswordHash = "hashedpassword",
+                            PasswordHash = "31f8e2558c4e101cc8dd389cda792ca5d40c82123ce8227bec1cd80277f40140",
                             Phone = "555-1006",
                             RoleId = 2,
                             Username = "it"
@@ -664,11 +672,11 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 7,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6952),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7062),
                             Email = "assistant1@school.com",
                             FullName = "Student Assistant",
                             IsActive = true,
-                            PasswordHash = "hashedpassword",
+                            PasswordHash = "3ce2305001eb77db89331a21af3dc007e9bbbecfb5cd07a62a8cb55b9981e1ba",
                             Phone = "555-1007",
                             RoleId = 3,
                             Username = "assistant1"
@@ -676,11 +684,11 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 8,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6954),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7079),
                             Email = "tech@school.com",
                             FullName = "Lab Technician",
                             IsActive = true,
-                            PasswordHash = "hashedpassword",
+                            PasswordHash = "090368d31d3a9252525bd7054b042d1d4d9b15c3e8f2d3824c1354b5be1ea269",
                             Phone = "555-1008",
                             RoleId = 3,
                             Username = "tech"
@@ -688,11 +696,11 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 9,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6955),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7095),
                             Email = "security@school.com",
                             FullName = "Security Staff",
                             IsActive = true,
-                            PasswordHash = "hashedpassword",
+                            PasswordHash = "814d75eb9a4302909ccbbffc196e22a1f732263c6194a4991603fae272480159",
                             Phone = "555-1009",
                             RoleId = 3,
                             Username = "security"
@@ -700,14 +708,110 @@ namespace AspnetCoreMvcStarter.Migrations
                         new
                         {
                             UserId = 10,
-                            CreatedAt = new DateTime(2025, 3, 2, 10, 11, 22, 499, DateTimeKind.Utc).AddTicks(6957),
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7112),
                             Email = "maintenance@school.com",
                             FullName = "Maintenance Staff",
                             IsActive = true,
-                            PasswordHash = "hashedpassword",
+                            PasswordHash = "62b2e47e3ee33aff95358885437a7e19c49cd62f8dfd0cc2761662e46f3292cf",
                             Phone = "555-1010",
                             RoleId = 3,
                             Username = "maintenance"
+                        },
+                        new
+                        {
+                            UserId = 11,
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7127),
+                            Email = "User1@school.com",
+                            FullName = "User 1",
+                            IsActive = true,
+                            PasswordHash = "bc5848f227cc161eb5f68dfe98cb13110a9c843ce69e953a88107d865583d397",
+                            Phone = "555-1011",
+                            RoleId = 4,
+                            Username = "User 1"
+                        },
+                        new
+                        {
+                            UserId = 12,
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7181),
+                            Email = "User2@school.com",
+                            FullName = "User 2",
+                            IsActive = true,
+                            PasswordHash = "bc5848f227cc161eb5f68dfe98cb13110a9c843ce69e953a88107d865583d397",
+                            Phone = "555-1012",
+                            RoleId = 4,
+                            Username = "User 2"
+                        },
+                        new
+                        {
+                            UserId = 13,
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7196),
+                            Email = "User3@school.com",
+                            FullName = "User 3",
+                            IsActive = true,
+                            PasswordHash = "bc5848f227cc161eb5f68dfe98cb13110a9c843ce69e953a88107d865583d397",
+                            Phone = "555-1013",
+                            RoleId = 4,
+                            Username = "User 3"
+                        },
+                        new
+                        {
+                            UserId = 14,
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7211),
+                            Email = "User4@school.com",
+                            FullName = "User 4",
+                            IsActive = true,
+                            PasswordHash = "bc5848f227cc161eb5f68dfe98cb13110a9c843ce69e953a88107d865583d397",
+                            Phone = "555-1014",
+                            RoleId = 4,
+                            Username = "User 4"
+                        },
+                        new
+                        {
+                            UserId = 15,
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7225),
+                            Email = "User5@school.com",
+                            FullName = "User 5",
+                            IsActive = true,
+                            PasswordHash = "bc5848f227cc161eb5f68dfe98cb13110a9c843ce69e953a88107d865583d397",
+                            Phone = "555-1015",
+                            RoleId = 4,
+                            Username = "User 5"
+                        },
+                        new
+                        {
+                            UserId = 16,
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7260),
+                            Email = "User6@school.com",
+                            FullName = "User 6",
+                            IsActive = true,
+                            PasswordHash = "bc5848f227cc161eb5f68dfe98cb13110a9c843ce69e953a88107d865583d397",
+                            Phone = "555-1016",
+                            RoleId = 4,
+                            Username = "User 6"
+                        },
+                        new
+                        {
+                            UserId = 17,
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7274),
+                            Email = "User7@school.com",
+                            FullName = "User 7",
+                            IsActive = true,
+                            PasswordHash = "bc5848f227cc161eb5f68dfe98cb13110a9c843ce69e953a88107d865583d397",
+                            Phone = "555-1017",
+                            RoleId = 4,
+                            Username = "User 7"
+                        },
+                        new
+                        {
+                            UserId = 18,
+                            CreatedAt = new DateTime(2025, 3, 4, 11, 25, 2, 715, DateTimeKind.Utc).AddTicks(7288),
+                            Email = "User8@school.com",
+                            FullName = "User 8",
+                            IsActive = true,
+                            PasswordHash = "bc5848f227cc161eb5f68dfe98cb13110a9c843ce69e953a88107d865583d397",
+                            Phone = "555-1018",
+                            RoleId = 4,
+                            Username = "User 8"
                         });
                 });
 

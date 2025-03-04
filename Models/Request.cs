@@ -12,6 +12,8 @@ namespace AspnetCoreMvcStarter.Models
 
     // ✅ Requestor (User who submitted the request)
     public int? RequestorId { get; set; }
+
+    public int? AssigneeId { get; set; }
     public virtual User? Requestor { get; set; }
 
     // ✅ Facility (Related facility)
@@ -32,7 +34,8 @@ namespace AspnetCoreMvcStarter.Models
     public string? SeverityLevel { get; set; }
     public string? Description { get; set; }
     public string Status { get; set; } = "Open";
-    public string? createby { get; set; }
+
+    // public string? CreateBy { get; set; }
 
     // ✅ Additional remarks
     public string? Remarks { get; set; }

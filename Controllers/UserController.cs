@@ -23,7 +23,7 @@ namespace AspnetCoreMvcStarter.Controllers
         // GET: Users
         [HttpGet]
         [Route("User")]
-        public async Task<IActionResult> Index(string search = "", int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string search = "", int page = 1, int pageSize = 10)
         {
           var query = _context.Users
             .Include(u => u.Role)

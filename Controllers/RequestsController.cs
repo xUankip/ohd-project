@@ -23,7 +23,7 @@ namespace AspnetCoreMvcStarter.Controllers
 
         // ✅ Show Request List (GET: /Requests)
         [Route("Requests/Index")]
-        public async Task<IActionResult> Index(string search = "", int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string search = "", int page = 1, int pageSize = 10)
         {
           var query = _context.Requests
             .Include(r => r.Requestor)
@@ -123,19 +123,22 @@ namespace AspnetCoreMvcStarter.Controllers
                     return View(request);
                 }
 
-                // Đặt các giá trị mặc định
                 request.RequestDate = DateTime.UtcNow;
 
-                // Lấy userId từ session
-                if (HttpContext.Session.GetInt32("UserId") != null)
+                string userIdStr = HttpContext.Session.GetString("UserId");
+                int? userId = !string.IsNullOrEmpty(userIdStr) ? int.Parse(userIdStr) : null;
+                if (userId.HasValue)
                 {
-                    request.RequestorId = HttpContext.Session.GetInt32("UserId");
+                  request.RequestorId = userId.Value;
+                  request.AssigneeId = userId.Value;
                 }
                 else
                 {
-                    // Fallback nếu không có session
-                    request.RequestorId = 14; // Hoặc giá trị mặc định khác
+                  request.RequestorId = 1;
+                  request.AssigneeId = 1;
                 }
+
+                request.AssigneeId = null;
 
                 request.Status = "Open";
 
@@ -193,7 +196,8 @@ namespace AspnetCoreMvcStarter.Controllers
 
             // Store the currently assigned user separately
             var currentAssignee = request.Requestor;
-
+            Console.WriteLine(currentAssignee);
+            Console.WriteLine("--------------");
             // Remove the currently assigned user from the dropdown list
             if (request.RequestorId.HasValue)
             {
@@ -210,7 +214,7 @@ namespace AspnetCoreMvcStarter.Controllers
 
         // ✅ Handle Request Assignment or Transfer (POST: /Requests/Assign/{id})
         [HttpPost]
-        public IActionResult Assign(int requestId, int? RequestorId)
+        public IActionResult Assign(int requestId, int? assigneeId)
         {
           var request = _context.Requests.FirstOrDefault(r => r.RequestId == requestId);
 
@@ -219,13 +223,13 @@ namespace AspnetCoreMvcStarter.Controllers
             return NotFound();
           }
 
-          if (!RequestorId.HasValue)
+          if (!assigneeId.HasValue)
           {
             TempData["Error"] = "Please select a valid user for assignment.";
             return RedirectToAction("Assign", new { id = requestId });
           }
 
-          request.RequestorId = RequestorId.Value;
+          request.AssigneeId = assigneeId.Value;
           _context.SaveChanges();
 
           // ✅ Removed success message
@@ -397,16 +401,13 @@ namespace AspnetCoreMvcStarter.Controllers
             return NotFound();
           }
 
-          int userId = 1; // Giá trị mặc định
-          if (HttpContext.Session.GetInt32("UserId") != null)
-          {
-              userId = HttpContext.Session.GetInt32("UserId").Value;
-          }
+          string userIdStr = HttpContext.Session.GetString("UserId");
+          int? userId = !string.IsNullOrEmpty(userIdStr) ? int.Parse(userIdStr) : null;
 
           var comment = new Comment
           {
             RequestId = requestId,
-            UserId = userId, // Sử dụng userId từ session
+            UserId = userId,
             CommentText = commentText,
             CreatedAt = DateTime.UtcNow
           };

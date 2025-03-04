@@ -37,10 +37,13 @@
     <thead>
     <tr>
       <th>Requestor</th>
+      <th>Assignee</th>
       <th>Facility</th>
       <th>Item</th>
       <th>Quantity</th>
+      <th>Level</th>
       <th>Status</th>
+      <th>Request Date</th>
       <th>Actions</th>
     </tr>
     </thead>
@@ -49,9 +52,11 @@
     {
       <tr>
         <td>@item.Requestor?.FullName</td>
+        <td>@item.AssigneeId</td>
         <td>@item.Facility?.FacilityName</td>
         <td>@item.FacilityItem?.ItemName</td>
         <td>@item.QuantityRequested</td>
+        <td>@item.SeverityLevel</td>
         <td>
           <select class="form-control form-control-sm status-dropdown" data-request-id="@item.RequestId" data-original-status="@item.Status">
             @foreach (var status in new[] { "Open", "In Progress", "Rejected", "Closed" })
@@ -60,6 +65,7 @@
             }
           </select>
         </td>
+        <td>@item.RequestDate</td>
         <td>
           <div class="d-flex gap-2">
             <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">Details</a>

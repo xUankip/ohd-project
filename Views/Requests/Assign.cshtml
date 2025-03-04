@@ -35,7 +35,7 @@ else
 
     <div class="form-group">
       <label>Select New Assignee</label>
-      <select name="RequestorId" class="form-control" required>
+      <select name="assigneeId" class="form-control" required>
         <option value="">-- Select User --</option>
         @foreach (var user in ViewBag.Assignees as SelectList)
         {
