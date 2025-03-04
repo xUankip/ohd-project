@@ -17,22 +17,20 @@ namespace AspnetCoreMvcStarter.Controllers
         {
             _context = context;
         }
+
         [HttpGet]
         public IActionResult AccessDenied()
         {
-          return View();
+            return View();
         }
-
 
         [HttpGet]
         public IActionResult Login()
         {
-
             if (HttpContext.Session.TryGetValue("UserId", out _))
             {
                 return RedirectToAction("Index", "Home");
             }
-
 
             Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
             Response.Headers["Pragma"] = "no-cache";
@@ -44,10 +42,11 @@ namespace AspnetCoreMvcStarter.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
-            // Thêm các header để ngăn cache
             Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
             Response.Headers["Pragma"] = "no-cache";
             Response.Headers["Expires"] = "0";
+
+            Console.WriteLine($"Login attempt: Email={email}");
 
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
@@ -59,38 +58,64 @@ namespace AspnetCoreMvcStarter.Controllers
                 return View();
             }
 
-            // Tìm kiếm người dùng và lấy thông tin vai trò
+
             var user = await _context.Users
-                .Include(u => u.Role) // Đảm bảo lấy thông tin vai trò
+                .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
             {
+                Console.WriteLine("Login failed: User not found");
                 ModelState.AddModelError("", "Email hoặc mật khẩu không chính xác.");
                 return View();
             }
+
+
+            Console.WriteLine($"User found: ID={user.UserId}, Name={user.FullName}, Email={user.Email}");
 
             if (!VerifyPassword(password, user.PasswordHash))
             {
+                Console.WriteLine("Login failed: Password incorrect");
                 ModelState.AddModelError("", "Email hoặc mật khẩu không chính xác.");
                 return View();
             }
 
-            // Đăng nhập thành công -> Lưu thông tin vào session
-            HttpContext.Session.SetString("UserId", user.UserId.ToString());
-            HttpContext.Session.SetString("UserName", user.FullName ?? user.Email);
-            HttpContext.Session.SetString("UserEmail", user.Email);
+            Console.WriteLine("Login successful, attempting to save session...");
 
-            // Lưu RoleId vào session - quan trọng cho việc kiểm tra quyền
-            HttpContext.Session.SetInt32("RoleId", user.RoleId);
-
-            // Nếu có tên vai trò, lưu vào session
-            if (user.Role != null)
+            try
             {
-                HttpContext.Session.SetString("RoleName", user.Role.RoleName);
+                Console.WriteLine($"Session ID: {HttpContext.Session.Id}");
+
+                HttpContext.Session.SetString("UserId", user.UserId.ToString());
+                var userIdCheck = HttpContext.Session.GetString("UserId");
+                Console.WriteLine($"UserId saved: {userIdCheck}");
+
+                HttpContext.Session.SetString("UserName", user.FullName ?? user.Email);
+                var userNameCheck = HttpContext.Session.GetString("UserName");
+                Console.WriteLine($"UserName saved: {userNameCheck}");
+
+                HttpContext.Session.SetString("UserEmail", user.Email);
+                var emailCheck = HttpContext.Session.GetString("UserEmail");
+                Console.WriteLine($"UserEmail saved: {emailCheck}");
+
+                HttpContext.Session.SetInt32("RoleId", user.RoleId);
+                var roleIdCheck = HttpContext.Session.GetInt32("RoleId");
+                Console.WriteLine($"RoleId saved: {roleIdCheck}");
+
+                if (user.Role != null)
+                {
+                    HttpContext.Session.SetString("RoleName", user.Role.RoleName);
+                    var roleNameCheck = HttpContext.Session.GetString("RoleName");
+                    Console.WriteLine($"RoleName saved: {roleNameCheck}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving session: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
             }
 
-            // Cũng lưu vào Claims để sử dụng trong các tính năng yêu cầu xác thực
+
             var claims = new List<System.Security.Claims.Claim>
             {
                 new System.Security.Claims.Claim("UserId", user.UserId.ToString()),
@@ -101,7 +126,6 @@ namespace AspnetCoreMvcStarter.Controllers
             var identity = new System.Security.Claims.ClaimsIdentity(claims, "CustomAuthType");
             var principal = new System.Security.Claims.ClaimsPrincipal(identity);
 
-            // Đăng nhập người dùng vào hệ thống
             await HttpContext.SignInAsync("CustomAuthScheme", principal);
 
             return RedirectToAction("Index", "Home");
@@ -110,17 +134,12 @@ namespace AspnetCoreMvcStarter.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            HttpContext.Session.Clear(); // Xóa toàn bộ session khi logout
-
-            // Đăng xuất từ hệ thống xác thực
+            HttpContext.Session.Clear();
             await HttpContext.SignOutAsync("CustomAuthScheme");
 
-            // Thêm các header để ngăn cache
             Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
             Response.Headers["Pragma"] = "no-cache";
             Response.Headers["Expires"] = "0";
-
-            // Thêm response header để ngăn chặn nút quay lại
             Response.Headers["Location"] = Url.Action("Login", "Auth");
 
             return RedirectToAction("Login");

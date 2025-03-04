@@ -18,6 +18,7 @@
   bool isAdmin = userRoleId == 1;
   bool isAssignee = userRoleId == 3;
   bool isFacilityHead = userRoleId == 2;
+  bool isUser = userRoleId == 4;
 
   // Debug - hiển thị giá trị RoleId trong console log hoặc comment để dễ debug
   // ViewData["UserRoleId"] = userRoleId;
@@ -54,6 +55,27 @@
     <!-- Menu Users chỉ hiển thị cho người dùng thông thường -->
     @if (isFacilityHead)
     {
+      <!-- Requests -->
+      <li class='menu-item@(currentPage.StartsWith("/Request") ? " active" : "")'>
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <i class='menu-icon tf-icons ri-file-list-line'></i>
+          <div data-i18n="Requests">Requests</div>
+        </a>
+        <ul class="menu-sub">
+          <li class='menu-item@(currentPage == "/Request" ? " active" : "")'>
+            <a asp-controller="Requests" asp-action="Index" class="menu-link">
+              <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
+              <div data-i18n="List">List</div>
+            </a>
+          </li>
+          <li class='menu-item@(currentPage == "/Requests/Report" ? " active" : "")'>
+            <a asp-controller="Requests" asp-action="Report" class="menu-link">
+              <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
+              <div data-i18n="Report">Report</div>
+            </a>
+          </li>
+        </ul>
+      </li>
       <!-- Facility -->
       <li class='menu-item@(currentPage.StartsWith("/Facility") ? " active" : "")'>
         <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -70,6 +92,28 @@
         </ul>
       </li>
     }
+
+
+    @if (isUser)
+    {
+      <!-- Requests -->
+      <li class='menu-item@(currentPage.StartsWith("/History") ? " active" : "")'>
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <i class='menu-icon tf-icons ri-file-list-line'></i>
+          <div data-i18n="Request">Request</div>
+        </a>
+        <ul class="menu-sub">
+          <li class='menu-item@(currentPage == "/History" ? " active" : "")'>
+            <a asp-controller="History" asp-action="Index" class="menu-link">
+              <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
+              <div data-i18n="List">History</div>
+            </a>
+          </li>
+
+        </ul>
+      </li>
+    }
+
 
     <!-- Các menu chỉ dành cho Admin -->
     @if (isAdmin)

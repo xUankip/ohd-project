@@ -1,0 +1,90 @@
+﻿@model AspnetCoreMvcStarter.Models.Request
+
+@{
+  ViewData["Title"] = "Create Request";
+}
+
+<h2>Create Request</h2>
+
+<form method="post" asp-action="Create">
+  @Html.AntiForgeryToken()
+
+  <div class="form-group">
+    <label asp-for="FacilityId" class="control-label">Facility</label>
+    <select asp-for="FacilityId" id="facilitySelect" class="form-control" asp-items="ViewBag.Facilities">
+      <option value="">Select Facility</option>
+    </select>
+    <span asp-validation-for="FacilityId" class="text-danger"></span>
+  </div>
+
+  <div class="form-group">
+    <label asp-for="FacilityItemId" class="control-label">Item</label>
+    <select asp-for="FacilityItemId" id="itemSelect" class="form-control">
+      <option value="">Select Item</option>
+    </select>
+    <span asp-validation-for="FacilityItemId" class="text-danger"></span>
+  </div>
+
+  <div class="form-group">
+    <label asp-for="QuantityRequested" class="control-label">Quantity Requested</label>
+    <input asp-for="QuantityRequested" class="form-control" type="number" min="1" required />
+    <span asp-validation-for="QuantityRequested" class="text-danger"></span>
+  </div>
+
+  <div class="form-group">
+    <label asp-for="SeverityLevel" class="control-label">Severity Level</label>
+    <select asp-for="SeverityLevel" class="form-control">
+      <option value="">Select Severity Level</option>
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+      <option value="Critical">Critical</option>
+    </select>
+    <span asp-validation-for="SeverityLevel" class="text-danger"></span>
+  </div>
+
+  <div class="form-group">
+    <label asp-for="Description" class="control-label">Description</label>
+    <textarea asp-for="Description" class="form-control"></textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+  </div>
+
+  <div class="form-group">
+    <input type="submit" class="btn btn-primary" value="Create" />
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+  </div>
+</form>
+
+@section Scripts {
+  @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+  <script>
+    $(document).ready(function () {
+      $('#facilitySelect').change(function () {
+        var facilityId = $(this).val();
+        if (facilityId) {
+          $.ajax({
+            url: '/Requests/GetItemsByFacility?facilityId=' + facilityId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+              var itemSelect = $('#itemSelect');
+              itemSelect.empty();
+              itemSelect.append('<option value="">Select Item</option>');
+
+              $.each(data, function (index, item) {
+                itemSelect.append('<option value="' + item.itemId + '">' + item.itemName + '</option>');
+              });
+            },
+            error: function () {
+              console.error('Failed to load items for the selected facility');
+            }
+          });
+        } else {
+          $('#itemSelect').empty();
+          $('#itemSelect').append('<option value="">Select Item</option>');
+        }
+      });
+    });
+  </script>
+}
