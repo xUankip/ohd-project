@@ -23,13 +23,18 @@ namespace AspnetCoreMvcStarter.Controllers
         }
 
         // Danh sách Facility
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 5)
         {
+          var totalFacilities = await _context.Facilities.CountAsync();
             var facilities = await _context.Facilities
                 .Include(f => f.FacilityHead)
                 .Where(f => f.DeletedAt == null)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalFacilities / pageSize);
             return View(facilities);
         }
 

@@ -72,31 +72,28 @@
   </tbody>
 </table>
 
-<!-- Pagination Controls with Search parameter -->
-@if (totalPages > 1)
+<!-- Phân trang -->
+@if (ViewBag.TotalPages > 1)
 {
   <nav>
     <ul class="pagination">
-      @if (currentPage > 1)
+      <!-- Nút Previous -->
+      <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">&lt;</a>
+      </li>
+
+      <!-- Số trang -->
+      @for (int i = 1; i <= ViewBag.TotalPages; i++)
       {
-        <li class="page-item">
-          <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch">Previous</a>
+        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+          <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
         </li>
       }
 
-      @for (int i = 1; i <= totalPages; i++)
-      {
-        <li class="page-item @(i == currentPage ? "active" : "")">
-          <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
-        </li>
-      }
-
-      @if (currentPage < totalPages)
-      {
-        <li class="page-item">
-          <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch">Next</a>
-        </li>
-      }
+      <!-- Nút Next -->
+      <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">&gt;</a>
+      </li>
     </ul>
   </nav>
 }
