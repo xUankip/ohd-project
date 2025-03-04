@@ -64,3 +64,66 @@
     </tbody>
   </table>
 </div>
+}
+<!-- 
+<h1>Danh sách cơ sở</h1>
+<p>
+  <a asp-action="Create" class="btn btn-primary">Thêm mới</a>
+</p>
+<div class="card-datatable table-responsive">
+  <table  class="datatables-users table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Tên cơ sở</th>
+      <th>Mô tả</th>
+      <th>Người phụ trách</th>
+      <th>Ngày tạo</th>
+      <th>Thao tác</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+      <tr>
+        <td>@item.FacilityId</td>
+        <td>@item.FacilityName</td>
+        <td>@(string.IsNullOrEmpty(item.Description) ? "-" : item.Description)</td>
+        <td>@(item.FacilityHead != null ? item.FacilityHead.FullName : "-")</td>
+        <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+        <td>
+          <div style="display: flex; gap: 5px;">
+            <a asp-action="Details" asp-route-id="@item.FacilityId" class="btn btn-info btn-sm">Chi tiết</a>
+            <a asp-action="Edit" asp-route-id="@item.FacilityId" class="btn btn-primary btn-sm">Sửa</a>
+            <a asp-action="Delete" asp-route-id="@item.FacilityId" class="btn btn-danger btn-sm">Xóa</a>
+          </div>
+        </td>
+      </tr>
+    }
+    </tbody>
+  </table>
+</div> -->
+<!-- Phân trang -->
+@if (ViewBag.TotalPages > 1)
+{
+  <nav>
+    <ul class="pagination">
+      <!-- Nút Previous -->
+      <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">&lt;</a>
+      </li>
+
+      <!-- Số trang -->
+      @for (int i = 1; i <= ViewBag.TotalPages; i++)
+      {
+        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+          <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+        </li>
+      }
+
+      <!-- Nút Next -->
+      <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">&gt;</a>
+      </li>
+    </ul>
+  </nav>
+}

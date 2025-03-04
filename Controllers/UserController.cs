@@ -5,10 +5,12 @@ using AspnetCoreMvcStarter.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using AspnetCoreMvcStarter.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AspnetCoreMvcStarter.Controllers
 {
+  [AllowRoles(1)]
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;

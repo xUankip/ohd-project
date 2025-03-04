@@ -9,6 +9,72 @@
 
 <h2>Request List</h2>
 
+<!-- <<<<<<< Tri/HoanThienGiaoDien
+<p>
+  <a asp-action="Create" class="btn btn-primary btn-sm">Create New Request</a>
+</p>
+<div class="card-datatable table-responsive">
+  <table  class="datatables-users table">
+    <thead>
+    <tr>
+      <th>Requestor</th>
+      <th>Facility</th>
+      <th>Item</th>
+      <th>Quantity</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+      <tr class="request-row">
+        <td>@item.Requestor?.FullName</td>
+        <td>@item.Facility?.FacilityName</td>
+        <td>@item.FacilityItem?.ItemName</td>
+        <td>@item.QuantityRequested</td>
+        <td>@item.Status</td>
+        <td>
+          <div  style="display: flex; gap: 5px;">
+            <a asp-action="Edit" asp-route-id="@item.RequestId" class="btn btn-warning btn-sm">Edit</a>
+            <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">Details</a>
+            <a asp-action="Delete" asp-route-id="@item.RequestId" class="btn btn-danger btn-sm">Delete</a>
+            <a asp-action="Assign" asp-route-id="@item.RequestId" class="btn btn-primary btn-sm">Assign</a>
+            <a asp-action="UpdateStatus" asp-route-id="@item.RequestId" class="btn btn-secondary btn-sm">Update Status</a>
+            <a asp-action="Revoke" asp-route-id="@item.RequestId" class="btn btn-dark btn-sm">Revoke</a>
+          </div>
+        </td>
+      </tr>
+    }
+    </tbody>
+  </table>
+</div>
+<!-- Phân trang -->
+@if (ViewBag.TotalPages > 1)
+{
+  <nav>
+    <ul class="pagination">
+      <!-- Nút Previous -->
+      <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">&lt;</a>
+      </li>
+
+      <!-- Số trang -->
+      @for (int i = 1; i <= ViewBag.TotalPages; i++)
+      {
+        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+          <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+        </li>
+      }
+
+      <!-- Nút Next -->
+      <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">&gt;</a>
+      </li>
+    </ul>
+  </nav>
+}
+======= -->
 <div class="row mb-3">
   <div class="col-md-6">
     <a asp-action="Create" class="btn btn-success">Create New Request</a>
