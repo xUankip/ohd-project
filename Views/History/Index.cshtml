@@ -1,0 +1,121 @@
+@model IEnumerable<AspnetCoreMvcStarter.Models.Request>
+@{
+  ViewData["Title"] = "Requests";
+  int currentPage = ViewBag.CurrentPage;
+  int totalPages = ViewBag.TotalPages;
+  string currentSearch = ViewBag.Search ?? "";
+}
+
+<h2>Request List</h2>
+
+<div class="row mb-3">
+  <div class="col-md-6">
+    <a asp-action="Create" class="btn btn-success">Create New Request</a>
+  </div>
+  <div class="col-md-6">
+    <form asp-action="Index" method="get" class="d-flex justify-content-end">
+      <div class="input-group">
+        <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Search...">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+@if (!string.IsNullOrEmpty(currentSearch)) {
+  <div class="alert alert-info">
+    <p class="mb-0">Showing results for: <strong>@currentSearch</strong>
+      <a asp-action="Index" class="btn btn-sm btn-outline-dark ms-2">Clear</a>
+    </p>
+  </div>
+}
+
+
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>CreateBy</th>
+      <th>Implementer</th>
+      <th>Facility</th>
+      <th>Item</th>
+      <th>Quantity</th>
+      <th>Status</th>
+      <th>time</th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+      <tr>
+        <td>@item.createby</td>
+        <td>@item.Requestor?.FullName</td>
+        <td>@item.Facility?.FacilityName</td>
+        <td>@item.FacilityItem?.ItemName</td>
+        <td>@item.QuantityRequested</td>
+        <td>@item.Status</td>
+        <td>@item.RequestDate</td>
+
+
+      </tr>
+    }
+    </tbody>
+  </table>
+</div>
+
+@if (totalPages > 1) {
+  <nav>
+    <ul class="pagination">
+      <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+        <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch">&lt;</a>
+      </li>
+      @for (int i = 1; i <= totalPages; i++)
+      {
+        <li class="page-item @(currentPage == i ? "active" : "")">
+          <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
+        </li>
+      }
+      <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+        <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch">&gt;</a>
+      </li>
+    </ul>
+  </nav>
+}
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".status-dropdown").forEach(dropdown => {
+      dropdown.addEventListener("change", function () {
+        let requestId = this.getAttribute("data-request-id");
+        let newStatus = this.value;
+        let originalStatus = this.getAttribute("data-original-status");
+
+        if (confirm("Are you sure you want to update the status?")) {
+          fetch('/Requests/UpdateStatus', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ requestId: requestId, status: newStatus })
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                alert("Status updated successfully!");
+                this.setAttribute("data-original-status", newStatus);
+              } else {
+                alert("Error updating status: " + data.message);
+                this.value = originalStatus;
+              }
+            })
+            .catch(error => {
+              alert("Request failed: " + error);
+              this.value = originalStatus;
+            });
+        } else {
+          this.value = originalStatus;
+        }
+      });
+    });
+  });
+</script>

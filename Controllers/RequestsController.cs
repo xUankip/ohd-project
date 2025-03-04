@@ -7,6 +7,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 namespace AspnetCoreMvcStarter.Controllers
 {
@@ -90,77 +92,87 @@ namespace AspnetCoreMvcStarter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Request request)
         {
-    try
-    {
+            try
+            {
+                // Kiểm tra các trường bắt buộc
+                if (request.FacilityId == null)
+                {
+                    ModelState.AddModelError("FacilityId", "Vui lòng chọn cơ sở");
+                    LoadDropdowns();
+                    return View(request);
+                }
 
-        // Kiểm tra các trường bắt buộc
-        if (request.FacilityId == null)
-        {
-            ModelState.AddModelError("FacilityId", "Vui lòng chọn cơ sở");
-            LoadDropdowns();
-            return View(request);
+                if (request.FacilityItemId == null)
+                {
+                    ModelState.AddModelError("FacilityItemId", "Vui lòng chọn vật dụng");
+                    LoadDropdowns();
+                    return View(request);
+                }
+
+                if (request.QuantityRequested <= 0)
+                {
+                    ModelState.AddModelError("QuantityRequested", "Số lượng phải lớn hơn 0");
+                    LoadDropdowns();
+                    return View(request);
+                }
+
+                if (string.IsNullOrEmpty(request.SeverityLevel))
+                {
+                    ModelState.AddModelError("SeverityLevel", "Vui lòng chọn mức độ ưu tiên");
+                    LoadDropdowns();
+                    return View(request);
+                }
+
+                // Đặt các giá trị mặc định
+                request.RequestDate = DateTime.UtcNow;
+
+                // Lấy userId từ session
+                if (HttpContext.Session.GetInt32("UserId") != null)
+                {
+                    request.RequestorId = HttpContext.Session.GetInt32("UserId");
+                }
+                else
+                {
+                    // Fallback nếu không có session
+                    request.RequestorId = 14; // Hoặc giá trị mặc định khác
+                }
+
+                request.Status = "Open";
+
+                // Mặc định description nếu không có
+                if (string.IsNullOrEmpty(request.Description))
+                {
+                    request.Description = "No description provided";
+                }
+
+                // Mặc định remarks nếu không có
+                if (string.IsNullOrEmpty(request.Remarks))
+                {
+                    request.Remarks = "";
+                }
+
+                _context.Requests.Add(request);
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = "Tạo request thành công!";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                // Log chi tiết lỗi
+                Console.WriteLine($"Exception when creating request: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                }
+
+                ModelState.AddModelError("", "Lỗi khi lưu request: " + ex.Message);
+                LoadDropdowns();
+                return View(request);
+            }
         }
-
-        if (request.FacilityItemId == null)
-        {
-            ModelState.AddModelError("FacilityItemId", "Vui lòng chọn vật dụng");
-            LoadDropdowns();
-            return View(request);
-        }
-
-        if (request.QuantityRequested <= 0)
-        {
-            ModelState.AddModelError("QuantityRequested", "Số lượng phải lớn hơn 0");
-            LoadDropdowns();
-            return View(request);
-        }
-
-        if (string.IsNullOrEmpty(request.SeverityLevel))
-        {
-            ModelState.AddModelError("SeverityLevel", "Vui lòng chọn mức độ ưu tiên");
-            LoadDropdowns();
-            return View(request);
-        }
-
-        // Đặt các giá trị mặc định
-        request.RequestDate = DateTime.UtcNow;
-        request.RequestorId = 1; // Mặc định là user có id = 1
-        request.Status = "Open";
-
-        // Mặc định description nếu không có
-        if (string.IsNullOrEmpty(request.Description))
-        {
-            request.Description = "No description provided";
-        }
-
-        // Mặc định remarks nếu không có
-        if (string.IsNullOrEmpty(request.Remarks))
-        {
-            request.Remarks = "";
-        }
-
-        _context.Requests.Add(request);
-        await _context.SaveChangesAsync();
-
-        TempData["Success"] = "Tạo request thành công!";
-        return RedirectToAction(nameof(Index));
-    }
-    catch (Exception ex)
-    {
-        // Log chi tiết lỗi
-        Console.WriteLine($"Exception when creating request: {ex.Message}");
-        Console.WriteLine($"Stack trace: {ex.StackTrace}");
-
-        if (ex.InnerException != null)
-        {
-            Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
-        }
-
-        ModelState.AddModelError("", "Lỗi khi lưu request: " + ex.Message);
-        LoadDropdowns();
-        return View(request);
-    }
-}
 
         // ✅ Assign or Transfer a Request (GET: /Requests/Assign/{id})
         public IActionResult Assign(int id)
@@ -198,7 +210,6 @@ namespace AspnetCoreMvcStarter.Controllers
 
         // ✅ Handle Request Assignment or Transfer (POST: /Requests/Assign/{id})
         [HttpPost]
-        [HttpPost]
         public IActionResult Assign(int requestId, int? RequestorId)
         {
           var request = _context.Requests.FirstOrDefault(r => r.RequestId == requestId);
@@ -224,7 +235,7 @@ namespace AspnetCoreMvcStarter.Controllers
 
 
 
-// ✅ Edit Request (GET)
+        // ✅ Edit Request (GET)
         public async Task<IActionResult> Edit(int id)
         {
           var request = await _context.Requests.FindAsync(id);
@@ -332,6 +343,7 @@ namespace AspnetCoreMvcStarter.Controllers
             var items = _context.FacilityItems.ToList();
             ViewBag.Items = items.Any() ? new SelectList(items, "FacilityItemId", "ItemName") : null;
         }
+
         [HttpGet]
         public IActionResult GetItemsByFacility(int facilityId)
         {
@@ -385,10 +397,16 @@ namespace AspnetCoreMvcStarter.Controllers
             return NotFound();
           }
 
+          int userId = 1; // Giá trị mặc định
+          if (HttpContext.Session.GetInt32("UserId") != null)
+          {
+              userId = HttpContext.Session.GetInt32("UserId").Value;
+          }
+
           var comment = new Comment
           {
             RequestId = requestId,
-            UserId = 1, // Replace with the actual logged-in user ID
+            UserId = userId, // Sử dụng userId từ session
             CommentText = commentText,
             CreatedAt = DateTime.UtcNow
           };
@@ -399,6 +417,5 @@ namespace AspnetCoreMvcStarter.Controllers
           TempData["Success"] = "Comment added successfully!";
           return RedirectToAction("Details", new { id = requestId });
         }
-
     }
 }
