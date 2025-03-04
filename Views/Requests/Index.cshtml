@@ -9,12 +9,31 @@
 
 <h2>Request List</h2>
 
-<!-- <<<<<<< Tri/HoanThienGiaoDien
-<p>
-  <a asp-action="Create" class="btn btn-primary btn-sm">Create New Request</a>
-</p>
-<div class="card-datatable table-responsive">
-  <table  class="datatables-users table">
+<div class="row mb-3">
+  <div class="col-md-6">
+    <a asp-action="Create" class="btn btn-success">Create New Request</a>
+  </div>
+  <div class="col-md-6">
+    <form asp-action="Index" method="get" class="d-flex justify-content-end">
+      <div class="input-group">
+        <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Search...">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+@if (!string.IsNullOrEmpty(currentSearch))
+{
+  <div class="alert alert-info">
+    <p class="mb-0">Showing results for: <strong>@currentSearch</strong>
+      <a asp-action="Index" class="btn btn-sm btn-outline-dark ms-2">Clear</a>
+    </p>
+  </div>
+}
+
+<div class="table-responsive">
+  <table class="table table-bordered">
     <thead>
     <tr>
       <th>Requestor</th>
@@ -28,20 +47,25 @@
     <tbody>
     @foreach (var item in Model)
     {
-      <tr class="request-row">
+      <tr>
         <td>@item.Requestor?.FullName</td>
         <td>@item.Facility?.FacilityName</td>
         <td>@item.FacilityItem?.ItemName</td>
         <td>@item.QuantityRequested</td>
-        <td>@item.Status</td>
         <td>
-          <div  style="display: flex; gap: 5px;">
-            <a asp-action="Edit" asp-route-id="@item.RequestId" class="btn btn-warning btn-sm">Edit</a>
+          <select class="form-control form-control-sm status-dropdown" data-request-id="@item.RequestId" data-original-status="@item.Status">
+            @foreach (var status in new[] { "Open", "In Progress", "Rejected", "Closed" })
+            {
+              <option value="@status" selected="@(item.Status == status)">@status</option>
+            }
+          </select>
+        </td>
+        <td>
+          <div class="d-flex gap-2">
             <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">Details</a>
+            <a asp-action="Assign" asp-route-id="@item.RequestId" class="btn btn-warning btn-sm">Assign</a>
+            <a asp-action="Edit" asp-route-id="@item.RequestId" class="btn btn-primary btn-sm">Edit</a>
             <a asp-action="Delete" asp-route-id="@item.RequestId" class="btn btn-danger btn-sm">Delete</a>
-            <a asp-action="Assign" asp-route-id="@item.RequestId" class="btn btn-primary btn-sm">Assign</a>
-            <a asp-action="UpdateStatus" asp-route-id="@item.RequestId" class="btn btn-secondary btn-sm">Update Status</a>
-            <a asp-action="Revoke" asp-route-id="@item.RequestId" class="btn btn-dark btn-sm">Revoke</a>
           </div>
         </td>
       </tr>
@@ -49,120 +73,23 @@
     </tbody>
   </table>
 </div>
-<!-- Phân trang -->
-@if (ViewBag.TotalPages > 1)
-{
-  <nav>
-    <ul class="pagination">
-      <!-- Nút Previous -->
-      <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">&lt;</a>
-      </li>
 
-      <!-- Số trang -->
-      @for (int i = 1; i <= ViewBag.TotalPages; i++)
-      {
-        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
-          <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
-        </li>
-      }
-
-      <!-- Nút Next -->
-      <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">&gt;</a>
-      </li>
-    </ul>
-  </nav>
-}
-======= -->
-<div class="row mb-3">
-  <div class="col-md-6">
-    <a asp-action="Create" class="btn btn-success">Create New Request</a>
-  </div>
-  <div class="col-md-6">
-    <form asp-action="Index" method="get" class="d-flex justify-content-end">
-      <div class="input-group">
-        <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Search...">
-        <button type="submit" class="btn btn-primary h-100">
-          Search
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-
-@if(!string.IsNullOrEmpty(currentSearch))
-{
-  <div class="alert alert-info">
-    <p class="mb-0">Showing results for: <strong>@currentSearch</strong>
-      <a asp-action="Index" class="btn btn-sm btn-outline-dark ms-2">Clear</a>
-    </p>
-  </div>
-}
-
-<table class="table table-bordered">
-  <thead>
-  <tr>
-    <th>Requestor</th>
-    <th>Facility</th>
-    <th>Item</th>
-    <th>Quantity</th>
-    <th>Status</th>
-    <th>Action</th>
-  </tr>
-  </thead>
-  <tbody>
-  @foreach (var item in Model)
-  {
-    <tr>
-      <td>@item.Requestor?.Username</td>
-      <td>@item.Facility?.FacilityName</td>
-      <td>@item.FacilityItem?.ItemName</td>
-      <td>@item.QuantityRequested</td>
-      <td>
-        <select class="form-control form-control-sm status-dropdown" data-request-id="@item.RequestId" data-original-status="@item.Status">
-          @foreach (var status in new[] { "Open", "In Progress", "Rejected", "Closed" })
-          {
-            <option value="@status" selected="@(item.Status == status)">@status</option>
-          }
-        </select>
-      </td>
-      <td>
-        <div class="d-flex gap-2">
-          <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">Details</a>
-          <a asp-action="Assign" asp-route-id="@item.RequestId" class="btn btn-warning btn-sm">Assign</a>
-        </div>
-      </td>
-    </tr>
-  }
-  </tbody>
-</table>
-
-<!-- Pagination Controls with Search parameter -->
 @if (totalPages > 1)
 {
   <nav>
     <ul class="pagination">
-      @if (currentPage > 1)
-      {
-        <li class="page-item">
-          <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch">Previous</a>
-        </li>
-      }
-
+      <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+        <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch">&lt;</a>
+      </li>
       @for (int i = 1; i <= totalPages; i++)
       {
-        <li class="page-item @(i == currentPage ? "active" : "")">
+        <li class="page-item @(currentPage == i ? "active" : "")">
           <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
         </li>
       }
-
-      @if (currentPage < totalPages)
-      {
-        <li class="page-item">
-          <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch">Next</a>
-        </li>
-      }
+      <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+        <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch">&gt;</a>
+      </li>
     </ul>
   </nav>
 }
@@ -178,9 +105,7 @@
         if (confirm("Are you sure you want to update the status?")) {
           fetch('/Requests/UpdateStatus', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ requestId: requestId, status: newStatus })
           })
             .then(response => response.json())

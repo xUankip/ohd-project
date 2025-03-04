@@ -13,8 +13,8 @@ namespace AspnetCoreMvcStarter.Controllers
   [AllowRoles(1,2)]
 
     public class FacilityController : Controller
-
     {
+        private const int PageSize = 10;
         private readonly ApplicationDbContext _context;
 
         public FacilityController(ApplicationDbContext context)
@@ -23,13 +23,13 @@ namespace AspnetCoreMvcStarter.Controllers
         }
 
         // Danh sách Facility
-        public async Task<IActionResult> Index(string search = "")
+        public async Task<IActionResult> Index(string search = "", int page = 1)
         {
           var query = _context.Facilities
             .Include(f => f.FacilityHead)
             .Where(f => f.DeletedAt == null);
 
-          // Apply search filter if search term is provided
+          // Lọc theo tìm kiếm
           if (!string.IsNullOrWhiteSpace(search))
           {
             search = search.ToLower();
@@ -39,10 +39,20 @@ namespace AspnetCoreMvcStarter.Controllers
             );
           }
 
-          var facilities = await query.ToListAsync();
+          // Tổng số mục và số trang
+          int totalItems = await query.CountAsync();
+          int totalPages = (int)Math.Ceiling(totalItems / (double)PageSize);
 
-          // Pass the search term to the ViewBag for the UI
+          // Lấy dữ liệu cho trang hiện tại
+          var facilities = await query
+            .Skip((page - 1) * PageSize)
+            .Take(PageSize)
+            .ToListAsync();
+
+          ViewBag.CurrentPage = page;
+          ViewBag.TotalPages = totalPages;
           ViewBag.Search = search;
+
           return View(facilities);
         }
 

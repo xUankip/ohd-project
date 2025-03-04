@@ -53,7 +53,7 @@ namespace AspnetCoreMvcStarter.Controllers
           // Set pagination data
           ViewBag.CurrentPage = page;
           ViewBag.TotalPages = (int)Math.Ceiling((double)totalRequests / pageSize);
-          ViewBag.Search = search; 
+          ViewBag.Search = search;
 
           return View(requests);
         }
