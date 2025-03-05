@@ -23,7 +23,7 @@
         <form asp-action="Index" method="get" class="d-flex justify-content-end">
           <div class="input-group">
             <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Search requests...">
-            <button type="submit" class="btn btn-primary">Search Requests</button>
+            <button type="submit" class="btn btn-primary">Search</button>
           </div>
         </form>
       </div>
@@ -52,14 +52,12 @@
             <td class="text-start">
               @if (!string.IsNullOrEmpty(item.SeverityLevel))
               {
-                <span class="badge severity-badge
-                                   @(item.SeverityLevel == "Critical" ? "bg-danger" :
+                <span class="badge severity-badge @(item.SeverityLevel == "Critical" ? "bg-danger" :
                                    item.SeverityLevel == "High" ? "bg-warning" :
                                    item.SeverityLevel == "Medium" ? "bg-primary" :
-                                   item.SeverityLevel == "Low" ? "bg-success" :
-                                   "bg-secondary")">
-            @item.SeverityLevel
-        </span>
+                                   item.SeverityLevel == "Low" ? "bg-success" : "bg-secondary")">
+                  @item.SeverityLevel
+                </span>
               }
               else
               {
@@ -67,20 +65,14 @@
               }
             </td>
             <td>
-              <div class="d-flex align-items-center">
-                <select class="form-select form-select-sm ms-4 status-dropdown"
-                        data-request-id="@item.RequestId"
-                        data-current-status="@item.Status"
-                        style="width: auto; margin-left: 15px;">
-                  @{
-                    var statusOptions = new[] { "Open", "In Progress", "Approved", "Pending", "Rejected", "Closed" };
-                  }
-                  @foreach (var status in statusOptions)
-                  {
-                    <option value="@status" selected="@(status == item.Status)">@status</option>
-                  }
-                </select>
-              </div>
+              <select class="form-select form-select-sm status-dropdown"
+                      data-request-id="@item.RequestId"
+                      data-current-status="@item.Status">
+                @foreach (var status in new[] { "Open", "In Progress", "Approved", "Pending", "Rejected", "Closed" })
+                {
+                  <option value="@status" selected="@(status == item.Status)">@status</option>
+                }
+              </select>
             </td>
             <td>@(item.RequestDate.ToString("dd/MM/yyyy HH:mm"))</td>
             <td>
@@ -94,92 +86,23 @@
         </tbody>
       </table>
     </div>
+
+    <!-- Pagination -->
+    <nav>
+      <ul class="pagination justify-content-center">
+        <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+          <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch">Previous</a>
+        </li>
+        @for (int i = 1; i <= totalPages; i++)
+        {
+          <li class="page-item @(i == currentPage ? "active" : "")">
+            <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
+          </li>
+        }
+        <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+          <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch">Next</a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>
-
-@section Scripts {
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      document.querySelectorAll(".status-dropdown").forEach(dropdown => {
-        dropdown.addEventListener("change", function () {
-          const requestId = this.getAttribute("data-request-id");
-          const currentStatus = this.getAttribute("data-current-status");
-          const newStatus = this.value;
-
-          if (confirm(`Are you sure you want to change status from ${currentStatus} to ${newStatus}?`)) {
-            fetch(`/Requests/UpdateStatus`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest"
-              },
-              body: JSON.stringify({ requestId, status: newStatus })
-            })
-              .then(response => response.json())
-              .then(data => {
-                if (data.success) {
-                  this.setAttribute("data-current-status", newStatus);
-                  alert("Status updated successfully!");
-                } else {
-                  this.value = currentStatus;
-                  alert("Failed to update status.");
-                }
-              })
-              .catch(error => {
-                console.error("Error:", error);
-                this.value = currentStatus;
-                alert("An error occurred while updating status.");
-              });
-          } else {
-            this.value = currentStatus;
-          }
-        });
-      });
-    });
-  </script>
-
-  <style>
-    .table td, .table th {
-      padding: 8px 12px; /* Reduce padding */
-    }
-
-    .level-column {
-      width: 120px; /* Adjust width of Level */
-      text-align: center;
-    }
-
-    .status-column {
-      width: 150px; /* Adjust width of Status */
-    }
-
-    .badge {
-      font-size: 14px;
-      padding: 5px 10px;
-    }
-
-    .form-select {
-      width: 100%;
-      padding: 3px;
-    }
-
-    .table thead th {
-      text-align: center;
-    }
-
-    .table tbody td {
-      text-align: center;
-    }
-
-    .severity-badge {
-      text-align: left !important;
-      display: inline-block;
-      padding: 5px 12px;
-      border-radius: 5px;
-      font-weight: bold;
-      white-space: nowrap; /* Ensures the text stays in one line */
-      min-width: auto; /* Allows the badge to adjust to text length */
-    }
-
-
-  </style>
-}
