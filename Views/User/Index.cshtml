@@ -1,93 +1,131 @@
 @model IEnumerable<AspnetCoreMvcStarter.Models.User>
 
 @{
-  ViewData["Title"] = "Users";
+  ViewData["Title"] = "Users List";
+  int currentPage = ViewBag.CurrentPage;
+  int totalPages = ViewBag.TotalPages;
   string currentSearch = ViewBag.Search ?? "";
 }
 
-<h2>List Users</h2>
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="card-title mb-0">Users List</h5>
+  </div>
 
-<!-- 🔍 Search Bar -->
-<div class="row mb-3">
-    <div class="col-md-6">
-        <a asp-action="Create" class="btn btn-success">Create New User</a>
-    </div>
-    <div class="col-md-6">
+  <div class="card-body">
+    <!-- Search and Create Button -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <a asp-action="Create" class="btn btn-primary">
+          <i class="bx bx-plus me-1"></i>Add New User
+        </a>
+      </div>
+      <div class="col-md-6">
         <form asp-action="Index" method="get" class="d-flex justify-content-end">
-            <div class="input-group">
-                <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Search users...">
-                <button type="submit" class="btn btn-primary">Search</button>
-            </div>
+          <div class="input-group">
+            <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Search users...">
+            <button type="submit" class="btn btn-primary">Search</button>
+          </div>
         </form>
+      </div>
     </div>
+
+    <!-- Error and Success Messages -->
+    @if (ViewData["ErrorMessage"] != null)
+    {
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @ViewData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    }
+
+    @if (ViewData["SuccessMessage"] != null)
+    {
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @ViewData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    }
+
+    <!-- Search Results Information -->
+    @if (!string.IsNullOrEmpty(currentSearch))
+    {
+      <div class="alert alert-info mb-3">
+        <p class="mb-0">
+          Showing results for: <strong>@currentSearch</strong>
+          <a asp-action="Index" class="btn btn-sm btn-outline-info ms-2">Clear</a>
+        </p>
+      </div>
+    }
+
+    <!-- Table displaying the users -->
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Username)</th>
+          <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Email)</th>
+          <th>Role</th>
+          <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Phone)</th>
+          <th>@Html.DisplayNameFor(model => model.FirstOrDefault().IsActive)</th>
+          <th>@Html.DisplayNameFor(model => model.FirstOrDefault().CreatedAt)</th>
+          <th class="text-center">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+          <tr>
+            <td>@item.Username</td>
+            <td>@item.Email</td>
+            <td>@item.Role?.RoleName</td>
+            <td>@item.Phone</td>
+            <td>@(item.IsActive ? "Active" : "Inactive")</td>
+            <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+            <td class="text-center">
+              <div class="d-flex justify-content-center gap-2">
+                <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-primary btn-sm">
+                  <i class="bx bx-edit"></i> Edit
+                </a>
+                <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-info btn-sm">
+                  <i class="bx bx-info-circle"></i> Details
+                </a>
+                <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger btn-sm">
+                  <i class="bx bx-trash"></i> Delete
+                </a>
+              </div>
+            </td>
+          </tr>
+        }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages > 1)
+    {
+      <div class="d-flex justify-content-center mt-3">
+        <ul class="pagination">
+          <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch">
+              <i class="bx bx-chevron-left"></i> Previous
+            </a>
+          </li>
+          @for (int i = 1; i <= totalPages; i++)
+          {
+            <li class="page-item @(currentPage == i ? "active" : "")">
+              <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
+            </li>
+          }
+          <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch">
+              <i class="bx bx-chevron-right"></i> Next
+            </a>
+          </li>
+        </ul>
+      </div>
+    }
+  </div>
 </div>
 
-<!-- 🛑 Show search results message -->
-@if (!string.IsNullOrEmpty(currentSearch))
-{
-    <div class="alert alert-info">
-        <p class="mb-0">Showing results for: <strong>@currentSearch</strong>
-            <a asp-action="Index" class="btn btn-sm btn-outline-dark ms-2">Clear</a>
-        </p>
-    </div>
-}
 
-<table class="table table-bordered">
-  <thead>
-  <tr>
-    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Username)</th>
-    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Email)</th>
-    <th>Role</th>
-    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Phone)</th>
-    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().IsActive)</th>
-    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().CreatedAt)</th>
-    <th>Action</th>
-  </tr>
-  </thead>
-  <tbody>
-  @foreach (var item in Model)
-  {
-    <tr>
-      <td>@item.Username</td>
-      <td>@item.Email</td>
-      <td>@item.Role?.RoleName</td>
-      <td>@item.Phone</td>
-      <td>@(item.IsActive ? "Active" : "Inactive")</td>
-      <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
-      <td>
-        <div style="display: flex; gap: 5px;">
-          <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-primary btn-sm">Edit</a>
-          <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-info btn-sm">Details</a>
-          <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger btn-sm">Delete</a>
-        </div>
-      </td>
-    </tr>
-  }
-  </tbody>
-</table>
-
-<!-- Pagination Controls with Search parameter -->
-@if (ViewBag.TotalPages > 1)
-{
-  <nav>
-    <ul class="pagination">
-      <!-- Previous Button -->
-      <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)" asp-route-search="@currentSearch">Previous</a>
-      </li>
-
-      <!-- Page Numbers -->
-      @for (int i = 1; i <= ViewBag.TotalPages; i++)
-      {
-        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-          <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
-        </li>
-      }
-
-      <!-- Next Button -->
-      <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)" asp-route-search="@currentSearch">Next</a>
-      </li>
-    </ul>
-  </nav>
-}

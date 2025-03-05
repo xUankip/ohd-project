@@ -4,46 +4,179 @@
   ViewData["Title"] = "Request Details";
 }
 
-<h2>Request Details</h2>
+<style>
+  .request-details-card {
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .request-header {
+    background: linear-gradient(135deg, #8a4fff, #6a11cb);
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .request-header-content h3 {
+    color: white;
+    margin-bottom: 0.5rem;
+  }
+  .request-details-body {
+    padding: 1.5rem;
+  }
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 1rem;
+  }
+  .detail-item:last-child {
+    border-bottom: none;
+  }
+  .detail-label {
+    color: #6c757d;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+  }
+  .detail-value {
+    font-weight: 600;
+    color: #333;
+  }
+  .comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #8a4fff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+  }
+  .comment-item {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .comment-item:last-child {
+    border-bottom: none;
+  }
+  .btn-custom {
+    background-color: #8a4fff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    transition: background-color 0.3s ease;
+  }
+  .btn-custom:hover {
+    background-color: #6a11cb;
+  }
+</style>
 
-<div>
-  <p><strong>Requestor:</strong> @Model.Requestor.FullName</p>
-  <p><strong>Facility:</strong> @Model.Facility.FacilityName</p>
-  <p><strong>Item:</strong> @Model.FacilityItem.ItemName</p>
-  <p><strong>Quantity:</strong> @Model.QuantityRequested</p>
-  <p><strong>Status:</strong> @Model.Status</p>
+<div class="container my-4">
+  <div class="card request-details-card">
+    <div class="request-header">
+      <div class="request-header-content">
+        <h3>Request Details</h3>
+        <span>Request ID: #@Model.RequestId</span>
+      </div>
+      <div class="d-flex gap-2">
+        <a asp-action="Index" class="btn btn-outline-light">
+          <i class="bx bx-arrow-back me-1"></i> Back to List
+        </a>
+        <a asp-action="Edit" asp-route-id="@Model.RequestId" class="btn btn-custom">
+          <i class="bx bx-edit me-1"></i> Edit
+        </a>
+      </div>
+    </div>
+
+    <div class="request-details-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="detail-item">
+            <span class="detail-label">Requestor</span>
+            <span class="detail-value">@Model.Requestor.FullName</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Facility</span>
+            <span class="detail-value">@Model.Facility.FacilityName</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Item</span>
+            <span class="detail-value">@Model.FacilityItem.ItemName</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="detail-item">
+            <span class="detail-label">Quantity Requested</span>
+            <span class="detail-value">@Model.QuantityRequested</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Status</span>
+            <span class="badge @GetStatusBadgeClass(Model.Status)">@Model.Status</span>
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-4 border-light" />
+
+      <h4 class="mb-3 text-primary">Comments</h4>
+      @if (Model.Comments.Any())
+      {
+        <div class="comment-list">
+          @foreach (var comment in Model.Comments.OrderByDescending(c => c.CreatedAt))
+          {
+            <div class="comment-item">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="d-flex align-items-center">
+                  <div class="comment-avatar">
+                    @comment.User?.FullName.FirstOrDefault()
+                  </div>
+                  <h6 class="mb-0">@comment.User?.FullName</h6>
+                </div>
+                <small class="text-muted">@comment.CreatedAt.ToString("g")</small>
+              </div>
+              <p class="text-muted mb-0">@comment.CommentText</p>
+            </div>
+          }
+        </div>
+      }
+      else
+      {
+        <div class="alert alert-light text-center" role="alert">
+          No comments yet
+        </div>
+      }
+
+      <hr class="my-4 border-light" />
+
+      <h4 class="mb-3 text-primary">Add Comment</h4>
+      <form asp-action="AddComment" method="post">
+        <input type="hidden" name="requestId" value="@Model.RequestId" />
+        <div class="mb-3">
+          <textarea name="commentText" class="form-control" rows="4" placeholder="Enter your comment..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-custom">
+          <i class="bx bx-send me-1"></i> Send Comment
+        </button>
+      </form>
+    </div>
+  </div>
 </div>
 
-<h3>Comments</h3>
-@if (Model.Comments.Any())
-{
-  <ul class="list-group">
-    @foreach (var comment in Model.Comments)
+@functions {
+  private string GetStatusBadgeClass(string status)
+  {
+    return status?.ToLower() switch
     {
-      <li class="list-group-item">
-        <strong>@comment.User?.FullName:</strong> @comment.CommentText
-        <br /><small>@comment.CreatedAt.ToString("g")</small>
-      </li>
-    }
-  </ul>
+      "pending" => "bg-warning",
+      "approved" => "bg-success",
+      "rejected" => "bg-danger",
+      _ => "bg-secondary"
+    };
+  }
 }
-else
-{
-  <p>No comments yet.</p>
-}
-
-<hr />
-
-<h4>Add a Comment</h4>
-<form asp-action="AddComment" method="post">
-  <input type="hidden" name="requestId" value="@Model.RequestId" />
-  <div class="form-group">
-    <textarea name="commentText" class="form-control" placeholder="Write your comment..."></textarea>
-  </div>
-  <div class="mt-4">
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </div>
-</form>
-
-<a asp-action="Edit" asp-route-id="@Model.RequestId" class="btn btn-warning">Edit</a>
-<a asp-action="Index" class="btn btn-secondary">Back to List</a>

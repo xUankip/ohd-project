@@ -1,137 +1,160 @@
 ﻿@model IEnumerable<AspnetCoreMvcStarter.Models.Request>
 
 @{
-  ViewData["Title"] = "Requests";
+  ViewData["Title"] = "Request Management";
   int currentPage = ViewBag.CurrentPage;
   int totalPages = ViewBag.TotalPages;
   string currentSearch = ViewBag.Search ?? "";
 }
 
-<h2>Request List</h2>
-
-<div class="row mb-3">
-  <div class="col-md-6">
-    <a asp-action="Create" class="btn btn-success">Create New Request</a>
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="card-title mb-0">Request Management</h5>
   </div>
-  <div class="col-md-6">
-    <form asp-action="Index" method="get" class="d-flex justify-content-end">
-      <div class="input-group">
-        <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Search...">
-        <button type="submit" class="btn btn-primary">Search</button>
+
+  <div class="card-body">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <a asp-action="Create" class="btn btn-primary">
+          <i class="bx bx-plus me-1"></i>Create New Request
+        </a>
       </div>
-    </form>
-  </div>
-</div>
-
-@if (!string.IsNullOrEmpty(currentSearch))
-{
-  <div class="alert alert-info">
-    <p class="mb-0">Showing results for: <strong>@currentSearch</strong>
-      <a asp-action="Index" class="btn btn-sm btn-outline-dark ms-2">Clear</a>
-    </p>
-  </div>
-}
-
-<div class="table-responsive">
-  <table class="table table-bordered">
-    <thead>
-    <tr>
-      <th>Requestor</th>
-      <th>Assignee</th>
-      <th>Facility</th>
-      <th>Item</th>
-      <th>Quantity</th>
-      <th>Level</th>
-      <th>Status</th>
-      <th>Request Date</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-      <tr>
-        <td>@item.Requestor?.FullName</td>
-        <td>@item.AssigneeId</td>
-        <td>@item.Facility?.FacilityName</td>
-        <td>@item.FacilityItem?.ItemName</td>
-        <td>@item.QuantityRequested</td>
-        <td>@item.SeverityLevel</td>
-        <td>
-          <select class="form-control form-control-sm status-dropdown" data-request-id="@item.RequestId" data-original-status="@item.Status">
-            @foreach (var status in new[] { "Open", "In Progress", "Rejected", "Closed" })
-            {
-              <option value="@status" selected="@(item.Status == status)">@status</option>
-            }
-          </select>
-        </td>
-        <td>@item.RequestDate</td>
-        <td>
-          <div class="d-flex gap-2">
-            <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">Details</a>
-            <a asp-action="Assign" asp-route-id="@item.RequestId" class="btn btn-warning btn-sm">Assign</a>
-            <a asp-action="Edit" asp-route-id="@item.RequestId" class="btn btn-primary btn-sm">Edit</a>
-            <a asp-action="Delete" asp-route-id="@item.RequestId" class="btn btn-danger btn-sm">Delete</a>
+      <div class="col-md-6">
+        <form asp-action="Index" method="get" class="d-flex justify-content-end">
+          <div class="input-group">
+            <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Search requests...">
+            <button type="submit" class="btn btn-primary">Search Requests</button>
           </div>
-        </td>
-      </tr>
+        </form>
+      </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(currentSearch))
+    {
+      <div class="alert alert-info mb-3">
+        <p class="mb-0">
+          Showing results for: <strong>@currentSearch</strong>
+          <a asp-action="Index" class="btn btn-sm btn-outline-info ms-2">Clear</a>
+        </p>
+      </div>
     }
-    </tbody>
-  </table>
+
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Requestor</th>
+          <th>Implementer ID</th>
+          <th>Facility</th>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Level</th>
+          <th>Status</th>
+          <th>Time</th>
+          <th class="text-center">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+          <tr>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar me-2">
+                                        <span class="avatar-initial rounded-circle bg-label-primary">
+                                            @(item.Requestor?.FullName?[0].ToString().ToUpper() ?? "N/A")
+                                        </span>
+                </div>
+                @(item.Requestor?.FullName ?? "Unknown")
+              </div>
+            </td>
+            <td>@(item.AssigneeId )</td>
+            <td>@(item.Facility?.FacilityName ?? "N/A")</td>
+            <td>@(item.FacilityItem?.ItemName ?? "N/A")</td>
+            <td>@item.QuantityRequested</td>
+            <td>
+                                <span class="badge @GetSeverityBadgeClass(item.SeverityLevel)">
+                                    @(item.SeverityLevel ?? "N/A")
+                                </span>
+            </td>
+            <td>
+                                <span class="badge @GetStatusBadgeClass(item.Status)">
+                                    @(item.Status ?? "N/A")
+                                </span>
+            </td>
+            <td>@(item.RequestDate.ToString("dd/MM/yyyy HH:mm"))</td>
+            <td class="text-center">
+              <div class="d-flex justify-content-center gap-2">
+                <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">
+                  <i class="bx bx-info-circle"></i>
+                  <span>Detail</span>
+                </a>
+                <a asp-action="Edit" asp-route-id="@item.RequestId" class="btn btn-primary btn-sm">
+                  <i class="bx bx-edit"></i>
+                  <span>Edit</span>
+                </a>
+                <a asp-action="Delete" asp-route-id="@item.RequestId" class="btn btn-danger btn-sm">
+                  <i class="bx bx-trash"></i>
+                  <span>Cancel</span>
+                </a>
+              </div>
+            </td>
+          </tr>
+        }
+        </tbody>
+      </table>
+    </div>
+
+    @if (totalPages > 1)
+    {
+      <div class="d-flex justify-content-center mt-3">
+        <ul class="pagination">
+          <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch">
+              <i class="bx bx-chevron-left"></i>
+            </a>
+          </li>
+          @for (int i = 1; i <= totalPages; i++)
+          {
+            <li class="page-item @(currentPage == i ? "active" : "")">
+              <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
+            </li>
+          }
+          <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch">
+              <i class="bx bx-chevron-right"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    }
+  </div>
 </div>
 
-@if (totalPages > 1)
-{
-  <nav>
-    <ul class="pagination">
-      <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-        <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch">&lt;</a>
-      </li>
-      @for (int i = 1; i <= totalPages; i++)
-      {
-        <li class="page-item @(currentPage == i ? "active" : "")">
-          <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
-        </li>
-      }
-      <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-        <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch">&gt;</a>
-      </li>
-    </ul>
-  </nav>
+@functions {
+  private string GetSeverityBadgeClass(string severityLevel)
+  {
+    return severityLevel switch
+    {
+      "Low" => "bg-label-info",
+      "Medium" => "bg-label-warning",
+      "High" => "bg-label-danger",
+      _ => "bg-label-secondary"
+    };
+  }
+
+  private string GetStatusBadgeClass(string status)
+  {
+    return status switch
+    {
+      "New" => "bg-label-primary",
+      "Open" => "bg-label-warning",
+      "Closed" => "bg-label-success",
+      "In Progress" => "bg-label-info",
+      "Rejected" => "bg-label-danger",
+      _ => "bg-label-secondary"
+    };
+  }
 }
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".status-dropdown").forEach(dropdown => {
-      dropdown.addEventListener("change", function () {
-        let requestId = this.getAttribute("data-request-id");
-        let newStatus = this.value;
-        let originalStatus = this.getAttribute("data-original-status");
 
-        if (confirm("Are you sure you want to update the status?")) {
-          fetch('/Requests/UpdateStatus', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ requestId: requestId, status: newStatus })
-          })
-            .then(response => response.json())
-            .then(data => {
-              if (data.success) {
-                alert("Status updated successfully!");
-                this.setAttribute("data-original-status", newStatus);
-              } else {
-                alert("Error updating status: " + data.message);
-                this.value = originalStatus;
-              }
-            })
-            .catch(error => {
-              alert("Request failed: " + error);
-              this.value = originalStatus;
-            });
-        } else {
-          this.value = originalStatus;
-        }
-      });
-    });
-  });
-</script>

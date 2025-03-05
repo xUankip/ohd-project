@@ -22,20 +22,30 @@ namespace AspnetCoreMvcStarter.Controllers
         }
 
         [Route("History/Index")]
-        public async Task<IActionResult> Index(string search = "", int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string search = "", int page = 1, int pageSize = 10, string errorMessage = null, string successMessage = null)
         {
-            string userIdStr = HttpContext.Session.GetString("UserId");
-            int? currentUserId = !string.IsNullOrEmpty(userIdStr) ? int.Parse(userIdStr) : null;
-            if (!currentUserId.HasValue)
-            {
-                currentUserId = 14; // Giá trị mặc định
-            }
+          // Chỉ set ViewData nếu có errorMessage
+          if (!string.IsNullOrEmpty(errorMessage))
+          {
+            ViewData["ErrorMessage"] = errorMessage;
+          }
+          if (!string.IsNullOrEmpty(successMessage))
+          {
+            ViewData["SuccessMessage"] = successMessage;
+          }
 
-            var query = _context.Requests
-                .Include(r => r.Requestor)
-                .Include(r => r.Facility)
-                .Include(r => r.FacilityItem)
-                .AsQueryable();
+          string userIdStr = HttpContext.Session.GetString("UserId");
+          int? currentUserId = !string.IsNullOrEmpty(userIdStr) ? int.Parse(userIdStr) : null;
+          if (!currentUserId.HasValue)
+          {
+            currentUserId = 14; // Giá trị mặc định
+          }
+
+          var query = _context.Requests
+            .Include(r => r.Requestor)
+            .Include(r => r.Facility)
+            .Include(r => r.FacilityItem)
+            .AsQueryable();
 
             query = query.Where(r => r.RequestorId == currentUserId.Value);
 
@@ -160,7 +170,7 @@ namespace AspnetCoreMvcStarter.Controllers
                 // Gửi email thông báo
                 await _emailService.SendEmailAsync(
                     "Thông báo: Yêu cầu mới đã được tạo",
-                    $"Một yêu cầu mới đã được tạo bởi người dùng {request.RequestorId}. Chi tiết yêu cầu:\n" +
+                    $"Một yêu cầu mới đã được tạo bởi người dùng {request.RequestorId}.\n Chi tiết yêu cầu:\n" +
                     $"Cơ sở: {request.FacilityId}\n" +
                     $"Vật dụng: {request.FacilityItemId}\n" +
                     $"Số lượng: {request.QuantityRequested}\n" +
@@ -230,5 +240,104 @@ namespace AspnetCoreMvcStarter.Controllers
             var items = _context.FacilityItems.ToList();
             ViewBag.Items = items.Any() ? new SelectList(items, "FacilityItemId", "ItemName") : null;
         }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+          var request = _context.Requests
+            .Include(r => r.Requestor)
+            .Include(r => r.Facility)
+            .Include(r => r.FacilityItem)
+            .FirstOrDefault(r => r.RequestId == id);
+
+          if (request == null)
+          {
+            return NotFound();
+          }
+
+          // Chỉ khi trạng thái KHÔNG phải là "Open"
+          if (request.Status != "Open")
+          {
+            return RedirectToAction(nameof(Index), new { errorMessage = $"Yêu cầu không thể sửa. Trạng thái hiện tại là: {request.Status}" });
+          }
+
+          LoadDropdowns();
+          return View(request);
+        }
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Edit(int id, Request request)
+{
+    if (id != request.RequestId)
+    {
+        return NotFound();
+    }
+
+    try
+    {
+        // Tìm yêu cầu hiện tại
+        var existingRequest = await _context.Requests.FindAsync(id);
+        if (existingRequest == null)
+        {
+            return NotFound();
+        }
+
+        // Kiểm tra trạng thái
+        if (existingRequest.Status != "Open")
+        {
+            TempData["ErrorMessage"] = $"Yêu cầu không thể sửa. Trạng thái hiện tại là: {existingRequest.Status}";
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Validate đầu vào
+        if (request.FacilityId == null)
+        {
+            ModelState.AddModelError("FacilityId", "Vui lòng chọn cơ sở");
+            LoadDropdowns();
+            return View(request);
+        }
+
+        if (request.FacilityItemId == null)
+        {
+            ModelState.AddModelError("FacilityItemId", "Vui lòng chọn vật dụng");
+            LoadDropdowns();
+            return View(request);
+        }
+
+        if (request.QuantityRequested <= 0)
+        {
+            ModelState.AddModelError("QuantityRequested", "Số lượng phải lớn hơn 0");
+            LoadDropdowns();
+            return View(request);
+        }
+
+        if (string.IsNullOrEmpty(request.SeverityLevel))
+        {
+            ModelState.AddModelError("SeverityLevel", "Vui lòng chọn mức độ ưu tiên");
+            LoadDropdowns();
+            return View(request);
+        }
+
+        // Cập nhật các trường được phép sửa
+        existingRequest.FacilityId = request.FacilityId;
+        existingRequest.FacilityItemId = request.FacilityItemId;
+        existingRequest.QuantityRequested = request.QuantityRequested;
+        existingRequest.SeverityLevel = request.SeverityLevel;
+        existingRequest.Description = request.Description ?? "Không có mô tả";
+        existingRequest.Remarks = request.Remarks ?? "";
+
+        _context.Update(existingRequest);
+        await _context.SaveChangesAsync();
+
+
+        return RedirectToAction(nameof(Index), new { successMessage = "Cập nhật yêu cầu thành công!" });
+    }
+    catch (Exception ex)
+    {
+        TempData["ErrorMessage"] = "Lỗi khi cập nhật yêu cầu: " + ex.Message;
+        LoadDropdowns();
+        return View(request);
+    }
+}
     }
 }

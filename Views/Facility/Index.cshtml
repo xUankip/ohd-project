@@ -1,82 +1,129 @@
 @model IEnumerable<AspnetCoreMvcStarter.Models.Facility>
 
 @{
-  ViewData["Title"] = "Danh sách cơ sở";
+  ViewData["Title"] = "Facility List";
+  int currentPage = ViewBag.CurrentPage;
+  int totalPages = ViewBag.TotalPages;
   string currentSearch = ViewBag.Search ?? "";
 }
-  <!-- 🛑 Show search results message -->
-  @if (!string.IsNullOrEmpty(currentSearch))
-  {
-    <div class="alert alert-info">
-      <p class="mb-0">Hiển thị kết quả cho: <strong>@currentSearch</strong>
-        <a asp-action="Index" class="btn btn-sm btn-outline-dark ms-2">Xóa bộ lọc</a>
-      </p>
-    </div>
-  }
-<h1>Danh sách cơ sở</h1>
-<p>
-  <a asp-action="Create" class="btn btn-primary">Thêm mới</a>
-</p>
-  <div class="col-md-6">
-    <form asp-action="Index" method="get" class="d-flex justify-content-end">
-      <div class="input-group">
-        <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Tìm kiếm...">
-        <button type="submit" class="btn btn-primary h-100">Tìm</button>
-      </div>
-    </form>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="card-title mb-0">Facility List</h5>
   </div>
-<div class="card-datatable table-responsive">
-  <table  class="datatables-users table">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Tên cơ sở</th>
-      <th>Mô tả</th>
-      <th>Người phụ trách</th>
-      <th>Ngày tạo</th>
-      <th>Thao tác</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model) {
-      <tr>
-        <td>@item.FacilityId</td>
-        <td>@item.FacilityName</td>
-        <td>@(string.IsNullOrEmpty(item.Description) ? "-" : item.Description)</td>
-        <td>@(item.FacilityHead != null ? item.FacilityHead.FullName : "-")</td>
-        <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
-        <td>
-          <div style="display: flex; gap: 5px;">
-            <a asp-action="Details" asp-route-id="@item.FacilityId" class="btn btn-info btn-sm">Chi tiết</a>
-            <a asp-action="Edit" asp-route-id="@item.FacilityId" class="btn btn-primary btn-sm">Sửa</a>
-            <a asp-action="Delete" asp-route-id="@item.FacilityId" class="btn btn-danger btn-sm">Xóa</a>
+
+  <div class="card-body">
+    <!-- Search and Create Button -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <a asp-action="Create" class="btn btn-primary">
+          <i class="bx bx-plus me-1"></i>Add New
+        </a>
+      </div>
+      <div class="col-md-6">
+        <form asp-action="Index" method="get" class="d-flex justify-content-end">
+          <div class="input-group">
+            <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Search...">
+            <button type="submit" class="btn btn-primary">Search</button>
           </div>
-        </td>
-      </tr>
+        </form>
+      </div>
+    </div>
+
+    <!-- Error and Success Messages -->
+    @if (ViewData["ErrorMessage"] != null)
+    {
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @ViewData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
     }
-    </tbody>
-  </table>
+
+    @if (ViewData["SuccessMessage"] != null)
+    {
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @ViewData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    }
+
+    <!-- Search Results Information -->
+    @if (!string.IsNullOrEmpty(currentSearch))
+    {
+      <div class="alert alert-info mb-3">
+        <p class="mb-0">
+          Showing results for: <strong>@currentSearch</strong>
+          <a asp-action="Index" class="btn btn-sm btn-outline-info ms-2">Clear</a>
+        </p>
+      </div>
+    }
+
+    <!-- Table displaying the facilities -->
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Facility Name</th>
+          <th>Description</th>
+          <th>Facility Head</th>
+          <th>Created At</th>
+          <th class="text-center">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+          <tr>
+            <td>@item.FacilityId</td>
+            <td>@item.FacilityName</td>
+            <td>@(string.IsNullOrEmpty(item.Description) ? "-" : item.Description)</td>
+            <td>@(item.FacilityHead != null ? item.FacilityHead.FullName : "-")</td>
+            <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+            <td class="text-center">
+              <div class="d-flex justify-content-center gap-2">
+                <a asp-action="Details" asp-route-id="@item.FacilityId" class="btn btn-info btn-sm">
+                  <i class="bx bx-info-circle"></i> Details
+                </a>
+                <a asp-action="Edit" asp-route-id="@item.FacilityId" class="btn btn-primary btn-sm">
+                  <i class="bx bx-edit"></i> Edit
+                </a>
+                <a asp-action="Delete" asp-route-id="@item.FacilityId" class="btn btn-danger btn-sm">
+                  <i class="bx bx-trash"></i> Delete
+                </a>
+              </div>
+            </td>
+          </tr>
+        }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages > 1)
+    {
+      <div class="d-flex justify-content-center mt-3">
+        <ul class="pagination">
+          <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch">
+              <i class="bx bx-chevron-left"></i>
+            </a>
+          </li>
+          @for (int i = 1; i <= totalPages; i++)
+          {
+            <li class="page-item @(currentPage == i ? "active" : "")">
+              <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
+            </li>
+          }
+          <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch">
+              <i class="bx bx-chevron-right"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    }
+  </div>
 </div>
-<!-- Phân trang -->
-@if (ViewBag.TotalPages > 1)
-{
-  <nav>
-    <ul class="pagination">
-      <!-- Nút Previous -->
-      <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">&lt;</a>
-      </li>
-      <!-- Số trang -->
-      @for (int i = 1; i <= ViewBag.TotalPages; i++)
-      {
-        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
-          <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
-        </li>
-      }
-      <!-- Nút Next -->
-      <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-        <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">&gt;</a>
-      </li>
-    </ul>
-  </nav>
-}
+
+

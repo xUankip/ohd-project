@@ -2,23 +2,29 @@ using AspnetCoreMvcStarter.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using AspnetCoreMvcStarter.Data;
 using AspnetCoreMvcStarter.Filters;
 
 namespace AspnetCoreMvcStarter.Controllers
 
 {
-  [AllowRoles(1,2)]
+   [AllowRoles(1,2)]
     public class FacilityItemController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public FacilityItemController(ApplicationDbContext context)
+        public FacilityItemController(
+            ApplicationDbContext context,
+            IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         // Form tạo mới FacilityItem (đã có facilityId)
@@ -31,88 +37,153 @@ namespace AspnetCoreMvcStarter.Controllers
         // Xử lý POST tạo mới FacilityItem
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(FacilityItem facilityItem)
+        public async Task<IActionResult> Create(FacilityItem facilityItem,
+          IFormFile ImageFile,
+          string ImageUploadType)
         {
-            if (ModelState.IsValid)
+          // Remove ItemImage validation if file is being uploaded
+          if (ImageUploadType == "file")
+          {
+            ModelState.Remove("ItemImage");
+          }
+
+          if (ModelState.IsValid)
+          {
+            // Handle image upload
+            if (ImageUploadType == "file" && ImageFile != null && ImageFile.Length > 0)
             {
-                facilityItem.CreatedAt = DateTime.UtcNow;
-                facilityItem.CreatedBy = 1; // Placeholder: thay bằng userId thực tế
+              // Create unique filename
+              string wwwRootPath = _hostEnvironment.WebRootPath;
+              string fileName = Path.GetFileNameWithoutExtension(ImageFile.FileName);
+              string extension = Path.GetExtension(ImageFile.FileName);
+              string uniqueFileName = $"{fileName}_{DateTime.Now.ToString("yyyyMMddHHmmss")}{extension}";
+              string path = Path.Combine(wwwRootPath + "/images/facility-items/", uniqueFileName);
 
-                _context.FacilityItems.Add(facilityItem);
-                await _context.SaveChangesAsync();
+              // Ensure directory exists
+              Directory.CreateDirectory(Path.Combine(wwwRootPath, "images/facility-items/"));
 
-                return RedirectToAction("Details", "Facility", new { id = facilityItem.FacilityId });
+              // Save file
+              using (var fileStream = new FileStream(path, FileMode.Create))
+              {
+                await ImageFile.CopyToAsync(fileStream);
+              }
+
+              // Save relative path to database
+              facilityItem.ItemImage = $"/images/facility-items/{uniqueFileName}";
             }
 
-            ViewBag.FacilityId = facilityItem.FacilityId;
-            return View(facilityItem);
-        }
+            facilityItem.CreatedAt = DateTime.UtcNow;
+            facilityItem.CreatedBy = 1; // Placeholder: replace with actual userId
 
-        // Form cập nhật FacilityItem
-        public async Task<IActionResult> Edit(int id)
-        {
-            var facilityItem = await _context.FacilityItems
-                .FirstOrDefaultAsync(i => i.FacilityItemId == id && i.DeletedAt == null);
+            _context.FacilityItems.Add(facilityItem);
+            await _context.SaveChangesAsync();
 
-            if (facilityItem == null)
-            {
-                return NotFound();
-            }
+            return RedirectToAction("Details", "Facility", new { id = facilityItem.FacilityId });
+          }
 
-            ViewBag.FacilityId = facilityItem.FacilityId;
-            return View(facilityItem);
+          ViewBag.FacilityId = facilityItem.FacilityId;
+          return View(facilityItem);
         }
 
         // Xử lý POST cập nhật FacilityItem
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, FacilityItem facilityItem)
+        // Form chỉnh sửa FacilityItem
+public async Task<IActionResult> Edit(int id)
+{
+    var facilityItem = await _context.FacilityItems
+        .FirstOrDefaultAsync(i => i.FacilityItemId == id && i.DeletedAt == null);
+
+    if (facilityItem == null)
+    {
+        return NotFound();
+    }
+
+    ViewBag.FacilityId = facilityItem.FacilityId;
+    return View(facilityItem);
+}
+
+// Xử lý POST cập nhật FacilityItem
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Edit(int id, FacilityItem facilityItem, IFormFile ImageFile)
+{
+    if (id != facilityItem.FacilityItemId)
+    {
+        return NotFound();
+    }
+
+    // Validate model state before processing
+    if (!ModelState.IsValid)
+    {
+        ViewBag.FacilityId = facilityItem.FacilityId;
+        return View(facilityItem);
+    }
+
+    // Tìm entity trong database
+    var existingItem = await _context.FacilityItems
+        .FirstOrDefaultAsync(i => i.FacilityItemId == id && i.DeletedAt == null);
+
+    if (existingItem == null)
+    {
+        return NotFound();
+    }
+
+    try
+    {
+        // Xử lý upload hình ảnh
+        if (ImageFile != null && ImageFile.Length > 0)
         {
-            if (id != facilityItem.FacilityItemId)
+            string wwwRootPath = _hostEnvironment.WebRootPath;
+            string fileName = Path.GetFileNameWithoutExtension(ImageFile.FileName);
+            string extension = Path.GetExtension(ImageFile.FileName);
+            string uniqueFileName = $"{fileName}_{DateTime.Now.ToString("yyyyMMddHHmmss")}{extension}";
+            string path = Path.Combine(wwwRootPath, "images", "facility-items", uniqueFileName);
+
+            // Tạo thư mục nếu chưa tồn tại
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+            // Lưu file mới
+            using (var fileStream = new FileStream(path, FileMode.Create))
             {
-                return NotFound();
+                await ImageFile.CopyToAsync(fileStream);
             }
 
-            if (ModelState.IsValid)
+            // Xóa file cũ nếu tồn tại
+            if (!string.IsNullOrEmpty(existingItem.ItemImage))
             {
-                try
+                string oldImagePath = Path.Combine(wwwRootPath.TrimEnd('/'), existingItem.ItemImage.TrimStart('/'));
+                if (System.IO.File.Exists(oldImagePath))
                 {
-                    var existingItem = await _context.FacilityItems
-                        .FirstOrDefaultAsync(i => i.FacilityItemId == id && i.DeletedAt == null);
-
-                    if (existingItem == null)
-                    {
-                        return NotFound();
-                    }
-
-                    // Cập nhật các thuộc tính
-                    existingItem.ItemName = facilityItem.ItemName;
-                    existingItem.ItemImage = facilityItem.ItemImage;
-                    existingItem.Quantity = facilityItem.Quantity;
-                    existingItem.Description = facilityItem.Description;
-                    existingItem.UpdatedAt = DateTime.UtcNow;
-                    existingItem.UpdatedBy = 1; // Placeholder: thay bằng userId thực tế
-
-                    await _context.SaveChangesAsync();
+                    System.IO.File.Delete(oldImagePath);
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FacilityItemExists(facilityItem.FacilityItemId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-
-                return RedirectToAction("Details", "Facility", new { id = facilityItem.FacilityId });
             }
 
-            ViewBag.FacilityId = facilityItem.FacilityId;
-            return View(facilityItem);
+            existingItem.ItemImage = $"/images/facility-items/{uniqueFileName}";
         }
+
+        // Cập nhật các thuộc tính khác
+        existingItem.ItemName = facilityItem.ItemName;
+        existingItem.Quantity = facilityItem.Quantity;
+        existingItem.Description = facilityItem.Description;
+
+        // Cập nhật thông tin
+        existingItem.UpdatedAt = DateTime.UtcNow;
+        existingItem.UpdatedBy = 1; // Placeholder: replace with actual userId
+
+        // Lưu thay đổi
+        await _context.SaveChangesAsync();
+
+        // Chuyển hướng sau khi lưu thành công
+        return RedirectToAction("Details", "Facility", new { id = existingItem.FacilityId });
+    }
+    catch (Exception ex)
+    {
+        // Xử lý nếu có lỗi
+        ModelState.AddModelError("", "Có lỗi xảy ra khi lưu thay đổi: " + ex.Message);
+        ViewBag.FacilityId = facilityItem.FacilityId;
+        return View(facilityItem);
+    }
+}
+
 
         // Form xác nhận xóa FacilityItem
         public async Task<IActionResult> Delete(int id)
