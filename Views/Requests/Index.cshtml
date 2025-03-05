@@ -49,10 +49,11 @@
             <td>@(item.Facility?.FacilityName ?? "N/A")</td>
             <td>@(item.FacilityItem?.ItemName ?? "N/A")</td>
             <td>@item.QuantityRequested</td>
-            <td>
+            <td class="text-start">
               @if (!string.IsNullOrEmpty(item.SeverityLevel))
               {
-                <span class="badge @(item.SeverityLevel == "Critical" ? "bg-danger" :
+                <span class="badge severity-badge
+                                   @(item.SeverityLevel == "Critical" ? "bg-danger" :
                                    item.SeverityLevel == "High" ? "bg-warning" :
                                    item.SeverityLevel == "Medium" ? "bg-primary" :
                                    item.SeverityLevel == "Low" ? "bg-success" :
@@ -168,5 +169,17 @@
     .table tbody td {
       text-align: center;
     }
+
+    .severity-badge {
+      text-align: left !important;
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 5px;
+      font-weight: bold;
+      white-space: nowrap; /* Ensures the text stays in one line */
+      min-width: auto; /* Allows the badge to adjust to text length */
+    }
+
+
   </style>
 }
