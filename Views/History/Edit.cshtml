@@ -1,0 +1,93 @@
+@model AspnetCoreMvcStarter.Models.Request
+
+<div class="container-fluid px-4 py-4">
+    <div class="card border-0 shadow-lg" style="background-color: #f8f9fc;">
+        <div class="card-header bg-primary text-white border-0 py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">Chỉnh sửa Yêu cầu</h2>
+                <a asp-action="Index" asp-route-id="@Model.RequestId" class="btn btn-outline-light">
+                    Quay Lại
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body px-4 py-4">
+            <form asp-action="Edit" method="post" class="needs-validation" novalidate>
+                <input type="hidden" asp-for="RequestId" />
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="FacilityId" class="form-label text-muted mb-2">Cơ sở</label>
+                            <select asp-for="FacilityId" asp-items="ViewBag.Facilities"
+                                    class="form-select form-control-lg bg-white border-0 shadow-sm" required>
+                                <option value="">Chọn Cơ sở</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="FacilityItemId" class="form-label text-muted mb-2">Mục</label>
+                            <select asp-for="FacilityItemId" asp-items="ViewBag.Items"
+                                    class="form-select form-control-lg bg-white border-0 shadow-sm" required>
+                                <option value="">Chọn Mục</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="QuantityRequested" class="form-label text-muted mb-2">Số lượng</label>
+                            <input asp-for="QuantityRequested"
+                                   class="form-control form-control-lg bg-white border-0 shadow-sm"
+                                   type="number" min="1" required />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="SeverityLevel" class="form-label text-muted mb-2">Mức độ Ưu tiên</label>
+                            <select asp-for="SeverityLevel"
+                                    class="form-select form-control-lg bg-white border-0 shadow-sm" required>
+                                <option value="">Chọn Mức độ</option>
+                                <option value="Low" class="text-success">Thấp</option>
+                                <option value="Medium" class="text-warning">Trung bình</option>
+                                <option value="High" class="text-danger">Cao</option>
+                                <option value="Urgent" class="text-danger fw-bold">Khẩn cấp</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group mb-3">
+                            <label asp-for="Description" class="form-label text-muted mb-2">Mô tả</label>
+                            <textarea asp-for="Description"
+                                      class="form-control form-control-lg bg-white border-0 shadow-sm"
+                                      rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group mb-3">
+                            <label asp-for="Remarks" class="form-label text-muted mb-2">Ghi chú</label>
+                            <textarea asp-for="Remarks"
+                                      class="form-control form-control-lg bg-white border-0 shadow-sm"
+                                      rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg px-4 shadow-sm">
+                        Cập Nhật Yêu Cầu
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

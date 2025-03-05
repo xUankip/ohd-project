@@ -1,5 +1,4 @@
 @model AspnetCoreMvcStarter.Models.FacilityItem
-
 @{
     ViewData["Title"] = "Thêm thiết bị mới";
     var facilityId = ViewBag.FacilityId;
@@ -10,7 +9,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form asp-action="Create" method="post">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" name="FacilityId" value="@facilityId" />
 
@@ -21,9 +20,25 @@
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="ItemImage" class="control-label">URL hình ảnh</label>
-                    <input asp-for="ItemImage" class="form-control" />
-                    <span asp-validation-for="ItemImage" class="text-danger"></span>
+                    <label class="control-label">Hình ảnh thiết bị</label>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="urlOption" name="ImageUploadType" class="custom-control-input" value="url" checked>
+                        <label class="custom-control-label" for="urlOption">Nhập URL hình ảnh</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="fileOption" name="ImageUploadType" class="custom-control-input" value="file">
+                        <label class="custom-control-label" for="fileOption">Tải ảnh từ máy tính</label>
+                    </div>
+
+                    <div id="urlInputGroup" class="form-group mt-2">
+                        <input asp-for="ItemImage" class="form-control" placeholder="Nhập URL hình ảnh" />
+                        <span asp-validation-for="ItemImage" class="text-danger"></span>
+                    </div>
+
+                    <div id="fileInputGroup" class="form-group mt-2" style="display:none;">
+                        <input type="file" name="ImageFile" class="form-control-file" accept="image/*" />
+                        <small class="form-text text-muted">Chọn ảnh từ máy tính (jpg, png, gif)</small>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -49,4 +64,18 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function() {
+            // Toggle between URL and file upload
+            $('input[name="ImageUploadType"]').change(function() {
+                if ($(this).val() === 'url') {
+                    $('#urlInputGroup').show();
+                    $('#fileInputGroup').hide();
+                } else {
+                    $('#urlInputGroup').hide();
+                    $('#fileInputGroup').show();
+                }
+            });
+        });
+    </script>
 }
