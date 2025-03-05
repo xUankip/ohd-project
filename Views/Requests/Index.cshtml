@@ -29,74 +29,63 @@
       </div>
     </div>
 
-    @if (!string.IsNullOrEmpty(currentSearch))
-    {
-      <div class="alert alert-info mb-3">
-        <p class="mb-0">
-          Showing results for: <strong>@currentSearch</strong>
-          <a asp-action="Index" class="btn btn-sm btn-outline-info ms-2">Clear</a>
-        </p>
-      </div>
-    }
-
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>
         <tr>
-          <th>Requestor</th>
-          <th>Implementer ID</th>
           <th>Facility</th>
           <th>Item</th>
           <th>Quantity</th>
           <th>Level</th>
           <th>Status</th>
           <th>Time</th>
-          <th class="text-center">Actions</th>
+          <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         @foreach (var item in Model)
         {
           <tr>
-            <td>
-              <div class="d-flex align-items-center">
-                <div class="avatar me-2">
-                                        <span class="avatar-initial rounded-circle bg-label-primary">
-                                            @(item.Requestor?.FullName?[0].ToString().ToUpper() ?? "N/A")
-                                        </span>
-                </div>
-                @(item.Requestor?.FullName ?? "Unknown")
-              </div>
-            </td>
-            <td>@(item.AssigneeId )</td>
             <td>@(item.Facility?.FacilityName ?? "N/A")</td>
             <td>@(item.FacilityItem?.ItemName ?? "N/A")</td>
             <td>@item.QuantityRequested</td>
             <td>
-                                <span class="badge @GetSeverityBadgeClass(item.SeverityLevel)">
-                                    @(item.SeverityLevel ?? "N/A")
-                                </span>
+              @if (!string.IsNullOrEmpty(item.SeverityLevel))
+              {
+                <span class="badge @(item.SeverityLevel == "Critical" ? "bg-danger" :
+                                   item.SeverityLevel == "High" ? "bg-warning" :
+                                   item.SeverityLevel == "Medium" ? "bg-primary" :
+                                   item.SeverityLevel == "Low" ? "bg-success" :
+                                   "bg-secondary")">
+            @item.SeverityLevel
+        </span>
+              }
+              else
+              {
+                <span class="badge bg-secondary">N/A</span>
+              }
             </td>
             <td>
-                                <span class="badge @GetStatusBadgeClass(item.Status)">
-                                    @(item.Status ?? "N/A")
-                                </span>
+              <div class="d-flex align-items-center">
+                <select class="form-select form-select-sm ms-4 status-dropdown"
+                        data-request-id="@item.RequestId"
+                        data-current-status="@item.Status"
+                        style="width: auto; margin-left: 15px;">
+                  @{
+                    var statusOptions = new[] { "Open", "In Progress", "Approved", "Pending", "Rejected", "Closed" };
+                  }
+                  @foreach (var status in statusOptions)
+                  {
+                    <option value="@status" selected="@(status == item.Status)">@status</option>
+                  }
+                </select>
+              </div>
             </td>
             <td>@(item.RequestDate.ToString("dd/MM/yyyy HH:mm"))</td>
-            <td class="text-center">
-              <div class="d-flex justify-content-center gap-2">
-                <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">
-                  <i class="bx bx-info-circle"></i>
-                  <span>Detail</span>
-                </a>
-                <a asp-action="Edit" asp-route-id="@item.RequestId" class="btn btn-primary btn-sm">
-                  <i class="bx bx-edit"></i>
-                  <span>Edit</span>
-                </a>
-                <a asp-action="Delete" asp-route-id="@item.RequestId" class="btn btn-danger btn-sm">
-                  <i class="bx bx-trash"></i>
-                  <span>Cancel</span>
-                </a>
+            <td>
+              <div class="d-flex gap-2">
+                <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">Details</a>
+                <a asp-action="Assign" asp-route-id="@item.RequestId" class="btn btn-primary btn-sm">Assign</a>
               </div>
             </td>
           </tr>
@@ -104,57 +93,80 @@
         </tbody>
       </table>
     </div>
-
-    @if (totalPages > 1)
-    {
-      <div class="d-flex justify-content-center mt-3">
-        <ul class="pagination">
-          <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch">
-              <i class="bx bx-chevron-left"></i>
-            </a>
-          </li>
-          @for (int i = 1; i <= totalPages; i++)
-          {
-            <li class="page-item @(currentPage == i ? "active" : "")">
-              <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
-            </li>
-          }
-          <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch">
-              <i class="bx bx-chevron-right"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-    }
   </div>
 </div>
 
-@functions {
-  private string GetSeverityBadgeClass(string severityLevel)
-  {
-    return severityLevel switch
-    {
-      "Low" => "bg-label-info",
-      "Medium" => "bg-label-warning",
-      "High" => "bg-label-danger",
-      _ => "bg-label-secondary"
-    };
-  }
+@section Scripts {
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".status-dropdown").forEach(dropdown => {
+        dropdown.addEventListener("change", function () {
+          const requestId = this.getAttribute("data-request-id");
+          const currentStatus = this.getAttribute("data-current-status");
+          const newStatus = this.value;
 
-  private string GetStatusBadgeClass(string status)
-  {
-    return status switch
-    {
-      "New" => "bg-label-primary",
-      "Open" => "bg-label-warning",
-      "Closed" => "bg-label-success",
-      "In Progress" => "bg-label-info",
-      "Rejected" => "bg-label-danger",
-      _ => "bg-label-secondary"
-    };
-  }
+          if (confirm(`Are you sure you want to change status from ${currentStatus} to ${newStatus}?`)) {
+            fetch(`/Requests/UpdateStatus`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest"
+              },
+              body: JSON.stringify({ requestId, status: newStatus })
+            })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  this.setAttribute("data-current-status", newStatus);
+                  alert("Status updated successfully!");
+                } else {
+                  this.value = currentStatus;
+                  alert("Failed to update status.");
+                }
+              })
+              .catch(error => {
+                console.error("Error:", error);
+                this.value = currentStatus;
+                alert("An error occurred while updating status.");
+              });
+          } else {
+            this.value = currentStatus;
+          }
+        });
+      });
+    });
+  </script>
+
+  <style>
+    .table td, .table th {
+      padding: 8px 12px; /* Reduce padding */
+    }
+
+    .level-column {
+      width: 120px; /* Adjust width of Level */
+      text-align: center;
+    }
+
+    .status-column {
+      width: 150px; /* Adjust width of Status */
+    }
+
+    .badge {
+      font-size: 14px;
+      padding: 5px 10px;
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 3px;
+    }
+
+    .table thead th {
+      text-align: center;
+    }
+
+    .table tbody td {
+      text-align: center;
+    }
+  </style>
 }
-
-
