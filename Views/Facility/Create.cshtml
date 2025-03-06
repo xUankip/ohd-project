@@ -31,7 +31,7 @@
                         <option value="">-- Chọn người phụ trách --</option>
                         @if (users != null)
                         {
-                            foreach (var user in users.Where(u => u.RoleId == 3))
+                            foreach (var user in users.Where(u => u.RoleId == 2))
                             {
                                 <option value="@user.UserId">@user.FullName</option>
                             }

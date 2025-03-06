@@ -198,8 +198,6 @@ namespace AspnetCoreMvcStarter.Controllers
 
             // Store the currently assigned user separately
             var currentAssignee = request.Requestor;
-            Console.WriteLine(currentAssignee);
-            Console.WriteLine("--------------");
             // Remove the currently assigned user from the dropdown list
             if (request.RequestorId.HasValue)
             {

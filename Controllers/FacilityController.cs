@@ -38,7 +38,7 @@ namespace AspnetCoreMvcStarter.Controllers
               (f.FacilityHead != null && f.FacilityHead.FullName.ToLower().Contains(search))
             );
           }
-
+          query = query.OrderByDescending(f => f.CreatedAt);
           // Tổng số mục và số trang
           int totalItems = await query.CountAsync();
           int totalPages = (int)Math.Ceiling(totalItems / (double)PageSize);

@@ -26,22 +26,6 @@
 
     <div class="row">
       <div class="col-md-6 mb-3">
-        <label asp-for="PasswordHash" class="form-label">Password</label>
-        <input asp-for="PasswordHash" class="form-control" type="password" />
-        <span asp-validation-for="PasswordHash" class="text-danger"></span>
-      </div>
-
-      <div class="col-md-6 mb-3">
-        <label asp-for="RoleId" class="form-label">User Role</label>
-        <select asp-for="RoleId" asp-items="ViewBag.Roles" class="form-select" required>
-          <option value="">Select Role</option>
-        </select>
-        <span asp-validation-for="RoleId" class="text-danger"></span>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-6 mb-3">
         <label asp-for="FullName" class="form-label">Full Name</label>
         <input asp-for="FullName" class="form-control" />
         <span asp-validation-for="FullName" class="text-danger"></span>

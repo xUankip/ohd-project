@@ -190,19 +190,46 @@ namespace AspnetCoreMvcStarter.Controllers
         // POST: Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Username,PasswordHash,Email,RoleID,FullName,Phone,IsActive")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,Username,Email,FullName,Phone,IsActive")] User user)
         {
-            if (id != user.UserId) return NotFound();
+          string userIdStr = HttpContext.Session.GetString("UserId");
+          int? userId = !string.IsNullOrEmpty(userIdStr) ? int.Parse(userIdStr) : null;
 
-            if (ModelState.IsValid)
+          if (ModelState.IsValid)
+          {
+            try
             {
-                _context.Update(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+              var existingUser = await _context.Users.FindAsync(userId);
+              if (existingUser == null)
+                return NotFound();
+
+              // Cập nhật các trường từ form
+              existingUser.Username = user.Username;
+              existingUser.Email = user.Email;
+              existingUser.FullName = user.FullName;
+              existingUser.Phone = user.Phone;
+              existingUser.IsActive = user.IsActive;
+              existingUser.UpdatedAt = DateTime.Now;
+
+              _context.Update(existingUser);
+              await _context.SaveChangesAsync();
+              return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            catch (DbUpdateConcurrencyException)
+            {
+              if (!UserExists(id))
+                return NotFound();
+              else
+                throw;
+            }
+          }
+          return View(user);
         }
 
+        private bool UserExists(int id)
+        {
+          return _context.Users.Any(e => e.UserId == id);
+        }
         // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
