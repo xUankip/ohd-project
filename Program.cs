@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using AspnetCoreMvcStarter.Filters;
+using AspnetCoreMvcStarter.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +33,7 @@ builder.Services.AddSession(options =>
     }
 });
 builder.Services.AddScoped<EmailService>();
-
+builder.Services.AddScoped<NotificationHelper>();
 // Thêm authentication với cấu hình tương tự
 builder.Services.AddAuthentication("CustomAuthScheme")
     .AddCookie("CustomAuthScheme", options =>

@@ -17,10 +17,12 @@ namespace AspnetCoreMvcStarter.Controllers
     public class AssigneeRequestsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly EmailService _emailService;
 
-        public AssigneeRequestsController(ApplicationDbContext context)
+        public AssigneeRequestsController(ApplicationDbContext context,  EmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // Hiển thị danh sách Request được giao cho Assignee
@@ -109,21 +111,67 @@ namespace AspnetCoreMvcStarter.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateStatus([FromBody] StatusUpdateRequest request)
         {
-          if (request == null || request.RequestId <= 0 || string.IsNullOrEmpty(request.Status))
-          {
-            return Json(new { success = false, message = "Invalid data" });
-          }
+            if (request == null || request.RequestId <= 0 || string.IsNullOrEmpty(request.Status))
+            {
+                return Json(new { success = false, message = "Invalid data" });
+            }
 
-          var existingRequest = await _context.Requests.FindAsync(request.RequestId);
-          if (existingRequest == null)
-          {
-            return Json(new { success = false, message = "Request not found" });
-          }
+            var existingRequest = await _context.Requests
+                .Include(r => r.Requestor)
+                .Include(r => r.Facility)
+                .Include(r => r.FacilityItem)
+                .FirstOrDefaultAsync(r => r.RequestId == request.RequestId);
 
-          existingRequest.Status = request.Status;
-          await _context.SaveChangesAsync();
+            if (existingRequest == null)
+            {
+                return Json(new { success = false, message = "Request not found" });
+            }
 
-          return Json(new { success = true, message = "Status updated successfully" });
+            // Store the old status for comparison
+            string oldStatus = existingRequest.Status;
+
+            // Update the status
+            existingRequest.Status = request.Status;
+            await _context.SaveChangesAsync();
+
+            // If status changes to "Resolved" or "Closed", notify the requestor
+            if ((request.Status == "Resolved" || request.Status == "Closed") &&
+                oldStatus != request.Status &&
+                existingRequest.RequestorId.HasValue)
+            {
+                try
+                {
+                    // Get the requestor
+                    var requestor = await _context.Users.FindAsync(existingRequest.RequestorId.Value);
+                    if (requestor != null && !string.IsNullOrEmpty(requestor.Email))
+                    {
+                        string subject = $"Request #{existingRequest.RequestId} Status Updated to {request.Status}";
+                        string body = $@"
+                            <html>
+                            <body>
+                                <h2>Request Status Update</h2>
+                                <p>Your request has been {request.Status.ToLower()}.</p>
+                                <div style='margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px;'>
+                                    <p><strong>Request ID:</strong> {existingRequest.RequestId}</p>
+                                    <p><strong>Facility:</strong> {existingRequest.Facility?.FacilityName ?? "Unknown"}</p>
+                                    <p><strong>Item:</strong> {existingRequest.FacilityItem?.ItemName ?? "Unknown"}</p>
+                                    <p><strong>Status:</strong> {request.Status}</p>
+                                </div>
+                                <p>Please log in to the system to view the details.</p>
+                            </body>
+                            </html>";
+
+                        await _emailService.SendEmailAsync(subject, body, requestor.Email);
+                    }
+                }
+                catch (Exception emailEx)
+                {
+                    Console.WriteLine($"Error sending status update email: {emailEx.Message}");
+                    // Don't stop the process if email fails
+                }
+            }
+
+            return Json(new { success = true, message = "Status updated successfully" });
         }
 
         // Thêm comment vào Request

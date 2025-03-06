@@ -113,10 +113,11 @@ namespace AspnetCoreMvcStarter.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Request request)
+       public async Task<IActionResult> Create(Request request)
         {
             try
             {
+                // Kiểm tra các trường bắt buộc
                 if (request.FacilityId == null)
                 {
                     ModelState.AddModelError("FacilityId", "Vui lòng chọn cơ sở");
@@ -179,22 +180,21 @@ namespace AspnetCoreMvcStarter.Controllers
                 _context.Requests.Add(request);
                 await _context.SaveChangesAsync();
 
-                // Gửi email thông báo
-                await _emailService.SendEmailAsync(
-                    "Thông báo: Yêu cầu mới đã được tạo",
-                    $"Một yêu cầu mới đã được tạo bởi người dùng {request.RequestorId}.\n Chi tiết yêu cầu:\n" +
-                    $"Cơ sở: {request.FacilityId}\n" +
-                    $"IDVật dụng: {request.FacilityItemId}\n" +
-                    $"Số lượng: {request.QuantityRequested}\n" +
-                    $"Mức độ ưu tiên: {request.SeverityLevel}\n" +
-                    $"Mô tả: {request.Description}"
-                );
+                try
+                {
+                    await _emailService.SendRequestCreationNotificationAsync(request);
+                }
+                catch (Exception emailEx)
+                {
+                    Console.WriteLine($"Error sending email notification: {emailEx.Message}");
+                }
 
                 TempData["Success"] = "Tạo request thành công!";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
+                // Log chi tiết lỗi
                 Console.WriteLine($"Exception when creating request: {ex.Message}");
                 Console.WriteLine($"Stack trace: {ex.StackTrace}");
 
