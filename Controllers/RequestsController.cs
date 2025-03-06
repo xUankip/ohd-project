@@ -379,6 +379,7 @@ namespace AspnetCoreMvcStarter.Controllers
           return Json(new { success = true, message = "Status updated successfully" });
         }
 
+// Update the StatusUpdateRequest class
         public class StatusUpdateRequest
         {
           public int RequestId { get; set; }
@@ -418,5 +419,6 @@ namespace AspnetCoreMvcStarter.Controllers
           TempData["Success"] = "Comment added successfully!";
           return RedirectToAction("Details", new { id = requestId });
         }
+
     }
 }
