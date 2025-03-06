@@ -17,12 +17,7 @@
 @*   <div class="alert alert-success">@TempData["Success"]</div> *@
 @* } *@
 
-@if (ViewBag.CurrentAssignee != null)
-{
-  <div class="alert alert-info">
-    <strong>Currently Assigned To:</strong> @ViewBag.CurrentAssignee.FullName
-  </div>
-}
+
 
 @if (ViewBag.Assignees == null || !((SelectList)ViewBag.Assignees).Any())
 {
@@ -36,7 +31,7 @@ else
     <div class="form-group">
       <label>Select New Assignee</label>
       <select name="assigneeId" class="form-control" required>
-        <option value="">-- Select User --</option>
+        <option value="">-- Select Assignee --</option>
         @foreach (var user in ViewBag.Assignees as SelectList)
         {
           <option value="@user.Value">@user.Text</option>
