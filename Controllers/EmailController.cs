@@ -16,7 +16,7 @@ public class EmailController : Controller
     {
         try
         {
-            await _emailService.SendEmailAsync("Thông báo", "Đây là huy vip đẹp zai");
+            await _emailService.SendEmailAsync("Thông báo", "Đây là huy vip đẹp zai", "eeeeeeeeeeeee");
             return Json(new { success = true, message = "Email đã được gửi thành công!" });
         }
         catch (Exception ex)

@@ -17,10 +17,12 @@ namespace AspnetCoreMvcStarter.Controllers
     public class RequestsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly EmailService _emailService;
 
-        public RequestsController(ApplicationDbContext context)
+        public RequestsController(ApplicationDbContext context, EmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // ✅ Show Request List (GET: /Requests)
@@ -159,6 +161,15 @@ namespace AspnetCoreMvcStarter.Controllers
                 _context.Requests.Add(request);
                 await _context.SaveChangesAsync();
 
+                try
+                {
+                    await _emailService.SendRequestCreationNotificationAsync(request);
+                }
+                catch (Exception emailEx)
+                {
+                    Console.WriteLine($"Error sending email notification: {emailEx.Message}");
+                }
+
                 TempData["Success"] = "Tạo request thành công!";
                 return RedirectToAction(nameof(Index));
             }
@@ -214,7 +225,7 @@ namespace AspnetCoreMvcStarter.Controllers
 
         // ✅ Handle Request Assignment or Transfer (POST: /Requests/Assign/{id})
         [HttpPost]
-        public IActionResult Assign(int requestId, int? assigneeId)
+        public async Task<IActionResult> Assign(int requestId, int? assigneeId)
         {
           var request = _context.Requests.FirstOrDefault(r => r.RequestId == requestId);
 
@@ -231,7 +242,15 @@ namespace AspnetCoreMvcStarter.Controllers
 
           request.AssigneeId = assigneeId.Value;
           _context.SaveChanges();
-
+          try
+          {
+            await _emailService.SendAssignmentNotificationAsync(request);
+          }
+          catch (Exception emailEx)
+          {
+            // Log the error but don't prevent assignment
+            Console.WriteLine($"Error sending assignment email notification: {emailEx.Message}");
+          }
           // ✅ Removed success message
           TempData["Success"] = "Request successfully assigned!";
           return RedirectToAction("Index");
