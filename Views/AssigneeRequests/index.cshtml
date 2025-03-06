@@ -1,30 +1,22 @@
-﻿@model IEnumerable<AspnetCoreMvcStarter.Models.Request>
-
+@model IEnumerable<AspnetCoreMvcStarter.Models.Request>
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
-  ViewData["Title"] = "Request Management";
-  int currentPage = ViewBag.CurrentPage;
-  int totalPages = ViewBag.TotalPages;
-  string currentSearch = ViewBag.Search ?? "";
+  var token = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+@{
+  ViewData["Title"] = "Assigned Requests";
 }
 
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
-    <h5 class="card-title mb-0">Request List</h5>
+    <h5 class="card-title mb-0">Assigned Requests</h5>
+    <form method="get" action="@Url.Action("Index", "AssigneeRequests")" class="d-flex">
+      <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Search...">
+      <button type="submit" class="btn btn-primary ms-2">Search</button>
+    </form>
   </div>
 
   <div class="card-body">
-    <div class="row mb-3">
-
-      <div class="col-md-6">
-        <form asp-action="Index" method="get" class="d-flex justify-content-end">
-          <div class="input-group">
-            <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Search requests...">
-            <button type="submit" class="btn btn-primary">Search</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
     @if (ViewData["ErrorMessage"] != null)
     {
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -41,22 +33,11 @@
       </div>
     }
 
-    @if (!string.IsNullOrEmpty(currentSearch))
-    {
-      <div class="alert alert-info mb-3">
-        <p class="mb-0">
-          Showing results for: <strong>@currentSearch</strong>
-          <a asp-action="Index" class="btn btn-sm btn-outline-info ms-2">Clear</a>
-        </p>
-      </div>
-    }
-
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>
         <tr>
           <th>REQUESTOR</th>
-          <th>ASSIGNEE</th>
           <th>FACILITY</th>
           <th>ITEM</th>
           <th>QUANTITY</th>
@@ -80,7 +61,6 @@
                 @(item.Requestor?.FullName ?? "Unknown")
               </div>
             </td>
-            <td>@item.AssigneeId</td>
             <td>@(item.Facility?.FacilityName ?? "N/A")</td>
             <td>@(item.FacilityItem?.ItemName ?? "N/A")</td>
             <td>@item.QuantityRequested</td>
@@ -105,21 +85,9 @@
             <td>@(item.RequestDate.ToString("dd/MM/yyyy HH:mm"))</td>
             <td class="text-center">
               <div class="d-flex justify-content-center gap-2">
-                <a asp-action="Details" asp-route-id="@item.RequestId" class="btn btn-info btn-sm">
+                <a href="@Url.Action("Details", "AssigneeRequests", new { id = item.RequestId })" class="btn btn-info btn-sm">
                   <i class="bx bx-info-circle"></i>
                   <span>Details</span>
-                </a>
-                <a asp-action="Assign" asp-route-id="@item.RequestId" class="btn btn-warning btn-sm">
-                  <i class="bx bx-user-check"></i>
-                  <span>Assign</span>
-                </a>
-                <a asp-action="Edit" asp-route-id="@item.RequestId" class="btn btn-primary btn-sm">
-                  <i class="bx bx-edit"></i>
-                  <span>Edit</span>
-                </a>
-                <a asp-action="Delete" asp-route-id="@item.RequestId" class="btn btn-danger btn-sm">
-                  <i class="bx bx-trash"></i>
-                  <span>Delete</span>
                 </a>
               </div>
             </td>
@@ -129,23 +97,23 @@
       </table>
     </div>
 
-    @if (totalPages > 1)
+    @if (ViewBag.TotalPages > 1)
     {
       <div class="d-flex justify-content-center mt-3">
         <ul class="pagination">
-          <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch">
+          <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", "AssigneeRequests", new { page = ViewBag.CurrentPage - 1, search = ViewBag.Search })">
               <i class="bx bx-chevron-left"></i>
             </a>
           </li>
-          @for (int i = 1; i <= totalPages; i++)
+          @for (int i = 1; i <= ViewBag.TotalPages; i++)
           {
-            <li class="page-item @(currentPage == i ? "active" : "")">
-              <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
+            <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+              <a class="page-link" href="@Url.Action("Index", "AssigneeRequests", new { page = i, search = ViewBag.Search })">@i</a>
             </li>
           }
-          <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch">
+          <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", "AssigneeRequests", new { page = ViewBag.CurrentPage + 1, search = ViewBag.Search })">
               <i class="bx bx-chevron-right"></i>
             </a>
           </li>
@@ -165,19 +133,6 @@
       "High" => "bg-label-danger",
       "Critical" => "bg-label-danger",
       "Urgent" => "bg-label-danger",
-      _ => "bg-label-secondary"
-    };
-  }
-
-  private string GetStatusBadgeClass(string status)
-  {
-    return status switch
-    {
-      "New" => "bg-label-primary",
-      "Open" => "bg-label-warning",
-      "Closed" => "bg-label-success",
-      "In Progress" => "bg-label-info",
-      "Rejected" => "bg-label-danger",
       _ => "bg-label-secondary"
     };
   }
@@ -221,7 +176,6 @@
         const newStatus = this.getAttribute("data-status");
         const dropdownMenu = this.closest(".status-dropdown-menu");
         const requestId = dropdownMenu.getAttribute("data-request-id");
-        const originalStatus = dropdownMenu.getAttribute("data-original-status");
         const statusButton = document.getElementById("status-" + requestId);
 
         if (confirm("Are you sure you want to update the status?")) {

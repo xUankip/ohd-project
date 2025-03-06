@@ -1,158 +1,174 @@
 @model AspnetCoreMvcStarter.Models.DashboardViewModel
 
 @{
-    ViewData["Title"] = "Online Help Desk";
-
-    var statusLabels = Model.RequestStats.Select(s => s.Status).ToArray();
-    var statusCounts = Model.RequestStats.Select(s => s.Count).ToArray();
-
-    var monthLabels = Model.MonthlyRequests.Select(m => $"{m.Month}/{m.Year}").ToArray();
-    var monthCounts = Model.MonthlyRequests.Select(m => m.Count).ToArray();
-
-    var topItemLabels = Model.TopRequestedItems.Select(t => t.ItemName).ToArray();
-    var topItemCounts = Model.TopRequestedItems.Select(t => t.RequestCount).ToArray();
+  ViewData["Title"] = "Welcome to the Online Help Desk";
 }
 
-<div class="container-fluid mt-4">
-    <h1 class="mb-4">Online Help Desk Dashboard</h1>
+<!-- Main Container -->
+<div class="container-fluid mt-5">
 
-    <div class="row">
-        <!-- Status Distribution Doughnut Chart -->
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <i class="fas fa-chart-pie me-2"></i>Request Status Distribution
-                </div>
-                <div class="card-body">
-                    <canvas id="requestStatusChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Monthly Requests Line Chart -->
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-header bg-success text-white">
-                    <i class="fas fa-chart-line me-2"></i>Monthly Request Trends
-                </div>
-                <div class="card-body">
-                    <canvas id="requestMonthChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Top Requested Items Bar Chart -->
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-header bg-warning text-white">
-                    <i class="fas fa-chart-bar me-2"></i>Top Requested Items
-                </div>
-                <div class="card-body">
-                    <canvas id="topItemsChart"></canvas>
-                </div>
-            </div>
-        </div>
+  <!-- Hero Section (Full Screen Intro with Background) -->
+  <div class="row justify-content-center align-items-center hero-section">
+    <div class="col-md-8 text-center">
+      <h1 class="display-3 font-weight-bold text-white">Welcome to the Online Help Desk</h1> >
+      <p class="lead mb-4 text-white">Your one-stop solution for managing requests and support. We’re here to assist you every step of the way.</p> <!-- Changed text color to white -->
+      <a href="#about" class="btn btn-light btn-lg shadow-lg">Learn More</a>
     </div>
+  </div>
 
-    <!-- Quick Stats Row -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header bg-info text-white">
-                    <i class="fas fa-info-circle me-2"></i>Quick Statistics
-                </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-md-3">
-                            <h5>Total Requests</h5>
-                            <p class="h3 text-primary">@(Model.TotalRequests)</p>
-                        </div>
-                        <div class="col-md-3">
-                            <h5>Open Requests</h5>
-                            <p class="h3 text-warning">@(Model.OpenRequests)</p>
-                        </div>
-                        <div class="col-md-3">
-                            <h5>Approved Requests</h5>
-                            <p class="h3 text-success">@(Model.ApprovedRequests)</p>
-                        </div>
-                        <div class="col-md-3">
-                            <h5>Pending Requests</h5>
-                            <p class="h3 text-danger">@(Model.PendingRequests)</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- About Section -->
+  <div id="about" class="row justify-content-center py-5 bg-light">
+    <div class="col-md-8 text-center">
+      <h2 class="text-info mb-3">How Can We Help You?</h2>
+      <p class="lead mb-4">We are here to assist you with any technical or customer support needs. Whether you need to report an issue or have a general inquiry, our team is ready to help you solve your problem quickly and effectively.</p>
     </div>
+  </div>
+
+  <!-- About Our Service Section -->
+  <div class="row justify-content-center py-5">
+    <div class="col-md-6 text-center">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-info text-white">
+          <i class="fas fa-info-circle"></i> About Our Service
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">What We Do</h5>
+          <p class="card-text">
+            Our Online Help Desk is designed to assist users like you in resolving any challenges or questions that arise. From submitting requests to tracking their status, we ensure a smooth and efficient process for getting the help you need.
+          </p>
+          <p class="card-text">
+            With a dedicated support team, we provide top-tier assistance and ensure that your concerns are addressed in a timely manner. Our goal is to make sure you have the best experience possible.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Meet the Team Section -->
+  <div class="row justify-content-center py-5 bg-light">
+    <div class="col-md-8 text-center">
+      <h2 class="text-info mb-3">Meet Our Support Team</h2>
+      <p class="lead mb-4">Our team is composed of professionals who are passionate about providing excellent support and ensuring you have a seamless experience with our service.</p>
+      <div class="row justify-content-center">
+        <div class="col-md-3 mb-4">
+          <div class="card shadow-lg border-0">
+            <img src="https://4kwallpapers.com/images/walls/thumbs/20885.jpg" class="card-img-top square-img" alt="Team Member">
+            <div class="card-body">
+              <h5 class="card-title">John Doe</h5>
+              <p class="card-text">Support Specialist</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4">
+          <div class="card shadow-lg border-0">
+            <img src="https://4kwallpapers.com/images/walls/thumbs/20928.jpg" class="card-img-top square-img" alt="Team Member">
+            <div class="card-body">
+              <h5 class="card-title">Jane Smith</h5>
+              <p class="card-text">Technical Expert</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4">
+          <div class="card shadow-lg border-0">
+            <img src="https://4kwallpapers.com/images/walls/thumbs/20954.jpg" class="card-img-top square-img" alt="Team Member">
+            <div class="card-body">
+              <h5 class="card-title">Emily White</h5>
+              <p class="card-text">Customer Support</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Call-to-Action Section -->
+  <div class="row justify-content-center py-5" style="background-color: #f8f9fa;">
+    <div class="col-md-8 text-center">
+      <h2 class="text-info mb-3">Need Assistance?</h2>
+      <p class="lead mb-4">Feel free to get in touch with us for any questions or support you may need. We're here to help!</p>
+      <a href="#contact" class="btn btn-danger btn-lg shadow-lg">Contact Us</a>
+    </div>
+  </div>
+
 </div>
 
 <!-- Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Request Status Doughnut Chart
-        var ctxStatus = document.getElementById('requestStatusChart').getContext('2d');
-        var requestStatusChart = new Chart(ctxStatus, {
-            type: 'doughnut',
-            data: {
-                labels: @Html.Raw(Json.Serialize(statusLabels)),
-                datasets: [{
-                    data: @Html.Raw(Json.Serialize(statusCounts)),
-                    backgroundColor: ['#007bff', '#ffc107', '#28a745', '#dc3545', '#6c757d']
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'bottom' }
-                }
-            }
-        });
+<!-- Custom Styles for Enhanced Homepage -->
+<style>
+  /* Hero Section Styles */
+  .hero-section {
+    position: relative;
+    height: 90vh;
+    background: url('https://png.pngtree.com/thumb_back/fh260/background/20230606/pngtree-group-of-business-people-standing-and-looking-serious-group-of-business-photo-image_3037893.jpg') no-repeat center center;
+    background-size: cover;
+    color: white;
+  }
 
-        // Monthly Requests Line Chart
-        var ctxMonth = document.getElementById('requestMonthChart').getContext('2d');
-        var requestMonthChart = new Chart(ctxMonth, {
-            type: 'line',
-            data: {
-                labels: @Html.Raw(Json.Serialize(monthLabels)),
-                datasets: [{
-                    label: 'Requests per Month',
-                    data: @Html.Raw(Json.Serialize(monthCounts)),
-                    borderColor: '#28a745',
-                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
+  /* Blurred Background */
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: inherit;
+    background-size: inherit;
+    background-position: inherit;
+    filter: blur(8px);
+    z-index: 1;
+  }
 
-        // Top Requested Items Bar Chart
-        var ctxItems = document.getElementById('topItemsChart').getContext('2d');
-        var topItemsChart = new Chart(ctxItems, {
-            type: 'bar',
-            data: {
-                labels: @Html.Raw(Json.Serialize(topItemLabels)),
-                datasets: [{
-                    label: 'Number of Requests',
-                    data: @Html.Raw(Json.Serialize(topItemCounts)),
-                    backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6c757d']
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-    });
-</script>
+  .hero-section .col-md-8 {
+    position: relative;
+    z-index: 2;
+  }
+
+  .card {
+    border-radius: 15px;
+  }
+
+  .card-body {
+    padding: 2rem;
+  }
+
+  .card-header {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+
+  .display-3 {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+
+  .text-muted {
+    color: #6c757d;
+  }
+
+  .text-info {
+    color: #17a2b8;
+  }
+
+  .lead {
+    font-size: 1.2rem;
+  }
+
+  .btn-lg {
+    padding: 1.2rem 2.5rem;
+    font-size: 1.2rem;
+  }
+
+  .card-img-top {
+    max-height: 200px;
+    object-fit: cover;
+  }
+
+  /* Smooth Scrolling for Anchors */
+  html {
+    scroll-behavior: smooth;
+  }
+</style>

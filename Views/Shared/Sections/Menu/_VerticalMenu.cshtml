@@ -43,12 +43,7 @@
 
   <ul class="menu-inner py-1">
     <!-- Menu cơ bản cho tất cả người dùng -->
-    <li class='menu-item@(currentPage == "/" ? " active" : "")'>
-      <a asp-controller="Home" asp-action="Index" class="menu-link">
-        <i class="menu-icon tf-icons ri-home-smile-line"></i>
-        <div data-i18n=" Dashboard"> Dashboard</div>
-      </a>
-    </li>
+
     @* Hiển thị RoleId để debug *@
     @* <li><span>RoleId: @userRoleId</span></li> *@
 
@@ -79,7 +74,7 @@
       <!-- Facility -->
       <li class='menu-item@(currentPage.StartsWith("/Facility") ? " active" : "")'>
         <a href="javascript:void(0);" class="menu-link menu-toggle">
-          <i class='menu-icon tf-icons ri-file-list-line'></i>
+          <i class='menu-icon tf-icons ri-archive-drawer-line'></i>
           <div data-i18n="Facility">Facility</div>
         </a>
         <ul class="menu-sub">
@@ -115,9 +110,46 @@
     }
 
 
+    @if (isAssignee)
+    {
+      <!-- Requests -->
+      <li class='menu-item@(currentPage.StartsWith("/AssigneeRequests") ? " active" : "")'>
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <i class='menu-icon tf-icons ri-file-list-line'></i>
+          <div data-i18n="AssigneeRequests">AssigneeRequests</div>
+        </a>
+        <ul class="menu-sub">
+          <li class='menu-item@(currentPage == "/AssigneeRequests" ? " active" : "")'>
+            <a asp-controller="AssigneeRequests" asp-action="Index" class="menu-link">
+              <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
+              <div data-i18n="AssigneeRequests">AssigneeRequests</div>
+            </a>
+          </li>
+
+        </ul>
+      </li>
+    }
+
+
     <!-- Các menu chỉ dành cho Admin -->
     @if (isAdmin)
     {
+      <li class='menu-item@(currentPage.StartsWith("/Dashboard") ? " active" : "")'>
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <i class='menu-icon tf-icons ri-bar-chart-2-fill'></i>
+          <div data-i18n="Dashboard">Dashboard</div>
+        </a>
+        <ul class="menu-sub">
+          <li class='menu-item@(currentPage == "/Dashboard" ? " active" : "")'>
+            <a asp-controller="Dashboard" asp-action="Index" class="menu-link">
+              <i class='menu-icon tf-icons ri-circle-line px-1_5'></i>
+              <div data-i18n="Dashboard">Dashboard</div>
+            </a>
+          </li>
+
+        </ul>
+      </li>
+
       <!-- Menu Users cho Admin -->
       <li class='menu-item@(currentPage.StartsWith("/User") ? " active" : "")'>
         <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -159,7 +191,7 @@
       <!-- Facility -->
       <li class='menu-item@(currentPage.StartsWith("/Facility") ? " active" : "")'>
         <a href="javascript:void(0);" class="menu-link menu-toggle">
-          <i class='menu-icon tf-icons ri-file-list-line'></i>
+          <i class='menu-icon tf-icons ri-archive-drawer-line'></i>
           <div data-i18n="Facility">Facility</div>
         </a>
         <ul class="menu-sub">

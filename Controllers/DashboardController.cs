@@ -6,15 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using AspnetCoreMvcStarter.Filters;
 
 namespace AspnetCoreMvcStarter.Controllers
 {
-  public class HomeController : Controller
+  [AllowRoles(1)]
+  public class DashboardController : Controller
   {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<DashboardController> _logger;
     private readonly ApplicationDbContext _context;
 
-    public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+    public DashboardController(ILogger<DashboardController> logger, ApplicationDbContext context)
     {
       _logger = logger;
       _context = context;
@@ -59,8 +61,6 @@ namespace AspnetCoreMvcStarter.Controllers
 
       return View(dashboardViewModel);
     }
-
-
 
     public IActionResult Privacy()
     {

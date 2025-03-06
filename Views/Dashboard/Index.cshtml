@@ -1,0 +1,158 @@
+@model AspnetCoreMvcStarter.Models.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Online Help Desk";
+
+    var statusLabels = Model.RequestStats.Select(s => s.Status).ToArray();
+    var statusCounts = Model.RequestStats.Select(s => s.Count).ToArray();
+
+    var monthLabels = Model.MonthlyRequests.Select(m => $"{m.Month}/{m.Year}").ToArray();
+    var monthCounts = Model.MonthlyRequests.Select(m => m.Count).ToArray();
+
+    var topItemLabels = Model.TopRequestedItems.Select(t => t.ItemName).ToArray();
+    var topItemCounts = Model.TopRequestedItems.Select(t => t.RequestCount).ToArray();
+}
+
+<div class="container-fluid mt-4">
+    <h1 class="mb-4">Online Help Desk Dashboardscc</h1>
+
+    <div class="row">
+        <!-- Status Distribution Doughnut Chart -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-chart-pie me-2"></i>Request Status Distribution
+                </div>
+                <div class="card-body">
+                    <canvas id="requestStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Requests Line Chart -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <i class="fas fa-chart-line me-2"></i>Monthly Request Trends
+                </div>
+                <div class="card-body">
+                    <canvas id="requestMonthChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Requested Items Bar Chart -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-white">
+                    <i class="fas fa-chart-bar me-2"></i>Top Requested Items
+                </div>
+                <div class="card-body">
+                    <canvas id="topItemsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats Row -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <i class="fas fa-info-circle me-2"></i>Quick Statistics
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <h5>Total Requests</h5>
+                            <p class="h3 text-primary">@(Model.TotalRequests)</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>Open Requests</h5>
+                            <p class="h3 text-warning">@(Model.OpenRequests)</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>Approved Requests</h5>
+                            <p class="h3 text-success">@(Model.ApprovedRequests)</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>Pending Requests</h5>
+                            <p class="h3 text-danger">@(Model.PendingRequests)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Request Status Doughnut Chart
+        var ctxStatus = document.getElementById('requestStatusChart').getContext('2d');
+        var requestStatusChart = new Chart(ctxStatus, {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Json.Serialize(statusLabels)),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(statusCounts)),
+                    backgroundColor: ['#007bff', '#ffc107', '#28a745', '#dc3545', '#6c757d']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Monthly Requests Line Chart
+        var ctxMonth = document.getElementById('requestMonthChart').getContext('2d');
+        var requestMonthChart = new Chart(ctxMonth, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(monthLabels)),
+                datasets: [{
+                    label: 'Requests per Month',
+                    data: @Html.Raw(Json.Serialize(monthCounts)),
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Top Requested Items Bar Chart
+        var ctxItems = document.getElementById('topItemsChart').getContext('2d');
+        var topItemsChart = new Chart(ctxItems, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(topItemLabels)),
+                datasets: [{
+                    label: 'Number of Requests',
+                    data: @Html.Raw(Json.Serialize(topItemCounts)),
+                    backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6c757d']
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    });
+</script>
