@@ -187,43 +187,62 @@ namespace AspnetCoreMvcStarter.Controllers
             return View(user);
         }
 
-        // POST: Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("UserId,Username,Email,FullName,Phone,IsActive")] User user)
         {
-          string userIdStr = HttpContext.Session.GetString("UserId");
-          int? userId = !string.IsNullOrEmpty(userIdStr) ? int.Parse(userIdStr) : null;
+          if (id != user.UserId) return NotFound();
 
-          if (ModelState.IsValid)
+          ModelState.Remove("PasswordHash");
+
+          ModelState.Remove("RoleId");
+
+          if (!ModelState.IsValid)
           {
-            try
+            foreach (var key in ModelState.Keys)
             {
-              var existingUser = await _context.Users.FindAsync(userId);
-              if (existingUser == null)
-                return NotFound();
-
-              // Cập nhật các trường từ form
-              existingUser.Username = user.Username;
-              existingUser.Email = user.Email;
-              existingUser.FullName = user.FullName;
-              existingUser.Phone = user.Phone;
-              existingUser.IsActive = user.IsActive;
-              existingUser.UpdatedAt = DateTime.Now;
-
-              _context.Update(existingUser);
-              await _context.SaveChangesAsync();
-              return RedirectToAction(nameof(Index));
+              foreach (var error in ModelState[key].Errors)
+              {
+                Console.WriteLine($"Validation error - Key: {key}, Error: {error.ErrorMessage}");
+              }
             }
-            catch (DbUpdateConcurrencyException)
-            {
-              if (!UserExists(id))
-                return NotFound();
-              else
-                throw;
-            }
+            return View(user);
           }
-          return View(user);
+
+          try
+          {
+            // Get existing user from database with all its current properties
+            var existingUser = await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.UserId == id);
+            if (existingUser == null)
+              return NotFound();
+
+            // Update only allowed fields, preserve everything else including PasswordHash
+            existingUser.Username = user.Username;
+            existingUser.Email = user.Email;
+            existingUser.FullName = user.FullName;
+            existingUser.Phone = user.Phone;
+            existingUser.IsActive = user.IsActive;
+            existingUser.UpdatedAt = DateTime.UtcNow;
+
+            // Save changes
+            _context.Entry(existingUser).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+          }
+          catch (DbUpdateConcurrencyException)
+          {
+            if (!_context.Users.Any(e => e.UserId == id))
+              return NotFound();
+            else
+              throw;
+          }
+          catch (Exception ex)
+          {
+            Console.WriteLine("Error updating user: " + ex.Message);
+            ModelState.AddModelError("", "An error occurred while updating the user.");
+            return View(user);
+          }
         }
 
         private bool UserExists(int id)
