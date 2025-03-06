@@ -1,0 +1,89 @@
+@model AspnetCoreMvcStarter.Models.User
+@{
+  ViewData["Title"] = "My Profile";
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Account /</span> Profile
+  </h4>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card mb-4">
+        <h5 class="card-header">Profile Details</h5>
+        <div class="card-body">
+          <div class="d-flex align-items-start align-items-sm-center gap-4 mb-4">
+            <img src="~/img/avatars/1.png" alt="user-avatar" class="d-block rounded-circle" height="100" width="100" id="uploadedAvatar">
+            <div class="button-wrapper">
+              <div class="d-flex flex-column">
+                <h5 class="mb-1 text-primary">@Model.FullName</h5>
+                <p class="text-muted mb-0">
+                  <span class="badge bg-label-primary">@(Model.Role?.RoleName ?? "No Role")</span>
+                </p>
+                <p class="text-muted mt-1 mb-0">
+                  <i class="ri-mail-line me-1"></i> @Model.Email
+                </p>
+              </div>
+            </div>
+          </div>
+          <hr class="my-0">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-xl-12">
+                <div class="card shadow-none bg-transparent border-0 mb-0">
+                  <div class="card-body row p-0">
+                    <div class="mb-3 col-md-6">
+                      <div class="d-flex align-items-start">
+                        <div class="flex-shrink-0 mt-1">
+                          <i class="ri-user-3-line text-muted fs-4 me-3"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-medium d-block">Full Name</span>
+                          <span>@Model.FullName</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 col-md-6">
+                      <div class="d-flex align-items-start">
+                        <div class="flex-shrink-0 mt-1">
+                          <i class="ri-shield-user-line text-muted fs-4 me-3"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-medium d-block">Role</span>
+                          <span>@(Model.Role?.RoleName ?? "No Role Assigned")</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 col-md-6">
+                      <div class="d-flex align-items-start">
+                        <div class="flex-shrink-0 mt-1">
+                          <i class="ri-mail-line text-muted fs-4 me-3"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-medium d-block">Email</span>
+                          <span>@Model.Email</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 col-md-6">
+                      <div class="d-flex align-items-start">
+                        <div class="flex-shrink-0 mt-1">
+                          <i class="ri-smartphone-line text-muted fs-4 me-3"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-medium d-block">Phone</span>
+                          <span>@(Model.Phone ?? "Not updated")</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

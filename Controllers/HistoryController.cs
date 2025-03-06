@@ -5,11 +5,13 @@ using AspnetCoreMvcStarter.Data;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AspnetCoreMvcStarter.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http;
 
 namespace AspnetCoreMvcStarter.Controllers
 {
+  [AllowRoles(4)]
     public class HistoryController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -98,6 +100,16 @@ namespace AspnetCoreMvcStarter.Controllers
             LoadDropdowns();
             return View();
         }
+        [HttpGet]
+        public JsonResult GetItemsByFacility(int facilityId)
+        {
+          var items = _context.FacilityItems
+            .Where(i => i.FacilityId == facilityId)
+            .Select(i => new { itemId = i.FacilityItemId, itemName = i.ItemName })
+            .ToList();
+
+          return Json(items);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -172,7 +184,7 @@ namespace AspnetCoreMvcStarter.Controllers
                     "Thông báo: Yêu cầu mới đã được tạo",
                     $"Một yêu cầu mới đã được tạo bởi người dùng {request.RequestorId}.\n Chi tiết yêu cầu:\n" +
                     $"Cơ sở: {request.FacilityId}\n" +
-                    $"Vật dụng: {request.FacilityItemId}\n" +
+                    $"IDVật dụng: {request.FacilityItemId}\n" +
                     $"Số lượng: {request.QuantityRequested}\n" +
                     $"Mức độ ưu tiên: {request.SeverityLevel}\n" +
                     $"Mô tả: {request.Description}"

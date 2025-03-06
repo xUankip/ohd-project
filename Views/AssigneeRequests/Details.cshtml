@@ -1,0 +1,172 @@
+@model AspnetCoreMvcStarter.Models.Request
+
+@{
+  ViewData["Title"] = "Request Details";
+}
+
+<div class="container-fluid mt-4">
+  <div class="card shadow-sm rounded-3">
+    <div class="card-header bg-white p-3 d-flex justify-content-between align-items-center">
+      <h5 class="text-primary fw-bold mb-0">Request Details #@Model.RequestId</h5>
+      <span class="badge rounded-pill
+                @(Model.Status == "Open" ? "bg-info" :
+                                   Model.Status == "InProgress" ? "bg-warning" :
+                                   Model.Status == "Resolved" ? "bg-success" :
+                                   Model.Status == "Closed" ? "bg-secondary" : "bg-dark")
+                px-3 py-2 fs-6">
+                @Model.Status
+            </span>
+    </div>
+
+    <div class="card-body p-4">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="row mb-3">
+            <div class="col-5 text-muted">Requester</div>
+            <div class="col-7 fw-medium">@Model.Requestor.Username</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-5 text-muted">Created On</div>
+            <div class="col-7 fw-medium">@Model.RequestDate.ToString("dd/MM/yyyy HH:mm")</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-5 text-muted">Priority Level</div>
+            <div class="col-7">
+                            <span class="badge
+                                @(Model.SeverityLevel == "Low" ? "bg-success" :
+                                                                         Model.SeverityLevel == "Medium" ? "bg-info" :
+                                                                         Model.SeverityLevel == "High" ? "bg-warning" :
+                                                                         Model.SeverityLevel == "Critical" ? "bg-danger" : "bg-secondary")
+                                rounded-pill px-3">
+                                @Model.SeverityLevel
+                            </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="row mb-3">
+            <div class="col-5 text-muted">Facility</div>
+            <div class="col-7 fw-medium">@Model.Facility.FacilityName</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-5 text-muted">Item</div>
+            <div class="col-7 fw-medium">@Model.FacilityItem.ItemName</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-5 text-muted">Quantity</div>
+            <div class="col-7 fw-medium">@Model.QuantityRequested</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Request Description -->
+      <div class="mt-4">
+        <h6 class="text-primary mb-2">Request Description</h6>
+        <div class="p-3 bg-light rounded">
+          @Html.Raw(Model.Description)
+        </div>
+      </div>
+
+      <!-- Status Update -->
+      <div class="mt-4">
+        <h6 class="text-primary mb-2">Update Status</h6>
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn @(Model.Status == "Open" ? "btn-info text-white" : "btn-outline-info") btn-sm"
+                  onclick="updateStatus(@Model.RequestId, 'Open')"
+                  @(Model.Status == "Open" ? "disabled" : "")>
+            Open
+          </button>
+          <button class="btn @(Model.Status == "InProgress" ? "btn-warning text-white" : "btn-outline-warning") btn-sm"
+                  onclick="updateStatus(@Model.RequestId, 'InProgress')"
+                  @(Model.Status == "InProgress" ? "disabled" : "")>
+            In Progress
+          </button>
+          <button class="btn @(Model.Status == "Resolved" ? "btn-success text-white" : "btn-outline-success") btn-sm"
+                  onclick="updateStatus(@Model.RequestId, 'Resolved')"
+                  @(Model.Status == "Resolved" ? "disabled" : "")>
+            Resolved
+          </button>
+          <button class="btn @(Model.Status == "Closed" ? "btn-secondary text-white" : "btn-outline-secondary") btn-sm"
+                  onclick="updateStatus(@Model.RequestId, 'Closed')"
+                  @(Model.Status == "Closed" ? "disabled" : "")>
+            Closed
+          </button>
+        </div>
+        <div id="statusUpdateMessage" class="mt-2"></div>
+      </div>
+
+      <!-- Comments -->
+      <div class="mt-4">
+        <h6 class="text-primary mb-2">Comments (@Model.Comments.Count)</h6>
+
+        @if (Model.Comments != null && Model.Comments.Any())
+        {
+          foreach (var comment in Model.Comments.OrderByDescending(c => c.CreatedAt))
+          {
+            <div class="bg-light p-3 rounded mb-2">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="fw-medium">@comment.User.Username</span>
+                <small class="text-muted">@comment.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+              </div>
+              <p class="mb-0">@comment.CommentText</p>
+            </div>
+          }
+        }
+        else
+        {
+          <div class="text-center py-3 text-muted bg-light rounded">
+            No comments yet
+          </div>
+        }
+
+        <div class="mt-3">
+          <form asp-action="AddComment" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="requestId" value="@Model.RequestId" />
+            <textarea class="form-control" name="commentText" rows="3" placeholder="Enter your comment..." required></textarea>
+            <button type="submit" class="btn btn-primary mt-2">
+              Submit Comment
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <a asp-action="Index" class="btn btn-outline-primary btn-sm">
+          Back to List
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script>
+    function updateStatus(requestId, status) {
+      fetch('/AssigneeRequests/UpdateStatus', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          requestId: requestId,
+          status: status
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            location.reload();
+          } else {
+            document.getElementById('statusUpdateMessage').innerHTML =
+              '<div class="alert alert-danger small py-2">' + data.message + '</div>';
+          }
+        })
+        .catch(error => {
+          document.getElementById('statusUpdateMessage').innerHTML =
+            '<div class="alert alert-danger small py-2">An error occurred while updating the status</div>';
+        });
+    }
+  </script>
+}

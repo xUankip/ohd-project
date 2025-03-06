@@ -9,9 +9,11 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
+using AspnetCoreMvcStarter.Filters;
 
 namespace AspnetCoreMvcStarter.Controllers
 {
+  [AllowRoles(1,2)]
     public class RequestsController : Controller
     {
         private readonly ApplicationDbContext _context;
