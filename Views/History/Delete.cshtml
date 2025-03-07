@@ -1,6 +1,102 @@
-namespace AspnetCoreMvcStarter.Views.History;
+@model AspnetCoreMvcStarter.Models.Request
 
-public class Delete_cshtml
-{
-  
+@{
+    ViewData["Title"] = "Cancel Request";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">Confirm Request Cancellation</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <h6><i class="bx bx-error-circle me-2"></i>Are you sure you want to cancel this request?</h6>
+            <p>This action will change the request status to "Closed" and cannot be undone.</p>
+        </div>
+
+        @if (Model.Status != "Open")
+        {
+            <div class="alert alert-danger">
+                <h6><i class="bx bx-x-circle me-2"></i>This request cannot be cancelled</h6>
+                <p>Only requests with "Open" status can be cancelled. Current status: <strong>@Model.Status</strong></p>
+            </div>
+        }
+
+        <div class="table-responsive mb-3">
+            <table class="table table-bordered">
+                <tr>
+                    <th width="30%">Request ID</th>
+                    <td>@Model.RequestId</td>
+                </tr>
+                <tr>
+                    <th>Facility</th>
+                    <td>@(Model.Facility?.FacilityName ?? "N/A")</td>
+                </tr>
+                <tr>
+                    <th>Item</th>
+                    <td>@(Model.FacilityItem?.ItemName ?? "N/A")</td>
+                </tr>
+                <tr>
+                    <th>Quantity</th>
+                    <td>@Model.QuantityRequested</td>
+                </tr>
+                <tr>
+                    <th>Priority Level</th>
+                    <td>@(Model.SeverityLevel ?? "N/A")</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>
+                        <span class="badge @(Model.Status == "Open" ? "bg-label-warning" : GetStatusBadgeClass(Model.Status))">
+                            @(Model.Status ?? "N/A")
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Request Date</th>
+                    <td>@Model.RequestDate.ToString("MM/dd/yyyy HH:mm")</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>@Model.Description</td>
+                </tr>
+            </table>
+        </div>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="RequestId" />
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bx bx-arrow-back me-1"></i>Back to List
+                </a>
+                @if (Model.Status == "Open")
+                {
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bx bx-trash me-1"></i>Confirm Cancellation
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-danger" disabled>
+                        <i class="bx bx-trash me-1"></i>Cannot Cancel
+                    </button>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+@functions {
+    private string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "New" => "bg-label-primary",
+            "Open" => "bg-label-warning",
+            "Closed" => "bg-label-success",
+            "In Progress" => "bg-label-info",
+            "Rejected" => "bg-label-danger",
+            _ => "bg-label-secondary"
+        };
+    }
 }
