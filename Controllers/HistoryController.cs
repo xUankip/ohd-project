@@ -351,5 +351,51 @@ public async Task<IActionResult> Edit(int id, Request request)
         return View(request);
     }
 }
+[HttpGet]
+public async Task<IActionResult> Delete(int id)
+{
+  var request = await _context.Requests.FindAsync(id);
+
+  if (request == null)
+  {
+    return NotFound();
+  }
+
+  // Only allow cancellation of requests with "Open" status
+  if (request.Status != "Open")
+  {
+    return RedirectToAction(nameof(Index), new { errorMessage = $"Cannot cancel request. Current status is: {request.Status}. Only requests with 'Open' status can be cancelled." });
+  }
+
+  return View(request);
+}
+
+[HttpPost, ActionName("Delete")]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> DeleteConfirmed(int id)
+{
+  var request = await _context.Requests.FindAsync(id);
+
+  if (request == null)
+  {
+    return NotFound();
+  }
+
+  // Only allow cancellation of requests with "Open" status
+  if (request.Status != "Open")
+  {
+    return RedirectToAction(nameof(Index), new { errorMessage = $"Cannot cancel request. Current status is: {request.Status}. Only requests with 'Open' status can be cancelled." });
+  }
+
+  // Update status to "Closed"
+  request.Status = "Closed";
+  request.Remarks = request.Remarks + " (Cancelled by user on " + DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm") + ")";
+
+  _context.Update(request);
+  await _context.SaveChangesAsync();
+
+  // Send success notification
+  return RedirectToAction(nameof(Index), new { successMessage = "Request has been successfully cancelled!" });
+}
     }
 }

@@ -70,17 +70,10 @@
                 </span>
             </td>
             <td>
-              <div class="dropdown">
-                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="status-@item.RequestId" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 90px;">
-                  @(item.Status ?? "Open")
-                </button>
-                <ul class="dropdown-menu status-dropdown-menu" aria-labelledby="status-@item.RequestId" data-request-id="@item.RequestId" data-original-status="@item.Status">
-                  @foreach (var status in new[] { "Open", "In Progress", "Rejected", "Closed" })
-                  {
-                    <li><a class="dropdown-item status-option @(item.Status == status ? "active" : "")" href="#" data-status="@status">@status</a></li>
-                  }
-                </ul>
-              </div>
+              <!-- Changed from dropdown to static badge -->
+              <span class="badge bg-label-@GetStatusBadgeClass(item.Status)">
+                @(item.Status ?? "Open")
+              </span>
             </td>
             <td>@(item.RequestDate.ToString("dd/MM/yyyy HH:mm"))</td>
             <td class="text-center">
@@ -136,6 +129,18 @@
       _ => "bg-label-secondary"
     };
   }
+
+  private string GetStatusBadgeClass(string status)
+  {
+    return status switch
+    {
+      "Open" => "secondary",
+      "In Progress" => "primary",
+      "Rejected" => "danger",
+      "Closed" => "success",
+      _ => "secondary"
+    };
+  }
 }
 
 <style>
@@ -161,50 +166,5 @@
     padding: 0.5rem 1rem;
     font-size: 0.75rem;
   }
-
-  .dropdown-toggle::after {
-    margin-left: 0.5em;
-  }
 </style>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".status-option").forEach(option => {
-      option.addEventListener("click", function (e) {
-        e.preventDefault();
-
-        const newStatus = this.getAttribute("data-status");
-        const dropdownMenu = this.closest(".status-dropdown-menu");
-        const requestId = dropdownMenu.getAttribute("data-request-id");
-        const statusButton = document.getElementById("status-" + requestId);
-
-        if (confirm("Are you sure you want to update the status?")) {
-          fetch('/Requests/UpdateStatus', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ requestId: requestId, status: newStatus })
-          })
-            .then(response => response.json())
-            .then(data => {
-              if (data.success) {
-                alert("Status updated successfully!");
-                statusButton.textContent = newStatus;
-                dropdownMenu.setAttribute("data-original-status", newStatus);
-
-                // Update active class
-                dropdownMenu.querySelectorAll(".status-option").forEach(opt => {
-                  opt.classList.remove("active");
-                });
-                this.classList.add("active");
-              } else {
-                alert("Error updating status: " + data.message);
-              }
-            })
-            .catch(error => {
-              alert("Request failed: " + error);
-            });
-        }
-      });
-    });
-  });
-</script>
