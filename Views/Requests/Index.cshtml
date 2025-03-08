@@ -5,16 +5,90 @@
   int currentPage = ViewBag.CurrentPage;
   int totalPages = ViewBag.TotalPages;
   string currentSearch = ViewBag.Search ?? "";
+
+  // Get filter values from ViewBag
+  string statusFilter = ViewBag.StatusFilter ?? "";
+  string severityFilter = ViewBag.SeverityFilter ?? "";
+  string facilityFilter = ViewBag.FacilityFilter ?? "";
+  string assigneeFilter = ViewBag.AssigneeFilter ?? "";
 }
 
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
     <h5 class="card-title mb-0">Request List</h5>
+    <div>
+      <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#filtersCollapse" aria-expanded="false" aria-controls="filtersCollapse">
+        <i class="bx bx-filter-alt me-1"></i>Filters
+      </button>
+      <a asp-action="Create" class="btn btn-success ms-2">
+        <i class="bx bx-plus me-1"></i>Create New
+      </a>
+    </div>
   </div>
 
   <div class="card-body">
-    <div class="row mb-3">
+    <div class="collapse mb-3" id="filtersCollapse">
+      <div class="card card-body bg-light">
+        <form asp-action="Index" method="get" id="filterForm">
+          <input type="hidden" name="search" value="@currentSearch" />
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label">Status</label>
+              <select name="statusFilter" class="form-select" onchange="document.getElementById('filterForm').submit()">
+                <option value="">All Statuses</option>
+                @foreach (var status in new[] { "Open", "In Progress", "Rejected", "Closed" })
+                {
+                  <option value="@status" selected="@(statusFilter == status)">@status</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Severity</label>
+              <select name="severityFilter" class="form-select" onchange="document.getElementById('filterForm').submit()">
+                <option value="">All Severities</option>
+                @foreach (var severity in new[] { "Low", "Medium", "High", "Critical", "Urgent" })
+                {
+                  <option value="@severity" selected="@(severityFilter == severity)">@severity</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Facility</label>
+              <select name="facilityFilter" class="form-select" onchange="document.getElementById('filterForm').submit()">
+                <option value="">All Facilities</option>
+                @if (ViewBag.Facilities != null)
+                {
+                  foreach (var facility in ViewBag.Facilities)
+                  {
+                    <option value="@facility.Value" selected="@(facilityFilter == facility.Value)">@facility.Text</option>
+                  }
+                }
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Assignee</label>
+              <select name="assigneeFilter" class="form-select" onchange="document.getElementById('filterForm').submit()">
+                <option value="">All Assignees</option>
+                @if (ViewBag.Assignees != null)
+                {
+                  foreach (var assignee in ViewBag.Assignees)
+                  {
+                    <option value="@assignee.Value" selected="@(assigneeFilter == assignee.Value)">@assignee.Text</option>
+                  }
+                }
+              </select>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12 text-end">
+              <a asp-action="Index" class="btn btn-outline-secondary">Clear Filters</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
 
+    <div class="row mb-3">
       <div class="col-md-6">
         <form asp-action="Index" method="get" class="d-flex justify-content-end">
           <div class="input-group">
@@ -41,13 +115,22 @@
       </div>
     }
 
-    @if (!string.IsNullOrEmpty(currentSearch))
+    @if (!string.IsNullOrEmpty(currentSearch) || !string.IsNullOrEmpty(statusFilter) || !string.IsNullOrEmpty(severityFilter) || !string.IsNullOrEmpty(facilityFilter) || !string.IsNullOrEmpty(assigneeFilter))
     {
       <div class="alert alert-info mb-3">
-        <p class="mb-0">
-          Showing results for: <strong>@currentSearch</strong>
-          <a asp-action="Index" class="btn btn-sm btn-outline-info ms-2">Clear</a>
-        </p>
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <p class="mb-0">
+              <strong>Filters applied:</strong>
+              @if (!string.IsNullOrEmpty(currentSearch)) { <span class="badge bg-primary me-2">Search: @currentSearch</span> }
+              @if (!string.IsNullOrEmpty(statusFilter)) { <span class="badge bg-secondary me-2">Status: @statusFilter</span> }
+              @if (!string.IsNullOrEmpty(severityFilter)) { <span class="badge bg-secondary me-2">Severity: @severityFilter</span> }
+              @if (!string.IsNullOrEmpty(facilityFilter)) { <span class="badge bg-secondary me-2">Facility ID: @facilityFilter</span> }
+              @if (!string.IsNullOrEmpty(assigneeFilter)) { <span class="badge bg-secondary me-2">Assignee ID: @assigneeFilter</span> }
+            </p>
+          </div>
+          <a asp-action="Index" class="btn btn-sm btn-outline-info">Clear All</a>
+        </div>
       </div>
     }
 
@@ -80,7 +163,19 @@
                 @(item.Requestor?.FullName ?? "Unknown")
               </div>
             </td>
-            <td>@item.AssigneeId</td>
+            <td>
+              @if (item.AssigneeId.HasValue)
+              {
+                var assigneeName = ViewBag.AssigneeNames != null && ViewBag.AssigneeNames.ContainsKey(item.AssigneeId.Value)
+                  ? ViewBag.AssigneeNames[item.AssigneeId.Value]
+                  : item.AssigneeId.ToString();
+                @assigneeName
+              }
+              else
+              {
+                <span class="text-muted">Unassigned</span>
+              }
+            </td>
             <td>@(item.Facility?.FacilityName ?? "N/A")</td>
             <td>@(item.FacilityItem?.ItemName ?? "N/A")</td>
             <td>@item.QuantityRequested</td>
@@ -134,18 +229,24 @@
       <div class="d-flex justify-content-center mt-3">
         <ul class="pagination">
           <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch">
+            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@currentSearch"
+               asp-route-statusFilter="@statusFilter" asp-route-severityFilter="@severityFilter"
+               asp-route-facilityFilter="@facilityFilter" asp-route-assigneeFilter="@assigneeFilter">
               <i class="bx bx-chevron-left"></i>
             </a>
           </li>
           @for (int i = 1; i <= totalPages; i++)
           {
             <li class="page-item @(currentPage == i ? "active" : "")">
-              <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch">@i</a>
+              <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@currentSearch"
+                 asp-route-statusFilter="@statusFilter" asp-route-severityFilter="@severityFilter"
+                 asp-route-facilityFilter="@facilityFilter" asp-route-assigneeFilter="@assigneeFilter">@i</a>
             </li>
           }
           <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch">
+            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@currentSearch"
+               asp-route-statusFilter="@statusFilter" asp-route-severityFilter="@severityFilter"
+               asp-route-facilityFilter="@facilityFilter" asp-route-assigneeFilter="@assigneeFilter">
               <i class="bx bx-chevron-right"></i>
             </a>
           </li>
@@ -210,10 +311,17 @@
   .dropdown-toggle::after {
     margin-left: 0.5em;
   }
+
+  /* Added styles for filter badges */
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+  }
 </style>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+    // Status update functionality
     document.querySelectorAll(".status-option").forEach(option => {
       option.addEventListener("click", function (e) {
         e.preventDefault();
@@ -252,5 +360,12 @@
         }
       });
     });
+
+    // Show filter collapse if any filter is applied
+    if (document.querySelectorAll('.badge.bg-secondary').length > 0) {
+      var filterCollapse = new bootstrap.Collapse(document.getElementById('filtersCollapse'), {
+        toggle: true
+      });
+    }
   });
 </script>
