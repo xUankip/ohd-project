@@ -31,10 +31,10 @@ public async Task<IActionResult> Index(
     string search = "",
     string statusFilter = "",
     string severityFilter = "",
-    string facilityFilter = "",
-    string assigneeFilter = "",
-    string requestorFilter = "",
-    string itemFilter = "",
+    string facilityFilter = "",    // Now expecting facility name instead of ID
+    string assigneeFilter = "",    // Now expecting assignee name instead of ID
+    string requestorFilter = "",   // Now expecting requestor name instead of ID
+    string itemFilter = "",        // Now expecting item name instead of ID
     int page = 1,
     int pageSize = 10)
 {
@@ -57,7 +57,7 @@ public async Task<IActionResult> Index(
         );
     }
 
-    // Apply filters
+    // Apply filters by status and severity (unchanged)
     if (!string.IsNullOrEmpty(statusFilter))
     {
         query = query.Where(r => r.Status == statusFilter);
@@ -68,27 +68,32 @@ public async Task<IActionResult> Index(
         query = query.Where(r => r.SeverityLevel == severityFilter);
     }
 
-    if (!string.IsNullOrEmpty(facilityFilter) && int.TryParse(facilityFilter, out int facilityId))
+    // Filter by facility name instead of ID
+    if (!string.IsNullOrEmpty(facilityFilter))
     {
-        query = query.Where(r => r.FacilityId == facilityId);
+        query = query.Where(r => r.Facility.FacilityName == facilityFilter);
     }
 
-    // Filter by assignee
-    if (!string.IsNullOrEmpty(assigneeFilter) && int.TryParse(assigneeFilter, out int assigneeId))
+    // Filter by assignee name instead of ID
+    if (!string.IsNullOrEmpty(assigneeFilter))
     {
-        query = query.Where(r => r.AssigneeId == assigneeId);
+        // Join with Users table to filter by assignee name
+        query = query.Where(r => r.AssigneeId.HasValue &&
+                              _context.Users.Any(u => u.UserId == r.AssigneeId &&
+                                                   u.FullName == assigneeFilter));
     }
 
-    // Filter by requestor
-    if (!string.IsNullOrEmpty(requestorFilter) && int.TryParse(requestorFilter, out int requestorId))
+    // Filter by requestor name instead of ID
+    if (!string.IsNullOrEmpty(requestorFilter))
     {
-        query = query.Where(r => r.RequestorId == requestorId);
+        query = query.Where(r => r.RequestorId.HasValue &&
+                              r.Requestor.FullName == requestorFilter);
     }
 
-    // Filter by item
-    if (!string.IsNullOrEmpty(itemFilter) && int.TryParse(itemFilter, out int itemId))
+    // Filter by item name instead of ID
+    if (!string.IsNullOrEmpty(itemFilter))
     {
-        query = query.Where(r => r.FacilityItemId == itemId);
+        query = query.Where(r => r.FacilityItem.ItemName == itemFilter);
     }
 
     // Get total count for pagination
@@ -114,24 +119,24 @@ public async Task<IActionResult> Index(
     ViewBag.RequestorFilter = requestorFilter;
     ViewBag.ItemFilter = itemFilter;
 
-    // Load facility dropdown for filtering
+    // Load facility dropdown for filtering (using names now)
     var facilities = await _context.Facilities.ToListAsync();
-    ViewBag.Facilities = new SelectList(facilities, "FacilityId", "FacilityName");
+    ViewBag.Facilities = new SelectList(facilities, "FacilityName", "FacilityName");
 
-    // Load assignee dropdown for filtering (users with role 3 - assuming these are the assignees)
+    // Load assignee dropdown for filtering (using names now)
     var assignees = await _context.Users.Where(u => u.IsActive && u.RoleId == 3).ToListAsync();
-    ViewBag.Assignees = new SelectList(assignees, "UserId", "FullName");
+    ViewBag.Assignees = new SelectList(assignees, "FullName", "FullName");
 
-    // Load requestor dropdown for filtering (all active users that have created requests)
+    // Load requestor dropdown for filtering (using names now)
     var requestors = await _context.Users
         .Where(u => u.IsActive)
         .Where(u => _context.Requests.Any(r => r.RequestorId == u.UserId))
         .ToListAsync();
-    ViewBag.Requestors = new SelectList(requestors, "UserId", "FullName");
+    ViewBag.Requestors = new SelectList(requestors, "FullName", "FullName");
 
-    // Load items dropdown for filtering
+    // Load items dropdown for filtering (using names now)
     var items = await _context.FacilityItems.ToListAsync();
-    ViewBag.Items = new SelectList(items, "FacilityItemId", "ItemName");
+    ViewBag.Items = new SelectList(items, "ItemName", "ItemName");
 
     // Create a dictionary of assignee IDs to assignee names for display in the table
     ViewBag.AssigneeNames = assignees.ToDictionary(a => a.UserId, a => a.FullName);

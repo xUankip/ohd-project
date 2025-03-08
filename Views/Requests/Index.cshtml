@@ -63,12 +63,12 @@
             <p class="mb-0">
               <strong>Filters applied:</strong>
               @if (!string.IsNullOrEmpty(currentSearch)) { <span class="badge bg-primary me-2">Search: @currentSearch</span> }
-              @if (!string.IsNullOrEmpty(requestorFilter)) { <span class="badge bg-secondary me-2">Requestor</span> }
-              @if (!string.IsNullOrEmpty(assigneeFilter)) { <span class="badge bg-secondary me-2">Assignee</span> }
-              @if (!string.IsNullOrEmpty(facilityFilter)) { <span class="badge bg-secondary me-2">Facility</span> }
-              @if (!string.IsNullOrEmpty(itemFilter)) { <span class="badge bg-secondary me-2">Item</span> }
-              @if (!string.IsNullOrEmpty(severityFilter)) { <span class="badge bg-secondary me-2">Severity</span> }
-              @if (!string.IsNullOrEmpty(statusFilter)) { <span class="badge bg-secondary me-2">Status</span> }
+              @if (!string.IsNullOrEmpty(requestorFilter)) { <span class="badge bg-secondary me-2">Requestor: @requestorFilter</span> }
+              @if (!string.IsNullOrEmpty(assigneeFilter)) { <span class="badge bg-secondary me-2">Assignee: @assigneeFilter</span> }
+              @if (!string.IsNullOrEmpty(facilityFilter)) { <span class="badge bg-secondary me-2">Facility: @facilityFilter</span> }
+              @if (!string.IsNullOrEmpty(itemFilter)) { <span class="badge bg-secondary me-2">Item: @itemFilter</span> }
+              @if (!string.IsNullOrEmpty(severityFilter)) { <span class="badge bg-secondary me-2">Severity: @severityFilter</span> }
+              @if (!string.IsNullOrEmpty(statusFilter)) { <span class="badge bg-secondary me-2">Status: @statusFilter</span> }
             </p>
           </div>
           <a asp-action="Index" class="btn btn-sm btn-outline-info">Clear All</a>
@@ -103,7 +103,7 @@
                       {
                         foreach (var requestor in ViewBag.Requestors)
                         {
-                          <option value="@requestor.Value" selected="@(requestorFilter == requestor.Value)">@requestor.Text</option>
+                          <option value="@requestor.Text" selected="@(requestorFilter == requestor.Text)">@requestor.Text</option>
                         }
                       }
                     </select>
@@ -135,7 +135,7 @@
                       {
                         foreach (var assignee in ViewBag.Assignees)
                         {
-                          <option value="@assignee.Value" selected="@(assigneeFilter == assignee.Value)">@assignee.Text</option>
+                          <option value="@assignee.Text" selected="@(assigneeFilter == assignee.Text)">@assignee.Text</option>
                         }
                       }
                     </select>
@@ -167,7 +167,7 @@
                       {
                         foreach (var facility in ViewBag.Facilities)
                         {
-                          <option value="@facility.Value" selected="@(facilityFilter == facility.Value)">@facility.Text</option>
+                          <option value="@facility.Text" selected="@(facilityFilter == facility.Text)">@facility.Text</option>
                         }
                       }
                     </select>
@@ -199,7 +199,7 @@
                       {
                         foreach (var item in ViewBag.Items)
                         {
-                          <option value="@item.Value" selected="@(itemFilter == item.Value)">@item.Text</option>
+                          <option value="@item.Text" selected="@(itemFilter == item.Text)">@item.Text</option>
                         }
                       }
                     </select>
