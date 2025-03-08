@@ -33,6 +33,8 @@ public async Task<IActionResult> Index(
     string severityFilter = "",
     string facilityFilter = "",
     string assigneeFilter = "",
+    string requestorFilter = "",
+    string itemFilter = "",
     int page = 1,
     int pageSize = 10)
 {
@@ -77,6 +79,18 @@ public async Task<IActionResult> Index(
         query = query.Where(r => r.AssigneeId == assigneeId);
     }
 
+    // Filter by requestor
+    if (!string.IsNullOrEmpty(requestorFilter) && int.TryParse(requestorFilter, out int requestorId))
+    {
+        query = query.Where(r => r.RequestorId == requestorId);
+    }
+
+    // Filter by item
+    if (!string.IsNullOrEmpty(itemFilter) && int.TryParse(itemFilter, out int itemId))
+    {
+        query = query.Where(r => r.FacilityItemId == itemId);
+    }
+
     // Get total count for pagination
     var totalRequests = await query.CountAsync();
 
@@ -97,6 +111,8 @@ public async Task<IActionResult> Index(
     ViewBag.SeverityFilter = severityFilter;
     ViewBag.FacilityFilter = facilityFilter;
     ViewBag.AssigneeFilter = assigneeFilter;
+    ViewBag.RequestorFilter = requestorFilter;
+    ViewBag.ItemFilter = itemFilter;
 
     // Load facility dropdown for filtering
     var facilities = await _context.Facilities.ToListAsync();
@@ -105,6 +121,17 @@ public async Task<IActionResult> Index(
     // Load assignee dropdown for filtering (users with role 3 - assuming these are the assignees)
     var assignees = await _context.Users.Where(u => u.IsActive && u.RoleId == 3).ToListAsync();
     ViewBag.Assignees = new SelectList(assignees, "UserId", "FullName");
+
+    // Load requestor dropdown for filtering (all active users that have created requests)
+    var requestors = await _context.Users
+        .Where(u => u.IsActive)
+        .Where(u => _context.Requests.Any(r => r.RequestorId == u.UserId))
+        .ToListAsync();
+    ViewBag.Requestors = new SelectList(requestors, "UserId", "FullName");
+
+    // Load items dropdown for filtering
+    var items = await _context.FacilityItems.ToListAsync();
+    ViewBag.Items = new SelectList(items, "FacilityItemId", "ItemName");
 
     // Create a dictionary of assignee IDs to assignee names for display in the table
     ViewBag.AssigneeNames = assignees.ToDictionary(a => a.UserId, a => a.FullName);
