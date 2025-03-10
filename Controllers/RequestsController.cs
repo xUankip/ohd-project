@@ -27,44 +27,127 @@ namespace AspnetCoreMvcStarter.Controllers
 
         // ✅ Show Request List (GET: /Requests)
         [Route("Requests/Index")]
-        public async Task<IActionResult> Index(string search = "", int page = 1, int pageSize = 10)
-        {
-          var query = _context.Requests
-            .Include(r => r.Requestor)
-            .Include(r => r.Facility)
-            .Include(r => r.FacilityItem)
-            .AsQueryable();
-          if (!string.IsNullOrWhiteSpace(search))
-          {
-            search = search.ToLower();
-            query = query.Where(r =>
-              (r.Requestor.Username != null && r.Requestor.Username.ToLower().Contains(search)) ||
-              (r.Facility.FacilityName != null && r.Facility.FacilityName.ToLower().Contains(search)) ||
-              (r.FacilityItem.ItemName != null && r.FacilityItem.ItemName.ToLower().Contains(search)) ||
-              (r.Status != null && r.Status.ToLower().Contains(search)) ||
-              r.QuantityRequested.ToString().Contains(search)
-            );
-          }
+        // Update the Index method in RequestsController.cs to support filtering
 
-          // Get total count for pagination
-          var totalRequests = await query.CountAsync();
+public async Task<IActionResult> Index(
+    string search = "",
+    string statusFilter = "",
+    string severityFilter = "",
+    string facilityFilter = "",    // Now expecting facility name instead of ID
+    string assigneeFilter = "",    // Now expecting assignee name instead of ID
+    string requestorFilter = "",   // Now expecting requestor name instead of ID
+    string itemFilter = "",        // Now expecting item name instead of ID
+    int page = 1,
+    int pageSize = 10)
+{
+    var query = _context.Requests
+        .Include(r => r.Requestor)
+        .Include(r => r.Facility)
+        .Include(r => r.FacilityItem)
+        .AsQueryable();
 
-          // Apply ordering and pagination
-          var requests = await query
-            .OrderByDescending(r => r.RequestDate)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+    // Text search
+    if (!string.IsNullOrWhiteSpace(search))
+    {
+        search = search.ToLower();
+        query = query.Where(r =>
+            (r.Requestor.Username != null && r.Requestor.Username.ToLower().Contains(search)) ||
+            (r.Facility.FacilityName != null && r.Facility.FacilityName.ToLower().Contains(search)) ||
+            (r.FacilityItem.ItemName != null && r.FacilityItem.ItemName.ToLower().Contains(search)) ||
+            (r.Status != null && r.Status.ToLower().Contains(search)) ||
+            r.QuantityRequested.ToString().Contains(search)
+        );
+    }
 
-          // Set pagination data
-          ViewBag.CurrentPage = page;
-          ViewBag.TotalPages = (int)Math.Ceiling((double)totalRequests / pageSize);
-          ViewBag.Search = search;
+    // Apply filters by status and severity (unchanged)
+    if (!string.IsNullOrEmpty(statusFilter))
+    {
+        query = query.Where(r => r.Status == statusFilter);
+    }
 
-          return View(requests);
-        }
+    if (!string.IsNullOrEmpty(severityFilter))
+    {
+        query = query.Where(r => r.SeverityLevel == severityFilter);
+    }
+
+    // Filter by facility name instead of ID
+    if (!string.IsNullOrEmpty(facilityFilter))
+    {
+        query = query.Where(r => r.Facility.FacilityName == facilityFilter);
+    }
+
+    // Filter by assignee name instead of ID
+    if (!string.IsNullOrEmpty(assigneeFilter))
+    {
+        // Join with Users table to filter by assignee name
+        query = query.Where(r => r.AssigneeId.HasValue &&
+                              _context.Users.Any(u => u.UserId == r.AssigneeId &&
+                                                   u.FullName == assigneeFilter));
+    }
+
+    // Filter by requestor name instead of ID
+    if (!string.IsNullOrEmpty(requestorFilter))
+    {
+        query = query.Where(r => r.RequestorId.HasValue &&
+                              r.Requestor.FullName == requestorFilter);
+    }
+
+    // Filter by item name instead of ID
+    if (!string.IsNullOrEmpty(itemFilter))
+    {
+        query = query.Where(r => r.FacilityItem.ItemName == itemFilter);
+    }
+
+    // Get total count for pagination
+    var totalRequests = await query.CountAsync();
+
+    // Apply ordering and pagination
+    var requests = await query
+        .OrderByDescending(r => r.RequestDate)
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .ToListAsync();
+
+    // Set pagination data
+    ViewBag.CurrentPage = page;
+    ViewBag.TotalPages = (int)Math.Ceiling((double)totalRequests / pageSize);
+    ViewBag.Search = search;
+
+    // Set filter data in ViewBag for the view
+    ViewBag.StatusFilter = statusFilter;
+    ViewBag.SeverityFilter = severityFilter;
+    ViewBag.FacilityFilter = facilityFilter;
+    ViewBag.AssigneeFilter = assigneeFilter;
+    ViewBag.RequestorFilter = requestorFilter;
+    ViewBag.ItemFilter = itemFilter;
+
+    // Load facility dropdown for filtering (using names now)
+    var facilities = await _context.Facilities.ToListAsync();
+    ViewBag.Facilities = new SelectList(facilities, "FacilityName", "FacilityName");
+
+    // Load assignee dropdown for filtering (using names now)
+    var assignees = await _context.Users.Where(u => u.IsActive && u.RoleId == 3).ToListAsync();
+    ViewBag.Assignees = new SelectList(assignees, "FullName", "FullName");
+
+    // Load requestor dropdown for filtering (using names now)
+    var requestors = await _context.Users
+        .Where(u => u.IsActive)
+        .Where(u => _context.Requests.Any(r => r.RequestorId == u.UserId))
+        .ToListAsync();
+    ViewBag.Requestors = new SelectList(requestors, "FullName", "FullName");
+
+    // Load items dropdown for filtering (using names now)
+    var items = await _context.FacilityItems.ToListAsync();
+    ViewBag.Items = new SelectList(items, "ItemName", "ItemName");
+
+    // Create a dictionary of assignee IDs to assignee names for display in the table
+    ViewBag.AssigneeNames = assignees.ToDictionary(a => a.UserId, a => a.FullName);
+
+    return View(requests);
+}
 
 
+        // ✅ Show Request Details (GET: /Requests/Details/{id})
         // ✅ Show Request Details (GET: /Requests/Details/{id})
         public IActionResult Details(int id)
         {
@@ -81,9 +164,27 @@ namespace AspnetCoreMvcStarter.Controllers
             return NotFound();
           }
 
+          // Fetch only active users with RoleId = 3 (Assignees)
+          var availableUsers = _context.Users
+            .Where(u => u.IsActive && u.RoleId == 3)
+            .ToList();
+
+          // Store the currently assigned user's name
+          User currentAssignee = null;
+          if (request.AssigneeId.HasValue)
+          {
+            currentAssignee = _context.Users.FirstOrDefault(u => u.UserId == request.AssigneeId.Value);
+            // Remove the currently assigned user from the dropdown list
+            availableUsers = availableUsers
+              .Where(u => u.UserId != request.AssigneeId.Value)
+              .ToList();
+          }
+
+          ViewBag.Assignees = availableUsers.Any() ? new SelectList(availableUsers, "UserId", "FullName") : null;
+          ViewBag.CurrentAssigneeName = currentAssignee?.FullName ?? "Not assigned";
+
           return View(request);
         }
-
 
         // ✅ Create Request (GET: /Requests/Create)
         public IActionResult Create()

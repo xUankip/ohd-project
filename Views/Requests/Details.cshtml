@@ -6,42 +6,108 @@
 
 <h2>Request Details</h2>
 
-<div>
-  <p><strong>Requestor:</strong> @Model.Requestor.FullName</p>
-  <p><strong>Facility:</strong> @Model.Facility.FacilityName</p>
-  <p><strong>Item:</strong> @Model.FacilityItem.ItemName</p>
-  <p><strong>Quantity:</strong> @Model.QuantityRequested</p>
-  <p><strong>Status:</strong> @Model.Status</p>
+@if (TempData["Error"] != null)
+{
+  <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h4>Request Information</h4>
+      </div>
+      <div class="card-body">
+        <p><strong>Requestor:</strong> @Model.Requestor.FullName</p>
+        <p><strong>Facility:</strong> @Model.Facility.FacilityName</p>
+        <p><strong>Item:</strong> @Model.FacilityItem.ItemName</p>
+        <p><strong>Quantity:</strong> @Model.QuantityRequested</p>
+        <p><strong>Status:</strong> @Model.Status</p>
+        <p><strong>Severity:</strong> @Model.SeverityLevel</p>
+        <p><strong>Request Date:</strong> @Model.RequestDate.ToString("g")</p>
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+          <p><strong>Description:</strong> @Model.Description</p>
+        }
+        @if (!string.IsNullOrEmpty(Model.Remarks))
+        {
+          <p><strong>Remarks:</strong> @Model.Remarks</p>
+        }
+      </div>
+    </div>
+  </div>
 </div>
 
-<h3>Comments</h3>
-@if (Model.Comments.Any())
-{
-  <ul class="list-group">
-    @foreach (var comment in Model.Comments)
-    {
-      <li class="list-group-item">
-        <strong>@comment.User?.FullName:</strong> @comment.CommentText
-        <br /><small>@comment.CreatedAt.ToString("g")</small>
-      </li>
-    }
-  </ul>
-}
-else
-{
-  <p>No comments yet.</p>
-}
-
-<hr />
-
-<h4>Add a Comment</h4>
-<form asp-action="AddComment" method="post">
-  <input type="hidden" name="requestId" value="@Model.RequestId" />
-  <div class="form-group">
-    <textarea name="commentText" class="form-control" placeholder="Write your comment..."></textarea>
+<div class="card mb-4">
+  <div class="card-header">
+    <h4>Assign Request</h4>
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+  <div class="card-body">
+    @if (ViewBag.Assignees == null || !((SelectList)ViewBag.Assignees).Any())
+    {
+      <p class="text-danger">⚠ No available users for assignment.</p>
+    }
+    else
+    {
+      <form asp-action="Assign" asp-controller="Requests" method="post">
+        <input type="hidden" name="requestId" value="@Model.RequestId" />
 
-<a asp-action="Edit" asp-route-id="@Model.RequestId" class="btn btn-warning">Edit</a>
-<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <div class="form-group mb-3">
+          <label>Current Assignee:</label>
+          <p>@(Model.AssigneeId.HasValue ? ViewBag.CurrentAssigneeName : "Not assigned")</p>
+        </div>
+
+        <div class="form-group mb-3">
+          <label>Select New Assignee</label>
+          <select name="assigneeId" class="form-control" required>
+            <option value="">-- Select Assignee --</option>
+            @foreach (var user in ViewBag.Assignees as SelectList)
+            {
+              <option value="@user.Value">@user.Text</option>
+            }
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Assign</button>
+      </form>
+    }
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">
+    <h4>Comments</h4>
+  </div>
+  <div class="card-body">
+    @if (Model.Comments.Any())
+    {
+      <ul class="list-group mb-4">
+        @foreach (var comment in Model.Comments)
+        {
+          <li class="list-group-item">
+            <strong>@comment.User?.FullName:</strong> @comment.CommentText
+            <br /><small>@comment.CreatedAt.ToString("g")</small>
+          </li>
+        }
+      </ul>
+    }
+    else
+    {
+      <p>No comments yet.</p>
+    }
+
+    <h5>Add a Comment</h5>
+    <form asp-action="AddComment" method="post">
+      <input type="hidden" name="requestId" value="@Model.RequestId" />
+      <div class="form-group mb-3">
+        <textarea name="commentText" class="form-control" placeholder="Write your comment..." rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit Comment</button>
+    </form>
+  </div>
+</div>
+
+<div class="mb-3">
+  <a asp-action="Edit" asp-route-id="@Model.RequestId" class="btn btn-warning">Edit</a>
+  <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
